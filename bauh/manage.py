@@ -59,7 +59,7 @@ def new_manage_panel(app_args: Namespace, app_config: dict, logger: logging.Logg
                                      manager=manager,
                                      icon_cache=icon_cache,
                                      screen_size=app.primaryScreen().size(),
-                                     config=app_config,
+                                     app_config=app_config,
                                      context=context,
                                      http_client=http_client,
                                      icon=util.get_default_icon()[1],

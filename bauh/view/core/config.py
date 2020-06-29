@@ -31,7 +31,8 @@ def read_config(update_file: bool = False) -> dict:
         },
         'ui': {
             'table': {
-                'max_displayed': 50
+                'max_displayed': 50,
+                'pagination': True
             },
             'tray': {
                 'default_icon': None,

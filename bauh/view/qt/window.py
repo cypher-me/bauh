@@ -3,6 +3,7 @@ import logging
 import operator
 import time
 import traceback
+from math import ceil
 from pathlib import Path
 from typing import List, Type, Set, Tuple
 
@@ -10,7 +11,7 @@ from PyQt5.QtCore import QEvent, Qt, QSize, pyqtSignal
 from PyQt5.QtGui import QIcon, QWindowStateChangeEvent, QCursor
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QCheckBox, QHeaderView, QToolBar, \
     QLabel, QPlainTextEdit, QLineEdit, QProgressBar, QPushButton, QComboBox, QApplication, QListView, QSizePolicy, \
-    QMenu, QAction
+    QMenu, QAction, QHBoxLayout
 
 from bauh import LOGS_PATH
 from bauh.api.abstract.cache import MemoryCache
@@ -88,6 +89,7 @@ CHECK_CONSOLE = 11
 BT_SETTINGS = 12
 BT_CUSTOM_ACTIONS = 13
 BT_ABOUT = 14
+PAGE_LINKS = 15
 
 # component groups ids
 GROUP_FILTERS = 1
@@ -103,7 +105,7 @@ class ManageWindow(QWidget):
     signal_table_update = pyqtSignal()
     signal_stop_notifying = pyqtSignal()
 
-    def __init__(self, i18n: I18n, icon_cache: MemoryCache, manager: SoftwareManager, screen_size, config: dict,
+    def __init__(self, i18n: I18n, icon_cache: MemoryCache, manager: SoftwareManager, screen_size, app_config: dict,
                  context: ApplicationContext, http_client: HttpClient, logger: logging.Logger, icon: QIcon):
         super(ManageWindow, self).__init__()
         self.comp_manager = QtComponentsManager()
@@ -114,10 +116,10 @@ class ManageWindow(QWidget):
         self.pkgs = []  # packages current loaded in the table
         self.pkgs_available = []  # all packages loaded in memory
         self.pkgs_installed = []  # cached installed packages
-        self.display_limit = config['ui']['table']['max_displayed']
+        self.pages = []
         self.icon_cache = icon_cache
         self.screen_size = screen_size
-        self.config = config
+        self.config = app_config
         self.context = context
         self.http_client = http_client
 
@@ -250,7 +252,9 @@ class ManageWindow(QWidget):
 
         toolbar_bts = []
 
-        if config['suggestions']['enabled']:
+        self.load_suggestions = bool(app_config['suggestions']['enabled'])
+
+        if self.load_suggestions:
             bt_sugs = QPushButton()
             bt_sugs.setCursor(QCursor(Qt.PointingHandCursor))
             bt_sugs.setToolTip(self.i18n['manage_window.bt.suggestions.tooltip'])
@@ -330,6 +334,27 @@ class ManageWindow(QWidget):
         self.comp_manager.register_component(CHECK_CONSOLE, self.check_console, toolbar_console.addWidget(self.check_console))
 
         toolbar_console.addWidget(new_spacer())
+
+        self.page_links = QWidget()
+        self.page_links.setCursor(QCursor(Qt.PointingHandCursor))
+        self.page_links.setLayout(QHBoxLayout())
+
+        bt_page_style = 'QPushButton { text-decoration: underline; border: 0px; background: none }'
+        self.page_prev = QPushButton(self.i18n['pagination.previous'].capitalize())
+        self.page_prev.setStyleSheet(bt_page_style)
+        self.page_prev.clicked.connect(self._load_previous_page)
+        self.page_links.layout().addWidget(self.page_prev)
+
+        self.page_current = QLabel()
+        self.page_links.layout().addWidget(self.page_current)
+
+        self.page_next = QPushButton(self.i18n['pagination.next'].capitalize())
+        self.page_next.setStyleSheet(bt_page_style)
+        self.page_next.clicked.connect(self._load_next_page)
+        self.page_links.layout().addWidget(self.page_next)
+
+        toolbar_console.addWidget(self.page_links)
+        self.comp_manager.register_component(PAGE_LINKS, self.page_links)
 
         self.label_displayed = QLabel()
         toolbar_console.addWidget(self.label_displayed)
@@ -433,7 +458,6 @@ class ManageWindow(QWidget):
         self.types_changed = False
 
         self.dialog_about = None
-        self.load_suggestions = bool(config['suggestions']['enabled'])
         self.suggestions_requested = False
         self.first_refresh = True
 
@@ -441,12 +465,41 @@ class ManageWindow(QWidget):
         self.thread_warnings.signal_warnings.connect(self._show_warnings)
         self.settings_window = None
         self.search_performed = False
+        self.pagination = True
+        self.current_page = -1
+        self.display_limit = 50
+        self.reconfigure(app_config)
 
         self.thread_load_installed = NotifyInstalledLoaded()
         self.thread_load_installed.signal_loaded.connect(self._finish_loading_installed)
         self.setMinimumHeight(int(screen_size.height() * 0.5))
         self.setMinimumWidth(int(screen_size.width() * 0.6))
         self._register_groups()
+
+    def _load_previous_page(self):
+        if self.current_page > 1:
+            self.current_page -= 1
+            self._update_table(self._gen_page_info(self.pages[self.current_page - 1]))
+            self._update_pagination_links()
+
+    def _load_next_page(self):
+        if self.current_page < len(self.pages):
+            self.current_page += 1
+            self._update_table(self._gen_page_info(self.pages[self.current_page - 1]))
+            self._update_pagination_links()
+
+    def _gen_page_info(self, pkgs: List[PackageView]) -> dict:
+        return {'pkgs_displayed': pkgs,
+                'not_installed': len([p for p in self.pkgs_available if not p.model.installed])}
+
+    def reconfigure(self, app_config: dict):
+        self.config = app_config
+        self.pagination = bool(app_config['ui']['table']['pagination'])
+
+        try:
+            self.display_limit = int(app_config['ui']['table']['max_displayed'])
+        except:
+            self.display_limit = 50
 
     def _register_groups(self):
         filters = (CHECK_APPS, CHECK_UPDATES, COMBO_CATEGORIES, COMBO_TYPES, INP_NAME)
@@ -502,6 +555,7 @@ class ManageWindow(QWidget):
 
     def _finish_apply_filters(self):
         self._finish_action(ACTION_APPLY_FILTERS)
+        self.paginate()
         self.update_bt_upgrade()
 
     def stop_notifying_package_states(self):
@@ -823,14 +877,20 @@ class ManageWindow(QWidget):
 
     def _update_table(self, pkgs_info: dict, signal: bool = False):
         self.pkgs = pkgs_info['pkgs_displayed']
-
         self.table_apps.update_packages(self.pkgs, update_check_enabled=pkgs_info['not_installed'] == 0)
 
         if not self._maximized:
             self.table_apps.change_headers_policy(QHeaderView.Stretch)
             self.table_apps.change_headers_policy()
             self._resize(accept_lower_width=len(self.pkgs) > 0)
-            self.label_displayed.setText('{} / {}'.format(len(self.pkgs), len(self.pkgs_available)))
+
+            if not self.pages:
+                self.label_displayed.setText('{} / {}'.format(len(self.pkgs), len(self.pkgs_available)))
+            else:
+                self.label_displayed.setText('{} / {} ({})'.format(len(self.pages[self.current_page-1]),
+                                                                   self.display_limit,
+                                                                   len(self.pkgs_available)))
+
         else:
             self.label_displayed.setText('')
 
@@ -887,7 +947,7 @@ class ManageWindow(QWidget):
             'category': self.category_filter,
             'updates': False if ignore_updates else self.filter_updates,
             'name': self.input_name.get_text().lower() if self.input_name.get_text() else None,
-            'display_limit': None if self.filter_updates else self.display_limit
+            'display_limit': None if (self.filter_updates or self._should_paginate()) else self.display_limit
         }
 
     def update_pkgs(self, new_pkgs: List[SoftwarePackage], as_installed: bool, types: Set[type] = None, ignore_updates: bool = False, keep_filters: bool = False) -> bool:
@@ -947,6 +1007,7 @@ class ManageWindow(QWidget):
             self.pkgs_installed = pkgs_info['pkgs']
 
         self.pkgs = pkgs_info['pkgs_displayed']
+        self.paginate(pkgs_info)
         self._update_table(pkgs_info=pkgs_info)
 
         if new_pkgs:
@@ -962,6 +1023,37 @@ class ManageWindow(QWidget):
             self.first_refresh = False
 
         return True
+
+    def _should_paginate(self, pkgs: List[PackageView] = None):
+        return self.pagination and self.display_limit > 0 and (pkgs is None or len(pkgs) > self.display_limit)
+
+    def paginate(self, pkgs_info: dict = None):
+        self.pages.clear()
+        self.current_page = -1
+        if self._should_paginate(self.pkgs):
+            npages = ceil(len(self.pkgs) / self.display_limit)
+
+            last_indexed = 0
+            for page in range(npages):
+                limit = last_indexed + self.display_limit
+                self.pages.append(self.pkgs[last_indexed:limit])
+                last_indexed = limit
+
+            self.current_page = 1
+
+            if pkgs_info:
+                pkgs_info['pkgs_displayed'] = self.pages[0]
+
+        self._update_pagination_links()
+
+    def _update_pagination_links(self):
+        if self.pages:
+            self.page_links.setVisible(True)
+            self.page_prev.setEnabled(self.current_page != 1)
+            self.page_next.setEnabled(self.current_page != len(self.pages))
+            self.page_current.setText('{}/{}'.format(self.current_page, len(self.pages)))
+        else:
+            self.page_links.setVisible(False)
 
     def _apply_filters(self, pkgs_info: dict, ignore_updates: bool):
         pkgs_info['pkgs_displayed'] = []

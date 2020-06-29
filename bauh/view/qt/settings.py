@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QToolBar, QSizePolicy, QPushBu
 from bauh import __app_name__
 from bauh.api.abstract.controller import SoftwareManager
 from bauh.api.abstract.view import MessageType
+from bauh.view.core import config
 from bauh.view.core.controller import GenericSoftwareManager
 from bauh.view.qt import dialog, css
 from bauh.view.qt.components import to_widget, new_spacer
@@ -93,10 +94,12 @@ class SettingsWindow(QWidget):
                 self.manager.prepare(task_manager=None, root_password=None, internet_available=None)
 
                 if self.window and self.window.isVisible():
+                    self.window.reconfigure(config.read_config())
                     self.window.update_custom_actions()
                     self.window.verify_warnings()
                     self.window.types_changed = True
                     self.window.begin_refresh_packages()
+
                 self.close()
         else:
             msg = StringIO()
