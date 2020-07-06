@@ -3,7 +3,6 @@ import logging
 import operator
 import time
 import traceback
-from math import ceil
 from pathlib import Path
 from typing import List, Type, Set, Tuple
 
@@ -27,6 +26,7 @@ from bauh.view.qt import dialog, commons, qt_utils, root, styles
 from bauh.view.qt.about import AboutDialog
 from bauh.view.qt.apps_table import AppsTable, UpdateToggleButton
 from bauh.view.qt.colors import GREEN
+from bauh.view.qt.commons import paginate, should_paginate
 from bauh.view.qt.components import new_spacer, InputFilter, IconButton, QtComponentsManager
 from bauh.view.qt.confirmation import ConfirmationDialog
 from bauh.view.qt.history import HistoryDialog
@@ -116,7 +116,7 @@ class ManageWindow(QWidget):
         self.pkgs = []  # packages current loaded in the table
         self.pkgs_available = []  # all packages loaded in memory
         self.pkgs_installed = []  # cached installed packages
-        self.pages = []
+        self.pages = []  # paginated packages found
         self.icon_cache = icon_cache
         self.screen_size = screen_size
         self.config = app_config
@@ -479,18 +479,14 @@ class ManageWindow(QWidget):
     def _load_previous_page(self):
         if self.current_page > 1:
             self.current_page -= 1
-            self._update_table(self._gen_page_info(self.pages[self.current_page - 1]))
+            self._update_table({'pkgs_displayed': self.pages[self.current_page - 1]})
             self._update_pagination_links()
 
     def _load_next_page(self):
         if self.current_page < len(self.pages):
             self.current_page += 1
-            self._update_table(self._gen_page_info(self.pages[self.current_page - 1]))
+            self._update_table({'pkgs_displayed': self.pages[self.current_page - 1]})
             self._update_pagination_links()
-
-    def _gen_page_info(self, pkgs: List[PackageView]) -> dict:
-        return {'pkgs_displayed': pkgs,
-                'not_installed': len([p for p in self.pkgs_available if not p.model.installed])}
 
     def reconfigure(self, app_config: dict):
         self.config = app_config
@@ -550,13 +546,14 @@ class ManageWindow(QWidget):
 
         self.thread_apply_filters.filters = self._gen_filters()
         self.thread_apply_filters.pkgs = self.pkgs_available
+        self.thread_apply_filters.pagination = self.pagination
         self.thread_apply_filters.start()
         self.setFocus(Qt.NoFocusReason)
 
     def _finish_apply_filters(self):
         self._finish_action(ACTION_APPLY_FILTERS)
-        self.paginate()
         self.update_bt_upgrade()
+        print('finished apply')
 
     def stop_notifying_package_states(self):
         if self.thread_notify_pkgs_ready.isRunning():
@@ -564,6 +561,12 @@ class ManageWindow(QWidget):
             self.thread_notify_pkgs_ready.wait(1000)
 
     def _update_table_and_upgrades(self, pkgs_info: dict):
+        print('updating table')
+        if pkgs_info.get('pages'):
+            self.pages = pkgs_info['pages']
+            self.current_page = 1
+            self._update_pagination_links()
+
         self._update_table(pkgs_info=pkgs_info, signal=True)
 
         if self.pkgs:
@@ -877,7 +880,7 @@ class ManageWindow(QWidget):
 
     def _update_table(self, pkgs_info: dict, signal: bool = False):
         self.pkgs = pkgs_info['pkgs_displayed']
-        self.table_apps.update_packages(self.pkgs, update_check_enabled=pkgs_info['not_installed'] == 0)
+        self.table_apps.update_packages(self.pkgs, update_check_enabled=not any([self.search_performed, self.suggestions_requested]))
 
         if not self._maximized:
             self.table_apps.change_headers_policy(QHeaderView.Stretch)
@@ -1025,21 +1028,13 @@ class ManageWindow(QWidget):
         return True
 
     def _should_paginate(self, pkgs: List[PackageView] = None):
-        return self.pagination and self.display_limit > 0 and (pkgs is None or len(pkgs) > self.display_limit)
+        return should_paginate(pagination=self.pagination, display_limit=self.display_limit, pkgs=pkgs)
 
     def paginate(self, pkgs_info: dict = None):
         self.pages.clear()
         self.current_page = -1
         if self._should_paginate(self.pkgs):
-            npages = ceil(len(self.pkgs) / self.display_limit)
-
-            last_indexed = 0
-            for page in range(npages):
-                limit = last_indexed + self.display_limit
-                self.pages.append(self.pkgs[last_indexed:limit])
-                last_indexed = limit
-
-            self.current_page = 1
+            self.pages = paginate(self.pkgs, self.display_limit)
 
             if pkgs_info:
                 pkgs_info['pkgs_displayed'] = self.pages[0]

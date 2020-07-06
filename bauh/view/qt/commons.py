@@ -1,3 +1,6 @@
+from math import ceil
+from typing import List
+
 from bauh.view.qt.view_model import PackageView
 
 
@@ -11,6 +14,7 @@ def new_pkgs_info() -> dict:
             'pkgs_displayed': [],
             'not_installed': 0,
             'categories': set(),
+            'pages': None,
             'pkgs': []}  # total packages
 
 
@@ -63,3 +67,20 @@ def is_package_hidden(pkg: PackageView, filters: dict) -> bool:
         hidden = not filters['name'] in pkg.model.name.lower()
 
     return hidden
+
+
+def paginate(pkgs: List[PackageView], page_size: int) -> List[List[PackageView]]:
+    npages = ceil(len(pkgs) / page_size)
+
+    last_indexed = 0
+    pages = []
+    for page in range(npages):
+        limit = last_indexed + page_size
+        pages.append(pkgs[last_indexed:limit])
+        last_indexed = limit
+
+    return pages
+
+
+def should_paginate(pagination: bool, display_limit: int, pkgs: List[PackageView]):
+    return pagination and display_limit and display_limit > 0 and (pkgs is None or len(pkgs) > display_limit)

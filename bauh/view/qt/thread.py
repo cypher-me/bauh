@@ -24,6 +24,7 @@ from bauh.commons.system import get_human_size_str, ProcessHandler, SimpleProces
 from bauh.view.core import timeshift
 from bauh.view.core.config import read_config
 from bauh.view.qt import commons
+from bauh.view.qt.commons import paginate, should_paginate
 from bauh.view.qt.view_model import PackageView, PackageViewStatus
 from bauh.view.util.translation import I18n
 
@@ -842,10 +843,11 @@ class ApplyFilters(AsyncAction):
 
     signal_table = pyqtSignal(object)
 
-    def __init__(self, filters: dict = None, pkgs: List[PackageView] = None):
+    def __init__(self, filters: dict = None, pagination: bool = False, pkgs: List[PackageView] = None):
         super(ApplyFilters, self).__init__()
         self.pkgs = pkgs
         self.filters = filters
+        self.pagination = pagination
         self.wait_table_update = False
 
     def stop_waiting(self):
@@ -901,12 +903,20 @@ class ApplyFilters(AsyncAction):
 
             for pkgv in self.pkgs:
                 commons.update_info(pkgv, pkgs_info)
-                commons.apply_filters(pkgv, self.filters, pkgs_info, limit=not name_filtering)
+                commons.apply_filters(pkgv, self.filters, pkgs_info, limit=not name_filtering and not self.pagination)
 
-            if name_filtering and pkgs_info['pkgs_displayed']:
+            if name_filtering and pkgs_info['pkgs_displayed']:  # TODO
                 pkgs_info['pkgs_displayed'] = self._sort_by_word(word=self.filters['name'],
                                                                  pkgs=pkgs_info['pkgs_displayed'],
                                                                  limit=self.filters['display_limit'])
+
+            if pkgs_info['pkgs_displayed'] and should_paginate(pagination=self.pagination,
+                                                               display_limit=self.filters['display_limit'],
+                                                               pkgs=pkgs_info['pkgs_displayed']):
+                pkgs_info['pages'] = paginate(pkgs_info['pkgs_displayed'], self.filters['display_limit'])
+
+                if pkgs_info['pages']:
+                    pkgs_info['pkgs_displayed'] = pkgs_info['pages'][0]
 
             self.wait_table_update = True
             self.signal_table.emit(pkgs_info)
