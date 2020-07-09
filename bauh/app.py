@@ -1,14 +1,16 @@
 import faulthandler
+import logging
 import os
 import sys
 import traceback
 
 import urllib3
 from PyQt5.QtCore import QCoreApplication, Qt
+from PyQt5.QtWidgets import QApplication
 
 from bauh import __app_name__, app_args
 from bauh.view.core import config
-from bauh.view.util import logs
+from bauh.view.util import logs, resource
 
 
 def main(tray: bool = False):

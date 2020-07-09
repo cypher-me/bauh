@@ -1,0 +1,23 @@
+QToolBar#toolbar_top {
+    spacing: 4px;
+    margin-top: 15px;
+}
+
+InputFilter#name_filter {
+    color: grey;
+}
+
+QComboBox#combo_type {
+    QLineEdit {
+        height: 2px;
+    }
+}
+
+QPushButton#bt_installed, QPushButton#bt_refresh, QPushButton#bt_suggestions, QPushButton#bt_upgrade {
+    font-weight: @upper_toolbar.bt_weight;
+}
+
+QPushButton#bt_upgrade {
+    background: @color_green;
+    color: white;
+}
