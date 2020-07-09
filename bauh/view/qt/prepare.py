@@ -12,7 +12,7 @@ from bauh import __app_name__
 from bauh.api.abstract.context import ApplicationContext
 from bauh.api.abstract.controller import SoftwareManager
 from bauh.api.abstract.handler import TaskManager
-from bauh.view.qt import root, styles
+from bauh.view.qt import root
 from bauh.view.qt.colors import GREEN
 from bauh.view.qt.components import new_spacer
 from bauh.view.qt.qt_utils import centralize
@@ -206,7 +206,7 @@ class PreparePanel(QWidget, TaskManager):
 
         self.bt_bar.addWidget(new_spacer())
         self.progress_bar = QProgressBar()
-        self.progress_bar.setStyleSheet(styles.PROGRESS_BAR)
+        self.progress_bar.setObjectName('progress_initialization')
         self.progress_bar.setMaximumHeight(10 if QApplication.instance().style().objectName().lower() == 'windows' else 4)
         self.progress_bar.setTextVisible(False)
         self.progress_bar.setVisible(False)

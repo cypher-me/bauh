@@ -22,7 +22,7 @@ from bauh.api.http import HttpClient
 from bauh.commons import user
 from bauh.commons.html import bold
 from bauh.view.core.tray_client import notify_tray
-from bauh.view.qt import dialog, commons, qt_utils, root, styles
+from bauh.view.qt import dialog, commons, qt_utils, root
 from bauh.view.qt.about import AboutDialog
 from bauh.view.qt.apps_table import AppsTable, UpdateToggleButton
 from bauh.view.qt.components import new_spacer, InputFilter, IconButton, QtComponentsManager
@@ -70,7 +70,7 @@ CHECK_APPS = 7
 COMBO_TYPES = 8
 COMBO_CATEGORIES = 9
 INP_NAME = 10
-CHECK_CONSOLE = 11
+CHECK_DETAILS = 11
 BT_SETTINGS = 12
 BT_CUSTOM_ACTIONS = 13
 BT_ABOUT = 14
@@ -92,6 +92,7 @@ class ManageWindow(QWidget):
     def __init__(self, i18n: I18n, icon_cache: MemoryCache, manager: SoftwareManager, screen_size, config: dict,
                  context: ApplicationContext, http_client: HttpClient, logger: logging.Logger, icon: QIcon):
         super(ManageWindow, self).__init__()
+        self.setObjectName('manage_window')
         self.comp_manager = QtComponentsManager()
         self.i18n = i18n
         self.logger = logger
@@ -113,72 +114,50 @@ class ManageWindow(QWidget):
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
 
-        self.toolbar_top = QToolBar()
-        self.toolbar_top.addWidget(new_spacer())
+        self.toolbar_status = QToolBar()
+        self.toolbar_status.setObjectName('toolbar_status')
+        self.toolbar_status.addWidget(new_spacer())
 
         self.label_status = QLabel()
+        self.label_status.setObjectName('label_status')
         self.label_status.setText('')
-        self.label_status.setStyleSheet("font-weight: bold")
-        self.toolbar_top.addWidget(self.label_status)
+        self.toolbar_status.addWidget(self.label_status)
 
         self.search_bar = QToolBar()
-        self.search_bar.setStyleSheet("spacing: 0px;")
+        self.search_bar.setObjectName('toolbar_search')
         self.search_bar.setContentsMargins(0, 0, 0, 0)
 
         self.inp_search = QLineEdit()
+        self.inp_search.setObjectName('inp_search')
         self.inp_search.setFrame(False)
         self.inp_search.setPlaceholderText(self.i18n['window_manage.input_search.placeholder'] + "...")
         self.inp_search.setToolTip(self.i18n['window_manage.input_search.tooltip'])
-        self.inp_search.setStyleSheet("""QLineEdit { 
-                color: grey;
-                spacing: 0; 
-                height: 30px; 
-                font-size: 12px; 
-                width: 300px; 
-                border-bottom: 1px solid lightgrey; 
-                border-top: 1px solid lightgrey; 
-        } 
-        """)
         self.inp_search.returnPressed.connect(self.search)
         search_background_color = self.inp_search.palette().color(self.inp_search.backgroundRole()).name()
 
-        label_pre_search = QLabel()
-        label_pre_search.setStyleSheet("""
-            border-top-left-radius: 5px; 
-            border-bottom-left-radius: 5px;
-            border-left: 1px solid lightgrey; 
-            border-top: 1px solid lightgrey; 
-            border-bottom: 1px solid lightgrey;
-            background: %s;
-        """ % search_background_color)
-
-        self.search_bar.addWidget(label_pre_search)
+        search_left_corner = QLabel()
+        search_left_corner.setObjectName('search_left_corner')
+        search_left_corner.setStyleSheet('QLabel#search_left_corner {background: %s;}' % search_background_color)
+        self.search_bar.addWidget(search_left_corner)
 
         self.search_bar.addWidget(self.inp_search)
 
-        label_pos_search = QLabel()
-        label_pos_search.setPixmap(QIcon(resource.get_path('img/search.svg')).pixmap(QSize(10, 10)))
-        label_pos_search.setStyleSheet("""
-            padding-right: 10px; 
-            border-top-right-radius: 5px; 
-            border-bottom-right-radius: 5px; 
-            border-right: 1px solid lightgrey; 
-            border-top: 1px solid lightgrey; 
-            border-bottom: 1px solid lightgrey;
-            background: %s;
-        """ % search_background_color)
+        search_right_corner = QLabel()
+        search_right_corner.setObjectName('search_right_corner')
+        search_right_corner.setPixmap(QIcon(resource.get_path('img/search.svg')).pixmap(QSize(10, 10)))
+        search_right_corner.setStyleSheet("QLabel#search_right_corner {background: %s;}" % search_background_color)
 
-        self.search_bar.addWidget(label_pos_search)
+        self.search_bar.addWidget(search_right_corner)
 
-        self.comp_manager.register_component(SEARCH_BAR, self.search_bar, self.toolbar_top.addWidget(self.search_bar))
+        self.comp_manager.register_component(SEARCH_BAR, self.search_bar, self.toolbar_status.addWidget(self.search_bar))
 
-        self.toolbar_top.addWidget(new_spacer())
-        self.layout.addWidget(self.toolbar_top)
+        self.toolbar_status.addWidget(new_spacer())
+        self.layout.addWidget(self.toolbar_status)
 
-        self.toolbar = QToolBar()
-        self.toolbar.setObjectName('toolbar_top')
-        self.toolbar.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        self.toolbar.setContentsMargins(0, 0, 0, 0)
+        self.toolbar_filters = QToolBar()
+        self.toolbar_filters.setObjectName('toolbar_filters')
+        self.toolbar_filters.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.toolbar_filters.setContentsMargins(0, 0, 0, 0)
 
         self.check_updates = QCheckBox()
         self.check_updates.setObjectName('check_updates')
@@ -186,7 +165,7 @@ class ManageWindow(QWidget):
         self.check_updates.setText(self.i18n['updates'].capitalize())
         self.check_updates.stateChanged.connect(self._handle_updates_filter)
         self.check_updates.sizePolicy().setRetainSizeWhenHidden(True)
-        self.comp_manager.register_component(CHECK_UPDATES, self.check_updates, self.toolbar.addWidget(self.check_updates))
+        self.comp_manager.register_component(CHECK_UPDATES, self.check_updates, self.toolbar_filters.addWidget(self.check_updates))
 
         self.check_apps = QCheckBox()
         self.check_apps.setObjectName('check_apps')
@@ -195,7 +174,7 @@ class ManageWindow(QWidget):
         self.check_apps.setChecked(True)
         self.check_apps.stateChanged.connect(self._handle_filter_only_apps)
         self.check_apps.sizePolicy().setRetainSizeWhenHidden(True)
-        self.comp_manager.register_component(CHECK_APPS, self.check_apps, self.toolbar.addWidget(self.check_apps))
+        self.comp_manager.register_component(CHECK_APPS, self.check_apps, self.toolbar_filters.addWidget(self.check_apps))
 
         self.any_type_filter = 'any'
         self.cache_type_filter_icons = {}
@@ -203,7 +182,6 @@ class ManageWindow(QWidget):
         self.combo_filter_type.setObjectName('combo_types')
         self.combo_filter_type.setCursor(QCursor(Qt.PointingHandCursor))
         self.combo_filter_type.setView(QListView())
-        # self.combo_filter_type.setStyleSheet('QLineEdit { height: 2px; }')
         self.combo_filter_type.setIconSize(QSize(14, 14))
         self.combo_filter_type.setSizeAdjustPolicy(QComboBox.AdjustToContents)
         self.combo_filter_type.setEditable(True)
@@ -212,13 +190,12 @@ class ManageWindow(QWidget):
         self.combo_filter_type.activated.connect(self._handle_type_filter)
         self.combo_filter_type.addItem('--- {} ---'.format(self.i18n['type'].capitalize()), self.any_type_filter)
         self.combo_filter_type.sizePolicy().setRetainSizeWhenHidden(True)
-        self.comp_manager.register_component(COMBO_TYPES, self.combo_filter_type, self.toolbar.addWidget(self.combo_filter_type))
+        self.comp_manager.register_component(COMBO_TYPES, self.combo_filter_type, self.toolbar_filters.addWidget(self.combo_filter_type))
 
         self.any_category_filter = 'any'
         self.combo_categories = QComboBox()
         self.combo_categories.setObjectName('combo_categories')
         self.combo_categories.setCursor(QCursor(Qt.PointingHandCursor))
-        self.combo_categories.setStyleSheet('QLineEdit { height: 2px; }')
         self.combo_categories.setSizeAdjustPolicy(QComboBox.AdjustToContents)
         self.combo_categories.setEditable(True)
         self.combo_categories.lineEdit().setReadOnly(True)
@@ -226,18 +203,17 @@ class ManageWindow(QWidget):
         self.combo_categories.activated.connect(self._handle_category_filter)
         self.combo_categories.sizePolicy().setRetainSizeWhenHidden(True)
         self.combo_categories.addItem('--- {} ---'.format(self.i18n['category'].capitalize()), self.any_category_filter)
-        self.comp_manager.register_component(COMBO_CATEGORIES, self.combo_categories, self.toolbar.addWidget(self.combo_categories))
+        self.comp_manager.register_component(COMBO_CATEGORIES, self.combo_categories, self.toolbar_filters.addWidget(self.combo_categories))
 
         self.input_name = InputFilter(self.begin_apply_filters)
         self.input_name.setObjectName('name_filter')
         self.input_name.setPlaceholderText(self.i18n['manage_window.name_filter.placeholder'] + '...')
         self.input_name.setToolTip(self.i18n['manage_window.name_filter.tooltip'])
-        # self.input_name.setStyleSheet("QLineEdit { color: grey; }")
         self.input_name.setFixedWidth(130)
         self.input_name.sizePolicy().setRetainSizeWhenHidden(True)
-        self.comp_manager.register_component(INP_NAME, self.input_name, self.toolbar.addWidget(self.input_name))
+        self.comp_manager.register_component(INP_NAME, self.input_name, self.toolbar_filters.addWidget(self.input_name))
 
-        self.toolbar.addWidget(new_spacer())
+        self.toolbar_filters.addWidget(new_spacer())
 
         toolbar_bts = []
 
@@ -250,7 +226,7 @@ class ManageWindow(QWidget):
             bt_sugs.setIcon(QIcon(resource.get_path('img/suggestions.svg')))
             bt_sugs.clicked.connect(lambda: self._begin_load_suggestions(filter_installed=True))
             bt_sugs.sizePolicy().setRetainSizeWhenHidden(True)
-            ref_bt_sugs = self.toolbar.addWidget(bt_sugs)
+            ref_bt_sugs = self.toolbar_filters.addWidget(bt_sugs)
             toolbar_bts.append(bt_sugs)
             self.comp_manager.register_component(BT_SUGGESTIONS, bt_sugs, ref_bt_sugs)
 
@@ -263,7 +239,7 @@ class ManageWindow(QWidget):
         bt_inst.clicked.connect(self._begin_loading_installed)
         bt_inst.sizePolicy().setRetainSizeWhenHidden(True)
         toolbar_bts.append(bt_inst)
-        self.comp_manager.register_component(BT_INSTALLED, bt_inst, self.toolbar.addWidget(bt_inst))
+        self.comp_manager.register_component(BT_INSTALLED, bt_inst, self.toolbar_filters.addWidget(bt_inst))
 
         bt_ref = QPushButton()
         bt_ref.setObjectName('bt_refresh')
@@ -274,7 +250,7 @@ class ManageWindow(QWidget):
         bt_ref.clicked.connect(self.begin_refresh_packages)
         bt_ref.sizePolicy().setRetainSizeWhenHidden(True)
         toolbar_bts.append(bt_ref)
-        self.comp_manager.register_component(BT_REFRESH, bt_ref, self.toolbar.addWidget(bt_ref))
+        self.comp_manager.register_component(BT_REFRESH, bt_ref, self.toolbar_filters.addWidget(bt_ref))
 
         self.bt_upgrade = QPushButton()
         self.bt_upgrade.setObjectName('bt_upgrade')
@@ -285,7 +261,7 @@ class ManageWindow(QWidget):
         self.bt_upgrade.clicked.connect(self.upgrade_selected)
         self.bt_upgrade.sizePolicy().setRetainSizeWhenHidden(True)
         toolbar_bts.append(self.bt_upgrade)
-        self.comp_manager.register_component(BT_UPGRADE, self.bt_upgrade, self.toolbar.addWidget(self.bt_upgrade))
+        self.comp_manager.register_component(BT_UPGRADE, self.bt_upgrade, self.toolbar_filters.addWidget(self.bt_upgrade))
 
         # setting all buttons to the same size:
         bt_biggest_size = 0
@@ -299,9 +275,10 @@ class ManageWindow(QWidget):
             if bt_biggest_size > bt_width:
                 bt.setFixedWidth(bt_biggest_size)
 
-        self.layout.addWidget(self.toolbar)
+        self.layout.addWidget(self.toolbar_filters)
 
         self.table_container = QWidget()
+        self.table_container.setObjectName('table_container')
         self.table_container.setContentsMargins(0, 0, 0, 0)
         self.table_container.setLayout(QVBoxLayout())
         self.table_container.layout().setContentsMargins(0, 0, 0, 0)
@@ -314,11 +291,12 @@ class ManageWindow(QWidget):
 
         toolbar_console = QToolBar()
 
-        self.check_console = QCheckBox()
-        self.check_console.setCursor(QCursor(Qt.PointingHandCursor))
-        self.check_console.setText(self.i18n['manage_window.checkbox.show_details'])
-        self.check_console.stateChanged.connect(self._handle_console)
-        self.comp_manager.register_component(CHECK_CONSOLE, self.check_console, toolbar_console.addWidget(self.check_console))
+        self.check_details = QCheckBox()
+        self.check_details.setObjectName('check_details')
+        self.check_details.setCursor(QCursor(Qt.PointingHandCursor))
+        self.check_details.setText(self.i18n['manage_window.checkbox.show_details'])
+        self.check_details.stateChanged.connect(self._handle_console)
+        self.comp_manager.register_component(CHECK_DETAILS, self.check_details, toolbar_console.addWidget(self.check_details))
 
         toolbar_console.addWidget(new_spacer())
 
@@ -327,16 +305,19 @@ class ManageWindow(QWidget):
 
         self.layout.addWidget(toolbar_console)
 
-        self.textarea_output = QPlainTextEdit(self)
-        self.textarea_output.resize(self.table_apps.size())
-        self.textarea_output.setStyleSheet("background: black; color: white;")
-        self.layout.addWidget(self.textarea_output)
-        self.textarea_output.setVisible(False)
-        self.textarea_output.setReadOnly(True)
+        self.textarea_details = QPlainTextEdit(self)
+        self.textarea_details.setObjectName('textarea_details')
+        self.textarea_details.resize(self.table_apps.size())
+        self.layout.addWidget(self.textarea_details)
+        self.textarea_details.setVisible(False)
+        self.textarea_details.setReadOnly(True)
 
         self.toolbar_substatus = QToolBar()
+        self.toolbar_substatus.setObjectName('toolbar_substatus')
         self.toolbar_substatus.addWidget(new_spacer())
+
         self.label_substatus = QLabel()
+        self.label_substatus.setObjectName('label_substatus')
         self.label_substatus.setCursor(QCursor(Qt.WaitCursor))
         self.toolbar_substatus.addWidget(self.label_substatus)
         self.toolbar_substatus.addWidget(new_spacer())
@@ -375,14 +356,14 @@ class ManageWindow(QWidget):
         self._bind_async_action(self.thread_ignore_updates, finished_call=self.finish_ignore_updates)
 
         self.toolbar_bottom = QToolBar()
+        self.toolbar_bottom.setObjectName('toolbar_bottom')
         self.toolbar_bottom.setIconSize(QSize(16, 16))
-        self.toolbar_bottom.setStyleSheet('QToolBar { spacing: 3px }')
 
         self.toolbar_bottom.addWidget(new_spacer())
 
         self.progress_bar = QProgressBar()
+        self.progress_bar.setObjectName('progress_manage')
         self.progress_bar.setCursor(QCursor(Qt.WaitCursor))
-        self.progress_bar.setStyleSheet(styles.PROGRESS_BAR)
         self.progress_bar.setMaximumHeight(10 if QApplication.instance().style().objectName().lower() == 'windows' else 4)
 
         self.progress_bar.setTextVisible(False)
@@ -656,17 +637,17 @@ class ManageWindow(QWidget):
 
     def _handle_console(self, checked: bool):
         if checked:
-            self.textarea_output.show()
+            self.textarea_details.show()
         else:
-            self.textarea_output.hide()
+            self.textarea_details.hide()
 
     def _handle_console_option(self, enable: bool):
         if enable:
-            self.textarea_output.clear()
+            self.textarea_details.clear()
 
-        self.comp_manager.set_component_visible(CHECK_CONSOLE, enable)
-        self.check_console.setChecked(False)
-        self.textarea_output.hide()
+        self.comp_manager.set_component_visible(CHECK_DETAILS, enable)
+        self.check_details.setChecked(False)
+        self.textarea_details.hide()
 
     def begin_refresh_packages(self, pkg_types: Set[Type[SoftwarePackage]] = None):
         self.inp_search.clear()
@@ -1043,8 +1024,8 @@ class ManageWindow(QWidget):
 
     def _resize(self, accept_lower_width: bool = True):
         table_width = self.table_apps.get_width()
-        toolbar_width = self.toolbar.sizeHint().width()
-        topbar_width = self.toolbar_top.sizeHint().width()
+        toolbar_width = self.toolbar_filters.sizeHint().width()
+        topbar_width = self.toolbar_status.sizeHint().width()
 
         new_width = max(table_width, toolbar_width, topbar_width)
         new_width *= 1.05  # this extra size is not because of the toolbar button, but the table upgrade buttons
@@ -1075,7 +1056,7 @@ class ManageWindow(QWidget):
         self._finish_action()
 
         if res.get('id'):
-            output = self.textarea_output.toPlainText()
+            output = self.textarea_details.toPlainText()
 
             if output:
                 try:
@@ -1084,8 +1065,8 @@ class ManageWindow(QWidget):
                     with open(logs_path, 'w+') as f:
                         f.write(output)
 
-                    self.textarea_output.appendPlainText('\n*Upgrade summary generated at: {}'.format(UpgradeSelected.SUMMARY_FILE.format(res['id'])))
-                    self.textarea_output.appendPlainText('*Upgrade logs generated at: {}'.format(logs_path))
+                    self.textarea_details.appendPlainText('\n*Upgrade summary generated at: {}'.format(UpgradeSelected.SUMMARY_FILE.format(res['id'])))
+                    self.textarea_details.appendPlainText('*Upgrade logs generated at: {}'.format(logs_path))
                 except:
                     traceback.print_exc()
 
@@ -1108,14 +1089,14 @@ class ManageWindow(QWidget):
         self.update_custom_actions()
 
     def _show_console_errors(self):
-        if self.textarea_output.toPlainText():
-            self.check_console.setChecked(True)
+        if self.textarea_details.toPlainText():
+            self.check_details.setChecked(True)
         else:
             self._handle_console_option(False)
-            self.comp_manager.set_component_visible(CHECK_CONSOLE, False)
+            self.comp_manager.set_component_visible(CHECK_DETAILS, False)
 
     def _update_action_output(self, output: str):
-        self.textarea_output.appendPlainText(output)
+        self.textarea_details.appendPlainText(output)
 
     def _begin_action(self, action_label: str, action_id: int = None):
         self.thread_animate_progress.stop = False
@@ -1236,8 +1217,8 @@ class ManageWindow(QWidget):
 
         if res.get('error'):
             self._handle_console_option(True)
-            self.textarea_output.appendPlainText(res['error'])
-            self.check_console.setChecked(True)
+            self.textarea_details.appendPlainText(res['error'])
+            self.check_details.setChecked(True)
         elif not res['history'].history:
             dialog.show_message(title=self.i18n['action.history.no_history.title'],
                                 body=self.i18n['action.history.no_history.body'].format(bold(res['history'].pkg.name)),
@@ -1301,7 +1282,7 @@ class ManageWindow(QWidget):
     def _finish_install(self, res: dict):
         self._finish_action(action_id=ACTION_INSTALL)
 
-        console_output = self.textarea_output.toPlainText()
+        console_output = self.textarea_details.toPlainText()
 
         if console_output:
             log_path = '{}/install/{}/{}'.format(LOGS_PATH, res['pkg'].model.get_type(), res['pkg'].model.name)
@@ -1312,9 +1293,9 @@ class ManageWindow(QWidget):
                 with open(log_file, 'w+') as f:
                     f.write(console_output)
 
-                self.textarea_output.appendPlainText(self.i18n['console.install_logs.path'].format('"{}"'.format(log_file)))
+                self.textarea_details.appendPlainText(self.i18n['console.install_logs.path'].format('"{}"'.format(log_file)))
             except:
-                self.textarea_output.appendPlainText("[warning] Could not write install log file to '{}'".format(log_path))
+                self.textarea_details.appendPlainText("[warning] Could not write install log file to '{}'".format(log_path))
 
         if res['success']:
             if self._can_notify_user():
@@ -1423,10 +1404,10 @@ class ManageWindow(QWidget):
             self._show_console_errors()
 
     def _show_console_checkbox_if_output(self):
-        if self.textarea_output.toPlainText():
-            self.comp_manager.set_component_visible(CHECK_CONSOLE, True)
+        if self.textarea_details.toPlainText():
+            self.comp_manager.set_component_visible(CHECK_DETAILS, True)
         else:
-            self.comp_manager.set_component_visible(CHECK_CONSOLE, False)
+            self.comp_manager.set_component_visible(CHECK_DETAILS, False)
 
     def show_settings(self):
         if self.settings_window:

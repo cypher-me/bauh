@@ -1,16 +1,60 @@
-QToolBar#toolbar_top {
+QProgressBar::chunk { background-color: @color_green; }
+
+QProgressBar#progress_initialization { }
+
+QWidget#manage_window { }
+
+QToolBar#toolbar_status { }
+
+QLabel#label_status {
+    font-weight: bold
+}
+
+QToolBar#toolbar_search {
+    spacing: 0px;
+}
+
+QLabel#search_left_corner {
+     border-top-left-radius: 5px;
+     border-bottom-left-radius: 5px;
+     border-left: 1px solid lightgrey;
+     border-top: 1px solid lightgrey;
+     border-bottom: 1px solid lightgrey;
+}
+
+QLabel#search_right_corner {
+    padding-right: 10px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-right: 1px solid lightgrey;
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+}
+
+QLineEdit#inp_search {
+     spacing: 0;
+     height: 30px;
+     font-size: 12px;
+     width: 300px;
+     border-bottom: 1px solid lightgrey;
+     border-top: 1px solid lightgrey;
+}
+
+QToolBar#toolbar_filters {
     spacing: 4px;
     margin-top: 15px;
 }
 
-InputFilter#name_filter {
-    color: grey;
+QCheckBox#check_updates { }
+
+QCheckBox#check_apps { }
+
+QComboBox#combo_types > QLineEdit, QComboBox#combo_categories > QLineEdit {
+    height: 2px;
 }
 
-QComboBox#combo_type {
-    QLineEdit {
-        height: 2px;
-    }
+InputFilter#name_filter {
+    color: grey;
 }
 
 QPushButton#bt_installed, QPushButton#bt_refresh, QPushButton#bt_suggestions, QPushButton#bt_upgrade {
@@ -21,3 +65,24 @@ QPushButton#bt_upgrade {
     background: @color_green;
     color: white;
 }
+
+QWidget#table_container { }
+
+QPlainTextEdit#textarea_details {
+    background: black;
+    color: white;
+}
+
+QToolBar#toolbar_substatus { }
+
+QCheckBox#check_details { }
+
+QLabel#label_substatus { }
+
+QToolBar#toolbar_bottom {
+    spacing: 3px;
+}
+
+QProgressBar#progress_manage { }
+
+QProgressBar#progress_screenshots { }
