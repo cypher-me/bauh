@@ -626,7 +626,7 @@ class InputFilter(QLineEdit):
 
 class IconButton(QWidget):
 
-    def __init__(self, icon: QIcon, action, i18n: I18n, background: str = None, align: int = Qt.AlignCenter, tooltip: str = None, expanding: bool = False):
+    def __init__(self, icon: QIcon, action, i18n: I18n, align: int = Qt.AlignCenter, tooltip: str = None, expanding: bool = False):
         super(IconButton, self).__init__()
         self.bt = QToolButton()
         self.bt.setCursor(QCursor(Qt.PointingHandCursor))
@@ -636,11 +636,6 @@ class IconButton(QWidget):
         self.default_tootip = tooltip
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         self.bt.setSizePolicy(QSizePolicy.Expanding if expanding else QSizePolicy.Minimum, QSizePolicy.Minimum)
-
-        if background:
-            style = 'QToolButton { color: white; background: ' + background + '} '
-            style += 'QToolButton:disabled { color: white; background: blue }'
-            self.bt.setStyleSheet(style)
 
         if tooltip:
             self.bt.setToolTip(tooltip)
@@ -866,7 +861,7 @@ class FormQt(QGroupBox):
             traceback.print_exc()
             icon = QIcon()
 
-        bt = IconButton(icon, i18n=self.i18n['clean'].capitalize(), action=clean_path, background=RED, tooltip=self.i18n['action.run.tooltip'])
+        bt = IconButton(icon, i18n=self.i18n['clean'].capitalize(), action=clean_path, tooltip=self.i18n['clean'].capitalize())
 
         wrapped.layout().addWidget(bt)
         return label, wrapped
