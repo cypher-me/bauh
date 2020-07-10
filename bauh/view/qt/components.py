@@ -676,7 +676,6 @@ class FormQt(QGroupBox):
         self.model = model
         self.i18n = i18n
         self.setLayout(QFormLayout())
-        self.setStyleSheet(css.GROUP_BOX)
 
         if model.spaces:
             self.layout().addRow(QLabel(), QLabel())

@@ -24,7 +24,7 @@ from bauh.api.abstract.model import PackageUpdate, PackageHistory, SoftwarePacka
 from bauh.api.abstract.view import MessageType, FormComponent, InputOption, SingleSelectComponent, SelectViewType, \
     ViewComponent, PanelComponent, MultipleSelectComponent, TextInputComponent, TextComponent
 from bauh.api.constants import TEMP_DIR
-from bauh.commons import user, internet
+from bauh.commons import user
 from bauh.commons.category import CategoriesDownloader
 from bauh.commons.config import save_config
 from bauh.commons.html import bold
@@ -1000,7 +1000,7 @@ class ArchManager(SoftwareManager):
     def _uninstall(self, context: TransactionContext, remove_unneeded: bool = False, disk_loader: DiskCacheLoader = None):
         self._update_progress(context, 10)
 
-        net_available = internet.is_available() if disk_loader else True
+        net_available = self.context.is_internet_available() if disk_loader else True
 
         required_by = self.deps_analyser.map_all_required_by({context.name}, set())
 
@@ -2362,8 +2362,9 @@ class ArchManager(SoftwareManager):
                         p.size = new_size - p.size
 
     def upgrade_system(self, root_password: str, watcher: ProcessWatcher) -> bool:
-        repo_map = pacman.map_repositories()
-        installed = self.read_installed(limit=-1, only_apps=False, pkg_types=None, internet_available=internet.is_available(), disk_loader=None).installed
+        installed = self.read_installed(limit=-1, only_apps=False, pkg_types=None,
+                                        internet_available=self.context.is_internet_available(),
+                                        disk_loader=None).installed
 
         if not installed:
             watcher.show_message(title=self.i18n['arch.custom_action.upgrade_system'],

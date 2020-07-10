@@ -14,7 +14,7 @@ from bauh.api.abstract.model import PackageHistory, PackageUpdate, SoftwarePacka
     SuggestionPriority, PackageStatus
 from bauh.api.abstract.view import MessageType, FormComponent, SingleSelectComponent, InputOption, SelectViewType, \
     ViewComponent, PanelComponent
-from bauh.commons import user, internet
+from bauh.commons import user
 from bauh.commons.config import save_config
 from bauh.commons.html import strip_html, bold
 from bauh.commons.system import SystemProcess, ProcessHandler
@@ -367,7 +367,7 @@ class FlatpakManager(SoftwareManager):
 
             if current_installed_by_level and (not installed_by_level or len(current_installed_by_level) > len(installed_by_level) + 1):
                 pkg_key = '{}:{}:{}'.format(pkg.id, pkg.name, pkg.branch)
-                net_available = internet.is_available()
+                net_available = self.context.is_internet_available()
                 for p in current_installed_by_level:
                     current_key = '{}:{}:{}'.format(p['id'], p['name'], p['branch'])
                     if current_key != pkg_key and (not installed_by_level or current_key not in installed_by_level):

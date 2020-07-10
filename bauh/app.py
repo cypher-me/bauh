@@ -1,16 +1,14 @@
 import faulthandler
-import logging
 import os
 import sys
 import traceback
 
 import urllib3
 from PyQt5.QtCore import QCoreApplication, Qt
-from PyQt5.QtWidgets import QApplication
 
 from bauh import __app_name__, app_args
 from bauh.view.core import config
-from bauh.view.util import logs, resource
+from bauh.view.util import logs
 
 
 def main(tray: bool = False):
@@ -23,6 +21,9 @@ def main(tray: bool = False):
     args = app_args.read()
 
     logger = logs.new_logger(__app_name__, bool(args.logs))
+
+    if args.offline:
+        logger.warning("offline mode activated")
 
     app_config = config.read_config(update_file=True)
 

@@ -11,7 +11,7 @@ from bauh.api.abstract.handler import ProcessWatcher, TaskManager
 from bauh.api.abstract.model import SoftwarePackage, PackageHistory, PackageUpdate, PackageSuggestion, \
     SuggestionPriority, CustomSoftwareAction
 from bauh.api.abstract.view import SingleSelectComponent, SelectViewType, InputOption
-from bauh.commons import resource, internet
+from bauh.commons import resource
 from bauh.commons.category import CategoriesDownloader
 from bauh.commons.html import bold
 from bauh.commons.system import SystemProcess, ProcessHandler, new_root_subprocess
@@ -227,7 +227,8 @@ class SnapManager(SoftwareManager):
 
             if installed:
                 try:
-                    current_installed = self.read_installed(disk_loader=disk_loader, internet_available=internet.is_available()).installed
+                    current_installed = self.read_installed(disk_loader=disk_loader,
+                                                            internet_available=self.context.is_internet_available()).installed
                 except:
                     current_installed = None
 
