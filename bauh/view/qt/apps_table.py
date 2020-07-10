@@ -14,7 +14,7 @@ from bauh.api.abstract.cache import MemoryCache
 from bauh.api.abstract.model import PackageStatus
 from bauh.commons.html import strip_html
 from bauh.view.qt import dialog
-from bauh.view.qt.colors import GREEN, BROWN
+from bauh.view.qt.colors import GREEN
 from bauh.view.qt.components import IconButton
 from bauh.view.qt.view_model import PackageView
 from bauh.view.util import resource
@@ -81,14 +81,13 @@ class UpdateToggleButton(QWidget):
         self.root.update_bt_upgrade()
 
 
-class AppsTable(QTableWidget):
+class TablePackages(QTableWidget):
 
     COL_NUMBER = 8
-    STYLE_BT_INSTALL = 'background: {b}; color: white; font-size: 10px; font-weight: bold'.format(b=GREEN)
-    STYLE_BT_UNINSTALL = 'color: {c}; font-size: 10px; font-weight: bold;'.format(c=BROWN)
 
     def __init__(self, parent: QWidget, icon_cache: MemoryCache, download_icons: bool):
-        super(AppsTable, self).__init__()
+        super(TablePackages, self).__init__()
+        self.setObjectName('table_packages')
         self.setParent(parent)
         self.window = parent
         self.download_icons = download_icons
@@ -298,15 +297,15 @@ class AppsTable(QTableWidget):
 
             self.setCellWidget(pkg.table_index, 7, col_update)
 
-    def _gen_row_button(self, text: str, style: str, callback) -> QWidget:
+    def _gen_row_button(self, text: str, name: str, callback) -> QWidget:
         col = QWidget()
         col.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
 
         col_bt = QToolButton()
+        col_bt.setObjectName(name)
         col_bt.setCursor(QCursor(Qt.PointingHandCursor))
         col_bt.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         col_bt.setText(text)
-        col_bt.setStyleSheet('QToolButton { ' + style + '}')
         col_bt.setMinimumWidth(80)
         col_bt.clicked.connect(callback)
 
@@ -328,7 +327,7 @@ class AppsTable(QTableWidget):
                 def uninstall():
                     self._uninstall(pkg)
 
-                item = self._gen_row_button(self.i18n['uninstall'].capitalize(), self.STYLE_BT_UNINSTALL, uninstall)
+                item = self._gen_row_button(self.i18n['uninstall'].capitalize(), 'bt_uninstall', uninstall)
             else:
                 item = None
 
@@ -336,7 +335,7 @@ class AppsTable(QTableWidget):
             def install():
                 self._install_app(pkg)
 
-            item = self._gen_row_button(self.i18n['install'].capitalize(), self.STYLE_BT_INSTALL, install)
+            item = self._gen_row_button(self.i18n['install'].capitalize(), 'bt_install', install)
         else:
             item = None
 
@@ -466,13 +465,15 @@ class AppsTable(QTableWidget):
             if len(publisher) > PUBLISHER_MAX_SIZE:
                 publisher = full_publisher[0: PUBLISHER_MAX_SIZE - 3] + '...'
 
+        lb_name = QLabel()
+
         if not publisher:
             if not pkg.model.installed:
-                item.setStyleSheet('QLabel { color: red; }')
+                lb_name.setObjectName('publisher_unknown')
 
             publisher = self.i18n['unknown']
 
-        lb_name = QLabel('  {}'.format(publisher))
+        lb_name.setText('  {}'.format(publisher))
         item.addWidget(lb_name)
 
         if publisher and full_publisher:

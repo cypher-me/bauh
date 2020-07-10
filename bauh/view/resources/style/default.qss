@@ -86,3 +86,20 @@ QToolBar#toolbar_bottom {
 QProgressBar#progress_manage { }
 
 QProgressBar#progress_screenshots { }
+
+QToolButton#bt_install {
+    background: @color_green;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+QToolButton#bt_uninstall {
+    color: @color_brown;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+QLabel#publisher_unknown {
+    color: red;
+}

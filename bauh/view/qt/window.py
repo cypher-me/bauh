@@ -24,7 +24,7 @@ from bauh.commons.html import bold
 from bauh.view.core.tray_client import notify_tray
 from bauh.view.qt import dialog, commons, qt_utils, root
 from bauh.view.qt.about import AboutDialog
-from bauh.view.qt.apps_table import AppsTable, UpdateToggleButton
+from bauh.view.qt.apps_table import TablePackages, UpdateToggleButton
 from bauh.view.qt.components import new_spacer, InputFilter, IconButton, QtComponentsManager
 from bauh.view.qt.confirmation import ConfirmationDialog
 from bauh.view.qt.history import HistoryDialog
@@ -283,7 +283,7 @@ class ManageWindow(QWidget):
         self.table_container.setLayout(QVBoxLayout())
         self.table_container.layout().setContentsMargins(0, 0, 0, 0)
 
-        self.table_apps = AppsTable(self, self.icon_cache, download_icons=bool(self.config['download']['icons']))
+        self.table_apps = TablePackages(self, self.icon_cache, download_icons=bool(self.config['download']['icons']))
         self.table_apps.change_headers_policy()
         self.table_container.layout().addWidget(self.table_apps)
 
