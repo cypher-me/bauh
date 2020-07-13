@@ -24,7 +24,7 @@ from bauh.commons.html import bold
 from bauh.view.core.tray_client import notify_tray
 from bauh.view.qt import dialog, commons, qt_utils, root
 from bauh.view.qt.about import AboutDialog
-from bauh.view.qt.apps_table import TablePackages, UpdateToggleButton
+from bauh.view.qt.apps_table import TablePackages, UpgradeToggleButton
 from bauh.view.qt.components import new_spacer, InputFilter, IconButton, QtComponentsManager
 from bauh.view.qt.confirmation import ConfirmationDialog
 from bauh.view.qt.history import HistoryDialog
@@ -1040,10 +1040,10 @@ class ManageWindow(QWidget):
         if dialog.ask_confirmation(title=self.i18n['manage_window.upgrade_all.popup.title'],
                                    body=self.i18n['manage_window.upgrade_all.popup.body'],
                                    i18n=self.i18n,
-                                   widgets=[UpdateToggleButton(pkg=None,
-                                                               root=self,
-                                                               i18n=self.i18n,
-                                                               clickable=False)]):
+                                   widgets=[UpgradeToggleButton(pkg=None,
+                                                                root=self,
+                                                                i18n=self.i18n,
+                                                                clickable=False)]):
 
             self._begin_action(action_label=self.i18n['manage_window.status.upgrading'],
                                action_id=ACTION_UPGRADE)

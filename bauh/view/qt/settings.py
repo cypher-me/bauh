@@ -2,13 +2,14 @@ import gc
 from io import StringIO
 
 from PyQt5.QtCore import QSize, Qt, QCoreApplication
+from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QToolBar, QSizePolicy, QPushButton
 
 from bauh import __app_name__
 from bauh.api.abstract.controller import SoftwareManager
 from bauh.api.abstract.view import MessageType
 from bauh.view.core.controller import GenericSoftwareManager
-from bauh.view.qt import dialog, css
+from bauh.view.qt import dialog
 from bauh.view.qt.components import to_widget, new_spacer
 from bauh.view.qt.qt_utils import centralize
 from bauh.view.util import util
@@ -36,6 +37,7 @@ class SettingsWindow(QWidget):
         action_bar.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 
         bt_close = QPushButton()
+        bt_close.setCursor(QCursor(Qt.PointingHandCursor))
         bt_close.setText(self.i18n['close'].capitalize())
         bt_close.clicked.connect(lambda: self.close())
         action_bar.addWidget(bt_close)
@@ -43,8 +45,9 @@ class SettingsWindow(QWidget):
         action_bar.addWidget(new_spacer())
 
         bt_change = QPushButton()
-        bt_change.setStyleSheet(css.OK_BUTTON)
+        bt_change.setObjectName('bt_ok_button')
         bt_change.setText(self.i18n['change'].capitalize())
+        bt_change.setCursor(QCursor(Qt.PointingHandCursor))
         bt_change.clicked.connect(self._save_settings)
         action_bar.addWidget(bt_change)
 

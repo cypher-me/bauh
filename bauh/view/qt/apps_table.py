@@ -14,7 +14,6 @@ from bauh.api.abstract.cache import MemoryCache
 from bauh.api.abstract.model import PackageStatus
 from bauh.commons.html import strip_html
 from bauh.view.qt import dialog
-from bauh.view.qt.colors import GREEN
 from bauh.view.qt.components import IconButton
 from bauh.view.qt.view_model import PackageView
 from bauh.view.util import resource
@@ -25,13 +24,10 @@ DESC_MAX_SIZE = 40
 PUBLISHER_MAX_SIZE = 25
 
 
-class UpdateToggleButton(QWidget):
-
-    STYLE_DEFAULT = 'QToolButton { background: ' + GREEN + ' } QToolButton:checked { background: gray } '
-    STYLE_UNCHECKED = 'QToolButton:disabled { background: #d69003 }'
+class UpgradeToggleButton(QWidget):
 
     def __init__(self, pkg: PackageView, root: QWidget, i18n: I18n, checked: bool = True, clickable: bool = True):
-        super(UpdateToggleButton, self).__init__()
+        super(UpgradeToggleButton, self).__init__()
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         self.app_view = pkg
         self.root = root
@@ -49,7 +45,8 @@ class UpdateToggleButton(QWidget):
         if clickable:
             self.bt.clicked.connect(self.change_state)
 
-        self.bt.setStyleSheet(self.STYLE_DEFAULT + (self.STYLE_UNCHECKED if not clickable and not checked else ''))
+        if not clickable and not checked:
+            self.bt.setObjectName('bt_check_upgrade_disabled')
 
         layout.addWidget(self.bt)
 
@@ -289,11 +286,11 @@ class TablePackages(QTableWidget):
             if update_check_enabled and pkg.model.installed and not pkg.model.is_update_ignored() and pkg.model.update:
                 col_update = QToolBar()
                 col_update.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
-                col_update.addWidget(UpdateToggleButton(pkg=pkg,
-                                                        root=self.window,
-                                                        i18n=self.i18n,
-                                                        checked=pkg.update_checked if pkg.model.can_be_updated() else False,
-                                                        clickable=pkg.model.can_be_updated()))
+                col_update.addWidget(UpgradeToggleButton(pkg=pkg,
+                                                         root=self.window,
+                                                         i18n=self.i18n,
+                                                         checked=pkg.update_checked if pkg.model.can_be_updated() else False,
+                                                         clickable=pkg.model.can_be_updated()))
 
             self.setCellWidget(pkg.table_index, 7, col_update)
 
@@ -372,11 +369,11 @@ class TablePackages(QTableWidget):
             tooltip = self.i18n['version.unknown']
 
         if pkg.model.update and not pkg.model.is_update_ignored():
-            label_version.setStyleSheet("color: {}; font-weight: bold".format(GREEN))
+            label_version.setObjectName('label_version')
             tooltip = self.i18n['version.installed_outdated']
 
         if pkg.model.is_update_ignored():
-            label_version.setStyleSheet("color: {}; font-weight: bold".format(BROWN))
+            label_version.setObjectName('label_version_ignored')
             tooltip = self.i18n['version.updates_ignored']
 
         if pkg.model.installed and pkg.model.update and not pkg.model.is_update_ignored() and pkg.model.version and pkg.model.latest_version and pkg.model.version != pkg.model.latest_version:

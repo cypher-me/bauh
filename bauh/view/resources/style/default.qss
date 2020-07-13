@@ -117,3 +117,67 @@ FormQt::title {
     left: 7px;
     padding: 0px 5px 0px 5px;
 }
+
+UpgradeToggleButton > QToolButton {
+    background: @color_green;
+}
+
+UpgradeToggleButton > QToolButton:checked {
+    background: grey;
+}
+
+QToolButton#bt_check_upgrade_disabled:disabled {
+    background: #dda739;
+}
+
+QLabel#label_version {
+    color: @color_green;
+    font-weight: bold;
+}
+
+QLabel#label_version_ignored {
+    color: @color_brown;
+    font-weight: bold;
+}
+
+QPushButton#bt_ok_button {
+    background: @color_green;
+    color: white;
+    font-weight: bold;
+}
+
+QPushButton#bt_ok_button:disabled {
+    background-color: grey;
+}
+
+AboutDialog > QLabel#app_name {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+AboutDialog > QLabel#app_version {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+AboutDialog > QLabel#app_description {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+AboutDialog > QLabel#app_more_information {
+    font-size: 11px;
+}
+
+AboutDialog > QLabel#app_license {
+    font-size: 11px;
+}
+
+AboutDialog > QLabel#app_trouble_question, AboutDialog > QLabel#app_rate_question {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+AboutDialog > QLabel#app_trouble_answer, AboutDialog > QLabel#app_rate_answer {
+    font-size: 10px;
+}
