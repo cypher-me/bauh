@@ -45,7 +45,7 @@ class SettingsWindow(QWidget):
         action_bar.addWidget(new_spacer())
 
         bt_change = QPushButton()
-        bt_change.setObjectName('bt_ok_button')
+        bt_change.setObjectName('bt_ok')
         bt_change.setText(self.i18n['change'].capitalize())
         bt_change.setCursor(QCursor(Qt.PointingHandCursor))
         bt_change.clicked.connect(self._save_settings)

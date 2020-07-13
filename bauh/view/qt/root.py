@@ -3,13 +3,12 @@ from typing import Tuple
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor, QIcon
-from PyQt5.QtWidgets import QInputDialog, QLineEdit, QDialogButtonBox, QApplication
+from PyQt5.QtWidgets import QInputDialog, QLineEdit, QDialogButtonBox, QApplication, QPushButton
 
 from bauh.api.abstract.context import ApplicationContext
 from bauh.api.abstract.view import MessageType
 from bauh.commons.system import new_subprocess
 from bauh.view.core.config import read_config
-from bauh.view.qt import css
 from bauh.view.qt.components import QtComponentsManager
 from bauh.view.qt.dialog import show_message
 from bauh.view.util import util
@@ -33,7 +32,6 @@ def ask_root_password(context: ApplicationContext, i18n: I18n,
         return context.root_password, True
 
     diag = QInputDialog(flags=Qt.CustomizeWindowHint | Qt.WindowTitleHint)
-    diag.setStyleSheet("""QLineEdit {  border-radius: 5px; font-size: 16px; border: 1px solid lightblue }""")
     diag.setInputMode(QInputDialog.TextInput)
     diag.setTextEchoMode(QLineEdit.Password)
     diag.setWindowIcon(util.get_default_icon()[1])
@@ -45,9 +43,6 @@ def ask_root_password(context: ApplicationContext, i18n: I18n,
     bt_box = [c for c in diag.children() if isinstance(c, QDialogButtonBox)][0]
 
     for bt in bt_box.buttons():
-        if bt_box.buttonRole(bt) == QDialogButtonBox.AcceptRole:
-            bt.setStyleSheet(css.OK_BUTTON)
-
         bt.setCursor(QCursor(Qt.PointingHandCursor))
         bt.setIcon(QIcon())
 

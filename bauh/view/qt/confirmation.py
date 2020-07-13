@@ -19,7 +19,6 @@ class ConfirmationDialog(QMessageBox):
             self.setWindowFlags(Qt.CustomizeWindowHint | Qt.WindowTitleHint)
 
         self.setWindowTitle(title)
-        self.setStyleSheet('QLabel { margin-right: 25px; }')
         self.bt_yes = self.addButton(i18n['popup.button.yes'] if not confirmation_label else confirmation_label.capitalize(), QMessageBox.YesRole)
         self.bt_yes.setStyleSheet(css.OK_BUTTON)
         self.setDefaultButton(self.bt_yes)

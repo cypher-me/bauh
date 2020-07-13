@@ -140,13 +140,13 @@ QLabel#label_version_ignored {
     font-weight: bold;
 }
 
-QPushButton#bt_ok_button {
+QPushButton#bt_ok {
     background: @color_green;
     color: white;
     font-weight: bold;
 }
 
-QPushButton#bt_ok_button:disabled {
+QPushButton#bt_ok:disabled {
     background-color: grey;
 }
 
@@ -180,4 +180,14 @@ AboutDialog > QLabel#app_trouble_question, AboutDialog > QLabel#app_rate_questio
 
 AboutDialog > QLabel#app_trouble_answer, AboutDialog > QLabel#app_rate_answer {
     font-size: 10px;
+}
+
+QInputDialog#dialog_password > QLineEdit {
+    border-radius: 5px;
+    font-size: 16px;
+    border: 1px solid lightblue;
+}
+
+ConfirmationDialog > QLabel, QMessageBox#confirmation > QLabel {
+    margin-right: 25px;
 }
