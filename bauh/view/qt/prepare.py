@@ -13,7 +13,6 @@ from bauh.api.abstract.context import ApplicationContext
 from bauh.api.abstract.controller import SoftwareManager
 from bauh.api.abstract.handler import TaskManager
 from bauh.view.qt import root
-from bauh.view.qt.colors import GREEN
 from bauh.view.qt.components import new_spacer
 from bauh.view.qt.qt_utils import centralize
 from bauh.view.qt.thread import AnimateProgress
@@ -159,14 +158,14 @@ class PreparePanel(QWidget, TaskManager):
         self.label_top = QLabel()
         self.label_top.setCursor(QCursor(Qt.WaitCursor))
         self.label_top.setText("{}...".format(self.i18n['prepare_panel.title.start'].capitalize()))
+        self.label_top.setObjectName('init_status')
         self.label_top.setAlignment(Qt.AlignHCenter)
-        self.label_top.setStyleSheet("QLabel { font-size: 14px; font-weight: bold; }")
         self.layout().addWidget(self.label_top)
         self.layout().addWidget(QLabel())
 
         self.table = QTableWidget()
+        self.table.setObjectName('init_table')
         self.table.setCursor(QCursor(Qt.WaitCursor))
-        self.table.setStyleSheet("QTableWidget { background-color: transparent; }")
         self.table.setFocusPolicy(Qt.NoFocus)
         self.table.setShowGrid(False)
         self.table.verticalHeader().setVisible(False)
@@ -176,23 +175,23 @@ class PreparePanel(QWidget, TaskManager):
         self.table.setHorizontalHeaderLabels(['' for _ in range(4)])
         self.layout().addWidget(self.table)
 
-        self.textarea_output = QPlainTextEdit(self)
-        self.textarea_output.resize(self.table.size())
-        self.textarea_output.setStyleSheet("background: black; color: white;")
-        self.layout().addWidget(self.textarea_output)
-        self.textarea_output.setVisible(False)
-        self.textarea_output.setReadOnly(True)
-        self.textarea_output.setMaximumHeight(100)
+        self.textarea_details = QPlainTextEdit(self)
+        self.textarea_details.setObjectName('init_details')
+        self.textarea_details.resize(self.table.size())
+        self.layout().addWidget(self.textarea_details)
+        self.textarea_details.setVisible(False)
+        self.textarea_details.setReadOnly(True)
+        self.textarea_details.setMaximumHeight(100)
         self.current_output_task = None
 
         self.bottom_widget = QWidget()
         self.bottom_widget.setLayout(QHBoxLayout())
         self.bottom_widget.layout().addStretch()
-        bt_hide_output = QPushButton(self.i18n['prepare.bt_hide_details'])
-        bt_hide_output.setStyleSheet('QPushButton { text-decoration: underline; border: 0px; background: none } ')
-        bt_hide_output.clicked.connect(self.hide_output)
-        bt_hide_output.setCursor(QCursor(Qt.PointingHandCursor))
-        self.bottom_widget.layout().addWidget(bt_hide_output)
+        bt_hide_details = QPushButton(self.i18n['prepare.bt_hide_details'])
+        bt_hide_details.setObjectName('init_bt_hide_details')
+        bt_hide_details.clicked.connect(self.hide_output)
+        bt_hide_details.setCursor(QCursor(Qt.PointingHandCursor))
+        self.bottom_widget.layout().addWidget(bt_hide_details)
         self.bottom_widget.layout().addStretch()
         self.layout().addWidget(self.bottom_widget)
         self.bottom_widget.setVisible(False)
@@ -224,8 +223,8 @@ class PreparePanel(QWidget, TaskManager):
 
     def hide_output(self):
         self.current_output_task = None
-        self.textarea_output.setVisible(False)
-        self.textarea_output.clear()
+        self.textarea_details.setVisible(False)
+        self.textarea_details.clear()
         self.bottom_widget.setVisible(False)
         self._resize_columns()
         self.setFocus(Qt.NoFocusReason)
@@ -295,11 +294,11 @@ class PreparePanel(QWidget, TaskManager):
 
             if lines:
                 self.current_output_task = id_
-                self.textarea_output.clear()
-                self.textarea_output.setVisible(True)
+                self.textarea_details.clear()
+                self.textarea_details.setVisible(True)
 
                 for l in lines:
-                    self.textarea_output.appendPlainText(l)
+                    self.textarea_details.appendPlainText(l)
 
                 self.bottom_widget.setVisible(True)
 
@@ -314,10 +313,10 @@ class PreparePanel(QWidget, TaskManager):
         self.table.setCellWidget(task_row, 0, icon_widget)
 
         lb_status = QLabel(label)
+        lb_status.setObjectName('init_task_status')
         lb_status.setCursor(Qt.WaitCursor)
         lb_status.setMinimumWidth(50)
         lb_status.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
-        lb_status.setStyleSheet("QLabel { font-weight: bold; }")
         self.table.setCellWidget(task_row, 1, lb_status)
 
         lb_sub = QLabel()
@@ -328,9 +327,9 @@ class PreparePanel(QWidget, TaskManager):
         self.table.setCellWidget(task_row, 2, lb_sub)
 
         lb_progress = QLabel('{0:.2f}'.format(0) + '%')
+        lb_progress.setObjectName('init_task_progress')
         lb_progress.setCursor(Qt.WaitCursor)
         lb_progress.setContentsMargins(10, 0, 10, 0)
-        lb_progress.setStyleSheet("QLabel { font-weight: bold; }")
         lb_progress.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
 
         self.table.setCellWidget(task_row, 3, lb_progress)
@@ -372,14 +371,15 @@ class PreparePanel(QWidget, TaskManager):
         full_output.append(output)
 
         if self.current_output_task == task_id:
-            self.textarea_output.appendPlainText(output)
+            self.textarea_details.appendPlainText(output)
 
     def finish_task(self, task_id: str):
         task = self.tasks[task_id]
         task['lb_sub'].setText('')
 
         for key in ('lb_prog', 'lb_status'):
-            task[key].setStyleSheet('QLabel { color: %s; text-decoration: line-through; }' % GREEN)
+            # FIXME not changing the style after the object name is changed
+            task[key].setObjectName('{}_finished'.format(task[key].objectName()))
 
         task['finished'] = True
         self._resize_columns()

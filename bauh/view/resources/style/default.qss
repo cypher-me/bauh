@@ -1,3 +1,32 @@
+QLabel#init_status {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+QTableWidget#init_table {
+    background-color: transparent;
+}
+
+QPlainTextEdit#init_details {
+    background: black;
+    color: white;
+}
+
+QPushButton#init_bt_hide_details {
+    text-decoration: underline;
+    border: 0px;
+    background: none;
+}
+
+QLabel#init_task_status, QLabel#init_task_progress {
+    font-weight: bold;
+}
+
+QLabel#init_task_status_finished, QLabel#init_task_progress_finished {
+    color: @color_green;
+    text-decoration: line-through;
+}
+
 QProgressBar::chunk { background-color: @color_green; }
 
 QProgressBar#progress_initialization { }
@@ -190,4 +219,38 @@ QInputDialog#dialog_password > QLineEdit {
 
 ConfirmationDialog > QLabel, QMessageBox#confirmation > QLabel {
     margin-right: 25px;
+}
+
+QLabel#info_field {
+    font-weight: bold;
+}
+
+QLineEdit#info_field_val {
+    width: 400px;
+}
+
+RadioSelectQt {
+    font-weight: bold;
+}
+
+ComboSelectQt QGridLayout, RangeInputQt QGridLayout, TextInputQt QGridLayout {
+    margin-left: 0;
+}
+
+ComboSelectQt QLabel, RangeInputQt QLabel, TextInputQt QLabel {
+    font-weight: bold;
+}
+
+MultipleSelectQt {
+    font-weight: bold;
+    font-size: 12px;
+    border: 1px solid silver;
+    border-radius: 6px;
+    margin-top: 6px;
+}
+
+MultipleSelectQt::title {
+    subcontrol-origin: margin;
+    left: 7px;
+    padding: 0px 5px 0px 5px;
 }

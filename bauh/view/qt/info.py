@@ -64,14 +64,14 @@ class InfoDialog(QDialog):
                     show_val = val
 
                 text = QLineEdit()
+                text.setObjectName('info_field_val')
                 text.setToolTip(show_val)
                 text.setText(val)
                 text.setCursorPosition(0)
-                text.setStyleSheet("width: 400px")
                 text.setReadOnly(True)
 
                 label = QLabel(i18n.get(i18n_key, i18n.get(attr.lower(), attr)).capitalize())
-                label.setStyleSheet("font-weight: bold")
+                label.setObjectName('info_field')
 
                 self.gbox_info.layout().addWidget(label, idx, 0)
                 self.gbox_info.layout().addWidget(text, idx, 1)

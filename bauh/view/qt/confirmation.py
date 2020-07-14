@@ -1,10 +1,9 @@
 from typing import List
 
 from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtWidgets import QMessageBox, QVBoxLayout, QLabel, QWidget, QScrollArea, QFrame
+from PyQt5.QtWidgets import QMessageBox, QVBoxLayout, QLabel, QWidget, QScrollArea, QFrame, QPushButton
 
 from bauh.api.abstract.view import ViewComponent
-from bauh.view.qt import css
 from bauh.view.qt.components import to_widget
 from bauh.view.util.translation import I18n
 
@@ -19,8 +18,9 @@ class ConfirmationDialog(QMessageBox):
             self.setWindowFlags(Qt.CustomizeWindowHint | Qt.WindowTitleHint)
 
         self.setWindowTitle(title)
-        self.bt_yes = self.addButton(i18n['popup.button.yes'] if not confirmation_label else confirmation_label.capitalize(), QMessageBox.YesRole)
-        self.bt_yes.setStyleSheet(css.OK_BUTTON)
+        self.bt_yes = QPushButton(i18n['popup.button.yes'] if not confirmation_label else confirmation_label.capitalize())
+        self.bt_yes.setObjectName('bt_ok')
+        self.addButton(self.bt_yes, QMessageBox.YesRole)
         self.setDefaultButton(self.bt_yes)
 
         if deny_button:

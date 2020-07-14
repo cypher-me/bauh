@@ -393,8 +393,6 @@ class RadioSelectQt(QGroupBox):
     def __init__(self, model: SingleSelectComponent):
         super(RadioSelectQt, self).__init__(model.label + ' :' if model.label else None)
         self.model = model
-        self.setStyleSheet("QGroupBox { font-weight: bold }")
-
         grid = QGridLayout()
         self.setLayout(grid)
 
@@ -423,7 +421,6 @@ class ComboSelectQt(QGroupBox):
         super(ComboSelectQt, self).__init__()
         self.model = model
         self.setLayout(QGridLayout())
-        self.setStyleSheet('QGridLayout {margin-left: 0} QLabel { font-weight: bold}')
         self.layout().addWidget(QLabel(model.label + ' :' if model.label else ''), 0, 0)
         self.layout().addWidget(FormComboBoxQt(model), 0, 1)
 
@@ -434,7 +431,6 @@ class TextInputQt(QGroupBox):
         super(TextInputQt, self).__init__()
         self.model = model
         self.setLayout(QGridLayout())
-        self.setStyleSheet('QGridLayout {margin-left: 0} QLabel { font-weight: bold}')
         self.layout().addWidget(QLabel(model.label.capitalize() + ' :' if model.label else ''), 0, 0)
 
         if self.model.max_width > 0:
@@ -467,7 +463,6 @@ class MultipleSelectQt(QGroupBox):
 
     def __init__(self, model: MultipleSelectComponent, callback):
         super(MultipleSelectQt, self).__init__(model.label if model.label else None)
-        self.setStyleSheet(css.GROUP_BOX)
         self.model = model
         self._layout = QGridLayout()
         self.setLayout(self._layout)
@@ -944,7 +939,6 @@ class RangeInputQt(QGroupBox):
         super(RangeInputQt, self).__init__()
         self.model = model
         self.setLayout(QGridLayout())
-        self.setStyleSheet('QGridLayout {margin-left: 0} QLabel { font-weight: bold}')
         self.layout().addWidget(QLabel(model.label.capitalize() + ' :' if model.label else ''), 0, 0)
 
         if self.model.max_width > 0:
