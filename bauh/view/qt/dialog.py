@@ -2,7 +2,7 @@ from typing import List
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QCursor
-from PyQt5.QtWidgets import QMessageBox, QLabel, QWidget, QHBoxLayout, QPushButton
+from PyQt5.QtWidgets import QMessageBox, QLabel, QWidget, QHBoxLayout
 
 from bauh.api.abstract.view import MessageType
 from bauh.view.util import resource
@@ -43,15 +43,12 @@ def ask_confirmation(title: str, body: str, i18n: I18n, icon: QIcon = QIcon(reso
 
     diag.layout().addWidget(wbody, 0, 1)
 
-    bt_yes = QPushButton(i18n['popup.button.yes'])
-    bt_yes.setObjectName('bt_ok')
+    bt_yes = diag.addButton(i18n['popup.button.yes'], QMessageBox.YesRole)
     bt_yes.setCursor(QCursor(Qt.PointingHandCursor))
-    diag.addButton(bt_yes, QMessageBox.YesRole)
     diag.setDefaultButton(bt_yes)
 
-    bt_no = QPushButton(i18n['popup.button.no'])
+    bt_no = diag.addButton(i18n['popup.button.no'], QMessageBox.NoRole)
     bt_no.setCursor(QCursor(Qt.PointingHandCursor))
-    diag.addButton(bt_no, QMessageBox.NoRole)
 
     if icon:
         diag.setWindowIcon(icon)

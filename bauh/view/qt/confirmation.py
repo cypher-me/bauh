@@ -1,7 +1,8 @@
 from typing import List
 
 from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtWidgets import QMessageBox, QVBoxLayout, QLabel, QWidget, QScrollArea, QFrame, QPushButton
+from PyQt5.QtGui import QCursor
+from PyQt5.QtWidgets import QMessageBox, QVBoxLayout, QLabel, QWidget, QScrollArea, QFrame
 
 from bauh.api.abstract.view import ViewComponent
 from bauh.view.qt.components import to_widget
@@ -11,20 +12,27 @@ from bauh.view.util.translation import I18n
 class ConfirmationDialog(QMessageBox):
 
     def __init__(self, title: str, body: str, i18n: I18n, screen_size: QSize,  components: List[ViewComponent] = None,
-                 confirmation_label: str = None, deny_label: str = None, deny_button: bool = True, window_cancel: bool = True):
+                 confirmation_label: str = None, deny_label: str = None, deny_button: bool = True, window_cancel: bool = True,
+                 confirmation_button: bool = True):
         super(ConfirmationDialog, self).__init__()
 
         if not window_cancel:
             self.setWindowFlags(Qt.CustomizeWindowHint | Qt.WindowTitleHint)
 
         self.setWindowTitle(title)
-        self.bt_yes = QPushButton(i18n['popup.button.yes'] if not confirmation_label else confirmation_label.capitalize())
-        self.bt_yes.setObjectName('bt_ok')
-        self.addButton(self.bt_yes, QMessageBox.YesRole)
-        self.setDefaultButton(self.bt_yes)
+
+        self.bt_yes = None
+        if confirmation_button:
+            self.bt_yes = self.addButton(i18n['popup.button.yes'] if not confirmation_label else confirmation_label.capitalize(), QMessageBox.YesRole)
+            self.bt_yes.setCursor(QCursor(Qt.PointingHandCursor))
+            self.setDefaultButton(self.bt_yes)
 
         if deny_button:
-            self.addButton(i18n['popup.button.no'] if not deny_label else deny_label.capitalize(), QMessageBox.NoRole)
+            self.bt_no = self.addButton(i18n['popup.button.no'] if not deny_label else deny_label.capitalize(), QMessageBox.NoRole)
+            self.bt_no.setCursor(QCursor(Qt.PointingHandCursor))
+
+            if not confirmation_button:
+                self.setDefaultButton(self.bt_no)
 
         label = None
         if body:
@@ -67,5 +75,5 @@ class ConfirmationDialog(QMessageBox):
 
         self.exec_()
 
-    def is_confirmed(self):
-        return self.clickedButton() == self.bt_yes
+    def is_confirmed(self) -> bool:
+        return bool(self.bt_yes and self.clickedButton() == self.bt_yes)
