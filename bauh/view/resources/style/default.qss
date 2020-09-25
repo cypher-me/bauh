@@ -254,3 +254,16 @@ MultipleSelectQt::title {
     left: 7px;
     padding: 0px 5px 0px 5px;
 }
+
+
+RootDialog QLineEdit#password {
+    qproperty-alignment: AlignCenter;
+    qproperty-echoMode: Password;
+}
+
+RootDialog QLabel#message { }
+
+RootDialog QLabel#error {
+    qproperty-alignment: AlignCenter;
+    color: red;
+}

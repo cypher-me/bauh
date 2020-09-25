@@ -1,5 +1,6 @@
 import gc
 from io import StringIO
+from typing import Optional
 
 from PyQt5.QtCore import QSize, Qt, QCoreApplication
 from PyQt5.QtGui import QCursor
@@ -18,7 +19,7 @@ from bauh.view.util.translation import I18n
 
 class SettingsWindow(QWidget):
 
-    def __init__(self, manager: SoftwareManager, i18n: I18n, screen_size: QSize, window: QWidget, parent: QWidget = None):
+    def __init__(self, manager: SoftwareManager, i18n: I18n, screen_size: QSize, window: QWidget, parent: Optional[QWidget] = None):
         super(SettingsWindow, self).__init__(parent=parent, flags=Qt.CustomizeWindowHint | Qt.WindowTitleHint)
         self.setWindowTitle('{} ({})'.format(i18n['settings'].capitalize(), __app_name__))
         self.setLayout(QVBoxLayout())

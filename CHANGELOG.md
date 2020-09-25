@@ -7,7 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [0.9.8]
 ### Improvements
 - new parameter **--offline**: it assumes the internet connection is off. Useful if the connection is bad or unstable.
-- "click" cursor added to some buttons
+- UI
+    - root dialog design and behavior
 
 ### Fixes
 - Arch
