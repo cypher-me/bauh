@@ -27,6 +27,7 @@ from bauh.view.qt.about import AboutDialog
 from bauh.view.qt.apps_table import TablePackages, UpgradeToggleButton
 from bauh.view.qt.components import new_spacer, InputFilter, IconButton, QtComponentsManager
 from bauh.view.qt.confirmation import ConfirmationDialog
+from bauh.view.qt.dialog import ConfirmationPopup
 from bauh.view.qt.history import HistoryDialog
 from bauh.view.qt.info import InfoDialog
 from bauh.view.qt.root import RootDialog
@@ -1366,10 +1367,10 @@ class ManageWindow(QWidget):
         self.progress_bar.setValue(value)
 
     def begin_execute_custom_action(self, pkg: PackageView, action: CustomSoftwareAction):
-        if pkg is None and not dialog.ask_confirmation(title=self.i18n['confirmation'].capitalize(),
-                                                       body=self.i18n['custom_action.proceed_with'].capitalize().format('"{}"'.format(self.i18n[action.i18n_label_key])),
-                                                       icon=QIcon(action.icon_path) if action.icon_path else QIcon(resource.get_path('img/logo.svg')),
-                                                       i18n=self.i18n):
+        if pkg is None and not ConfirmationPopup(title=self.i18n['confirmation'].capitalize(),
+                                                 body='<p>{}</p>'.format(self.i18n['custom_action.proceed_with'].capitalize().format(bold(self.i18n[action.i18n_label_key]))),
+                                                 icon=QIcon(action.icon_path) if action.icon_path else QIcon(resource.get_path('img/logo.svg')),
+                                                 i18n=self.i18n).ask():
             return False
 
         pwd = None
