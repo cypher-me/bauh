@@ -13,7 +13,7 @@ from bauh.api.abstract.model import SoftwarePackage, PackageHistory, PackageUpda
 from bauh.api.abstract.view import SingleSelectComponent, SelectViewType, InputOption, ViewComponent, PanelComponent, \
     FormComponent
 from bauh.api.exception import NoInternetException
-from bauh.commons import resource, internet
+from bauh.commons import resource
 from bauh.commons.category import CategoriesDownloader
 from bauh.commons.config import save_config
 from bauh.commons.html import bold
@@ -230,7 +230,8 @@ class SnapManager(SoftwareManager):
         if success:
             new_installed = []
             try:
-                current_installed = self.read_installed(disk_loader=disk_loader, internet_available=internet.is_available()).installed
+                net_available = self.context.internet_checker.is_available()
+                current_installed = self.read_installed(disk_loader=disk_loader, internet_available=net_available).installed
             except:
                 new_installed = [pkg]
                 traceback.print_exc()
@@ -261,7 +262,7 @@ class SnapManager(SoftwareManager):
         return ProcessHandler(watcher).handle_simple(snap.refresh_and_stream(pkg.name, root_password))[0]
 
     def change_channel(self, pkg: SnapApplication, root_password: str, watcher: ProcessWatcher) -> bool:
-        if not internet.is_available():
+        if not self.context.internet_checker.is_available():
             raise NoInternetException()
 
         try:

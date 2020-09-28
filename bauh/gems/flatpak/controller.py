@@ -364,7 +364,7 @@ class FlatpakManager(SoftwareManager):
             if user.is_root():
                 handler.handle_simple(flatpak.set_default_remotes('system'))
             else:
-                user_password, valid = watcher.request_root_password()
+                valid, user_password = watcher.request_root_password()
                 if not valid:
                     watcher.print('Operation aborted')
                     return TransactionResult(success=False, installed=[], removed=[])

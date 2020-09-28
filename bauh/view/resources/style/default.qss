@@ -261,7 +261,9 @@ RootDialog QLineEdit#password {
     qproperty-echoMode: Password;
 }
 
-RootDialog QLabel#message { }
+RootDialog QLabel#message {
+    qproperty-alignment: AlignCenter;
+}
 
 RootDialog QLabel#error {
     qproperty-alignment: AlignCenter;

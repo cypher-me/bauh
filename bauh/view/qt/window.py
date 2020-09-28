@@ -4,7 +4,7 @@ import operator
 import time
 import traceback
 from pathlib import Path
-from typing import List, Type, Set, Tuple
+from typing import List, Type, Set, Tuple, Optional
 
 from PyQt5.QtCore import QEvent, Qt, QSize, pyqtSignal
 from PyQt5.QtGui import QIcon, QWindowStateChangeEvent, QCursor
@@ -22,14 +22,14 @@ from bauh.api.http import HttpClient
 from bauh.commons import user
 from bauh.commons.html import bold
 from bauh.view.core.tray_client import notify_tray
-from bauh.view.qt import dialog, commons, qt_utils, root
+from bauh.view.qt import dialog, commons, qt_utils
 from bauh.view.qt.about import AboutDialog
 from bauh.view.qt.apps_table import TablePackages, UpgradeToggleButton
 from bauh.view.qt.components import new_spacer, InputFilter, IconButton, QtComponentsManager
 from bauh.view.qt.confirmation import ConfirmationDialog
 from bauh.view.qt.history import HistoryDialog
 from bauh.view.qt.info import InfoDialog
-from bauh.view.qt.root import ask_root_password
+from bauh.view.qt.root import RootDialog
 from bauh.view.qt.screenshots import ScreenshotsDialog
 from bauh.view.qt.settings import SettingsWindow
 from bauh.view.qt.thread import UpgradeSelected, RefreshApps, UninstallPackage, DowngradePackage, ShowPackageInfo, \
@@ -85,7 +85,7 @@ GROUP_LOWER_BTS = 5
 
 class ManageWindow(QWidget):
     signal_user_res = pyqtSignal(bool)
-    signal_root_password = pyqtSignal(str, bool)
+    signal_root_password = pyqtSignal(bool, str)
     signal_table_update = pyqtSignal()
     signal_stop_notifying = pyqtSignal()
 
@@ -528,10 +528,10 @@ class ManageWindow(QWidget):
 
     def _pause_and_ask_root_password(self):
         self.thread_animate_progress.pause()
-        password, valid = root.ask_root_password(self.context, i18n=self.i18n, comp_manager=self.comp_manager)
+        valid, password = RootDialog.ask_password(self.context, i18n=self.i18n, comp_manager=self.comp_manager)
 
         self.thread_animate_progress.animate()
-        self.signal_root_password.emit(password, valid)
+        self.signal_root_password.emit(valid, password)
 
     def _show_message(self, msg: dict):
         self.thread_animate_progress.pause()
@@ -1256,13 +1256,13 @@ class ManageWindow(QWidget):
             self.comp_manager.restore_state(ACTION_SEARCH)
             dialog.show_message(title=self.i18n['warning'].capitalize(), body=self.i18n[res['error']], type_=MessageType.WARNING)
 
-    def _ask_root_password(self, action: str, pkg: PackageView) -> Tuple[str, bool]:
+    def _ask_root_password(self, action: str, pkg: PackageView) -> Tuple[Optional[str], bool]:
         pwd = None
         requires_root = self.manager.requires_root(action, pkg.model)
 
         if not user.is_root() and requires_root:
-            pwd, ok = ask_root_password(self.context, i18n=self.i18n, comp_manager=self.comp_manager)
-            if not ok:
+            valid, pwd = RootDialog.ask_password(self.context, i18n=self.i18n, comp_manager=self.comp_manager)
+            if not valid:
                 return pwd, False
 
         return pwd, True
@@ -1375,9 +1375,9 @@ class ManageWindow(QWidget):
         pwd = None
 
         if not user.is_root() and action.requires_root:
-            pwd, ok = ask_root_password(self.context, i18n=self.i18n, comp_manager=self.comp_manager)
+            valid, pwd = RootDialog.ask_password(self.context, i18n=self.i18n, comp_manager=self.comp_manager)
 
-            if not ok:
+            if not valid:
                 return
 
         self._begin_action(action_label='{}{}'.format(self.i18n[action.i18n_status_key], ' {}'.format(pkg.model.name) if pkg else ''),

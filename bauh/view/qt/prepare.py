@@ -1,7 +1,7 @@
 import datetime
 import operator
 from functools import reduce
-from typing import Tuple
+from typing import Tuple, Optional
 
 from PyQt5.QtCore import QSize, Qt, QThread, pyqtSignal, QCoreApplication
 from PyQt5.QtGui import QIcon, QCursor
@@ -12,9 +12,9 @@ from bauh import __app_name__
 from bauh.api.abstract.context import ApplicationContext
 from bauh.api.abstract.controller import SoftwareManager
 from bauh.api.abstract.handler import TaskManager
-from bauh.view.qt import root
 from bauh.view.qt.components import new_spacer
 from bauh.view.qt.qt_utils import centralize
+from bauh.view.qt.root import RootDialog
 from bauh.view.qt.thread import AnimateProgress
 from bauh.view.util.translation import I18n
 
@@ -36,7 +36,7 @@ class Prepare(QThread, TaskManager):
         self.password_response = None
         self._registered = 0
 
-    def ask_password(self) -> Tuple[str, bool]:
+    def ask_password(self) -> Tuple[bool, Optional[str]]:
         self.waiting_password = True
         self.signal_ask_password.emit()
 
@@ -45,14 +45,14 @@ class Prepare(QThread, TaskManager):
 
         return self.password_response
 
-    def set_password_reply(self, password: str, valid: bool):
-        self.password_response = password, valid
+    def set_password_reply(self, valid: bool, password: str):
+        self.password_response = valid, password
         self.waiting_password = False
 
     def run(self):
         root_pwd = None
         if self.manager.requires_root('prepare', None):
-            root_pwd, ok = self.ask_password()
+            ok, root_pwd = self.ask_password()
 
             if not ok:
                 QCoreApplication.exit(1)
@@ -114,7 +114,7 @@ class EnableSkip(QThread):
 class PreparePanel(QWidget, TaskManager):
 
     signal_status = pyqtSignal(int)
-    signal_password_response = pyqtSignal(str, bool)
+    signal_password_response = pyqtSignal(bool, str)
 
     def __init__(self, context: ApplicationContext, manager: SoftwareManager, screen_size: QSize,  i18n: I18n, manage_window: QWidget):
         super(PreparePanel, self).__init__(flags=Qt.CustomizeWindowHint | Qt.WindowTitleHint)
@@ -231,8 +231,8 @@ class PreparePanel(QWidget, TaskManager):
             self.bt_bar.setVisible(True)
 
     def ask_root_password(self):
-        root_pwd, ok = root.ask_root_password(self.context, self.i18n)
-        self.signal_password_response.emit(root_pwd, ok)
+        valid, root_pwd = RootDialog.ask_password(self.context, self.i18n)
+        self.signal_password_response.emit(valid, root_pwd)
 
     def _enable_skip_button(self):
         self.bt_skip.setEnabled(True)
