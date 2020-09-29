@@ -217,10 +217,6 @@ QInputDialog#dialog_password > QLineEdit {
     border: 1px solid lightblue;
 }
 
-ConfirmationDialog > QLabel, QMessageBox#confirmation > QLabel {
-    margin-right: 25px;
-}
-
 QLabel#info_field {
     font-weight: bold;
 }
