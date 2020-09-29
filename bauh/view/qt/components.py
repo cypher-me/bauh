@@ -1027,3 +1027,42 @@ class RangeInputQt(QGroupBox):
 
     def _update_value(self):
         self.model.value = self.spinner.value()
+
+
+class QSearchBar(QWidget):
+
+    def __init__(self, i18n: I18n, search_callback, parent: Optional[QWidget] = None):
+        super(QSearchBar, self).__init__(parent=parent)
+        self.setLayout(QHBoxLayout())
+        self.setContentsMargins(0, 0, 0, 0)
+        self.layout().setSpacing(0)
+
+        self.inp_search = QLineEdit()
+        self.inp_search.setObjectName('inp_search')
+        self.inp_search.setFrame(False)
+        self.inp_search.setPlaceholderText(i18n['window_manage.input_search.placeholder'] + "...")
+        self.inp_search.setToolTip(i18n['window_manage.input_search.tooltip'])
+        self.inp_search.returnPressed.connect(search_callback)
+        search_background_color = self.inp_search.palette().color(self.inp_search.backgroundRole()).name()
+
+        search_left_corner = QLabel()
+        search_left_corner.setObjectName('lb_left_corner')
+        search_left_corner.setStyleSheet('QLabel#lb_left_corner { background: %s; }' % search_background_color)
+        self.layout().addWidget(search_left_corner)
+
+        self.layout().addWidget(self.inp_search)
+
+        search_right_corner = QLabel()
+        search_right_corner.setObjectName('lb_right_corner')
+        search_right_corner.setPixmap(QIcon(resource.get_path('img/search.svg')).pixmap(QSize(10, 10)))
+        search_right_corner.setStyleSheet("QLabel#lb_right_corner { background: %s; }" % search_background_color)
+        self.layout().addWidget(search_right_corner)
+
+    def clear(self):
+        self.inp_search.clear()
+
+    def text(self) -> str:
+        return self.inp_search.text()
+
+    def setFocus(self):
+        self.inp_search.setFocus()

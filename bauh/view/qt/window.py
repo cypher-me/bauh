@@ -1,5 +1,4 @@
 import logging
-import logging
 import operator
 import time
 import traceback
@@ -9,7 +8,7 @@ from typing import List, Type, Set, Tuple, Optional
 from PyQt5.QtCore import QEvent, Qt, QSize, pyqtSignal
 from PyQt5.QtGui import QIcon, QWindowStateChangeEvent, QCursor
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QCheckBox, QHeaderView, QToolBar, \
-    QLabel, QPlainTextEdit, QLineEdit, QProgressBar, QPushButton, QComboBox, QApplication, QListView, QSizePolicy, \
+    QLabel, QPlainTextEdit, QProgressBar, QPushButton, QComboBox, QApplication, QListView, QSizePolicy, \
     QMenu, QAction
 
 from bauh import LOGS_PATH
@@ -25,7 +24,7 @@ from bauh.view.core.tray_client import notify_tray
 from bauh.view.qt import dialog, commons, qt_utils
 from bauh.view.qt.about import AboutDialog
 from bauh.view.qt.apps_table import TablePackages, UpgradeToggleButton
-from bauh.view.qt.components import new_spacer, InputFilter, IconButton, QtComponentsManager, to_widget
+from bauh.view.qt.components import new_spacer, InputFilter, IconButton, QtComponentsManager, to_widget, QSearchBar
 from bauh.view.qt.dialog import ConfirmationDialog
 from bauh.view.qt.history import HistoryDialog
 from bauh.view.qt.info import InfoDialog
@@ -123,32 +122,7 @@ class ManageWindow(QWidget):
         self.label_status.setText('')
         self.toolbar_status.addWidget(self.label_status)
 
-        self.search_bar = QToolBar()
-        self.search_bar.setObjectName('toolbar_search')
-        self.search_bar.setContentsMargins(0, 0, 0, 0)
-
-        self.inp_search = QLineEdit()
-        self.inp_search.setObjectName('inp_search')
-        self.inp_search.setFrame(False)
-        self.inp_search.setPlaceholderText(self.i18n['window_manage.input_search.placeholder'] + "...")
-        self.inp_search.setToolTip(self.i18n['window_manage.input_search.tooltip'])
-        self.inp_search.returnPressed.connect(self.search)
-        search_background_color = self.inp_search.palette().color(self.inp_search.backgroundRole()).name()
-
-        search_left_corner = QLabel()
-        search_left_corner.setObjectName('search_left_corner')
-        search_left_corner.setStyleSheet('QLabel#search_left_corner {background: %s;}' % search_background_color)
-        self.search_bar.addWidget(search_left_corner)
-
-        self.search_bar.addWidget(self.inp_search)
-
-        search_right_corner = QLabel()
-        search_right_corner.setObjectName('search_right_corner')
-        search_right_corner.setPixmap(QIcon(resource.get_path('img/search.svg')).pixmap(QSize(10, 10)))
-        search_right_corner.setStyleSheet("QLabel#search_right_corner {background: %s;}" % search_background_color)
-
-        self.search_bar.addWidget(search_right_corner)
-
+        self.search_bar = QSearchBar(i18n=self.i18n, search_callback=self.search)
         self.comp_manager.register_component(SEARCH_BAR, self.search_bar, self.toolbar_status.addWidget(self.search_bar))
 
         self.toolbar_status.addWidget(new_spacer())
@@ -555,7 +529,7 @@ class ManageWindow(QWidget):
         self.thread_warnings.start()
 
     def _begin_loading_installed(self):
-        self.inp_search.setText('')
+        self.search_bar.clear()
         self.input_name.setText('')
         self._begin_action(self.i18n['manage_window.status.installed'])
         self._handle_console_option(False)
@@ -652,7 +626,7 @@ class ManageWindow(QWidget):
         self.textarea_details.hide()
 
     def begin_refresh_packages(self, pkg_types: Set[Type[SoftwarePackage]] = None):
-        self.inp_search.clear()
+        self.search_bar.clear()
 
         self._begin_action(self.i18n['manage_window.status.refreshing'])
         self.comp_manager.set_components_visible(False)
@@ -683,7 +657,7 @@ class ManageWindow(QWidget):
         self.types_changed = False
 
     def _begin_load_suggestions(self, filter_installed: bool):
-        self.inp_search.clear()
+        self.search_bar.clear()
         self._begin_action(self.i18n['manage_window.status.suggestions'])
         self._handle_console_option(False)
         self.comp_manager.set_components_visible(False)
@@ -1234,7 +1208,7 @@ class ManageWindow(QWidget):
         self._begin_action('{} {}'.format(self.i18n['manage_window.status.searching'], word if word else ''), action_id=action_id)
 
     def search(self):
-        word = self.inp_search.text().strip()
+        word = self.search_bar.text().strip()
         if word:
             self._handle_console(False)
             self._begin_search(word, action_id=ACTION_SEARCH)

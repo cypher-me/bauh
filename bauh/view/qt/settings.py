@@ -3,7 +3,7 @@ from io import StringIO
 from typing import Optional
 
 from PyQt5.QtCore import QSize, Qt, QCoreApplication
-from PyQt5.QtGui import QCursor
+from PyQt5.QtGui import QCursor, QKeyEvent
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QToolBar, QSizePolicy, QPushButton
 
 from bauh import __app_name__
@@ -39,6 +39,8 @@ class SettingsWindow(QWidget):
         action_bar.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 
         bt_close = QPushButton()
+        bt_close.setObjectName('bt_cancel')
+        bt_close.setAutoDefault(True)
         bt_close.setCursor(QCursor(Qt.PointingHandCursor))
         bt_close.setText(self.i18n['close'].capitalize())
         bt_close.clicked.connect(lambda: self.close())
@@ -47,6 +49,8 @@ class SettingsWindow(QWidget):
         action_bar.addWidget(new_spacer())
 
         bt_change = QPushButton()
+        bt_change.setAutoDefault(True)
+        bt_change.setObjectName('bt_ok')
         bt_change.setCursor(QCursor(Qt.PointingHandCursor))
         bt_change.setText(self.i18n['change'].capitalize())
         bt_change.clicked.connect(self._save_settings)

@@ -39,19 +39,17 @@ QLabel#label_status {
     font-weight: bold
 }
 
-QToolBar#toolbar_search {
-    spacing: 0px;
-}
 
-QLabel#search_left_corner {
+QSearchBar QLabel#lb_left_corner {
      border-top-left-radius: 5px;
      border-bottom-left-radius: 5px;
      border-left: 1px solid lightgrey;
      border-top: 1px solid lightgrey;
      border-bottom: 1px solid lightgrey;
+     border-right: 0px;
 }
 
-QLabel#search_right_corner {
+QSearchBar QLabel#lb_right_corner {
     padding-right: 10px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
