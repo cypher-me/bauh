@@ -1,35 +1,35 @@
-QLabel#init_status {
+PreparePanel QLabel#prepare_status {
     font-size: 14px;
     font-weight: bold;
 }
 
-QTableWidget#init_table {
+PreparePanel QTableWidget#tasks {
     background-color: transparent;
 }
 
-QPlainTextEdit#init_details {
+PreparePanel QPlainTextEdit#task_details {
     background: black;
     color: white;
 }
 
-QPushButton#init_bt_hide_details {
+PreparePanel QPushButton#bt_hide_details {
     text-decoration: underline;
     border: 0px;
     background: none;
 }
 
-QLabel#init_task_status, QLabel#init_task_progress {
+PreparePanel QLabel#task_status, QLabel#task_progress {
     font-weight: bold;
 }
 
-QLabel#init_task_status_finished, QLabel#init_task_progress_finished {
+PreparePanel QLabel#task_status_finished, QLabel#task_progress_finished {
     color: @color_green;
     text-decoration: line-through;
 }
 
 QProgressBar::chunk { background-color: @color_green; }
 
-QProgressBar#progress_initialization { }
+QProgressBar#prepare_progress { }
 
 QWidget#manage_window { }
 

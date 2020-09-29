@@ -4,7 +4,7 @@ from functools import reduce
 from typing import Tuple, Optional
 
 from PyQt5.QtCore import QSize, Qt, QThread, pyqtSignal, QCoreApplication
-from PyQt5.QtGui import QIcon, QCursor
+from PyQt5.QtGui import QIcon, QCursor, QCloseEvent
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QSizePolicy, QTableWidget, QHeaderView, QPushButton, QToolBar, \
     QProgressBar, QApplication, QPlainTextEdit, QToolButton, QHBoxLayout
 
@@ -156,13 +156,13 @@ class PreparePanel(QWidget, TaskManager):
         self.label_top = QLabel()
         self.label_top.setCursor(QCursor(Qt.WaitCursor))
         self.label_top.setText("{}...".format(self.i18n['prepare_panel.title.start'].capitalize()))
-        self.label_top.setObjectName('init_status')
+        self.label_top.setObjectName('prepare_status')
         self.label_top.setAlignment(Qt.AlignHCenter)
         self.layout().addWidget(self.label_top)
         self.layout().addWidget(QLabel())
 
         self.table = QTableWidget()
-        self.table.setObjectName('init_table')
+        self.table.setObjectName('tasks')
         self.table.setCursor(QCursor(Qt.WaitCursor))
         self.table.setFocusPolicy(Qt.NoFocus)
         self.table.setShowGrid(False)
@@ -174,7 +174,7 @@ class PreparePanel(QWidget, TaskManager):
         self.layout().addWidget(self.table)
 
         self.textarea_details = QPlainTextEdit(self)
-        self.textarea_details.setObjectName('init_details')
+        self.textarea_details.setObjectName('task_details')
         self.textarea_details.resize(self.table.size())
         self.layout().addWidget(self.textarea_details)
         self.textarea_details.setVisible(False)
@@ -185,8 +185,9 @@ class PreparePanel(QWidget, TaskManager):
         self.bottom_widget = QWidget()
         self.bottom_widget.setLayout(QHBoxLayout())
         self.bottom_widget.layout().addStretch()
+
         bt_hide_details = QPushButton(self.i18n['prepare.bt_hide_details'])
-        bt_hide_details.setObjectName('init_bt_hide_details')
+        bt_hide_details.setObjectName('bt_hide_details')
         bt_hide_details.clicked.connect(self.hide_output)
         bt_hide_details.setCursor(QCursor(Qt.PointingHandCursor))
         self.bottom_widget.layout().addWidget(bt_hide_details)
@@ -196,6 +197,7 @@ class PreparePanel(QWidget, TaskManager):
 
         self.bt_bar = QToolBar()
         self.bt_close = QPushButton(self.i18n['close'].capitalize())
+        self.bt_close.setObjectName('bt_cancel')
         self.bt_close.setCursor(QCursor(Qt.PointingHandCursor))
         self.bt_close.clicked.connect(self.close)
         self.bt_close.setVisible(False)
@@ -203,7 +205,7 @@ class PreparePanel(QWidget, TaskManager):
 
         self.bt_bar.addWidget(new_spacer())
         self.progress_bar = QProgressBar()
-        self.progress_bar.setObjectName('progress_initialization')
+        self.progress_bar.setObjectName('prepare_progress')
         self.progress_bar.setMaximumHeight(10 if QApplication.instance().style().objectName().lower() == 'windows' else 4)
         self.progress_bar.setTextVisible(False)
         self.progress_bar.setVisible(False)
@@ -249,7 +251,7 @@ class PreparePanel(QWidget, TaskManager):
         for i in range(self.table.columnCount()):
             header_horizontal.setSectionResizeMode(i, QHeaderView.ResizeToContents)
 
-        self.resize(self.get_table_width() * 1.05, self.sizeHint().height())
+        self.resize(int(self.get_table_width() * 1.05), self.sizeHint().height())
 
     def show(self):
         super(PreparePanel, self).show()
@@ -266,7 +268,7 @@ class PreparePanel(QWidget, TaskManager):
         self.ref_bt_close.setVisible(True)
         self.ref_progress_bar.setVisible(True)
 
-    def closeEvent(self, QCloseEvent):
+    def closeEvent(self, ev: QCloseEvent):
         if not self.self_close:
             QCoreApplication.exit()
 
@@ -312,19 +314,21 @@ class PreparePanel(QWidget, TaskManager):
         self.table.setCellWidget(task_row, 0, icon_widget)
 
         lb_status = QLabel(label)
-        lb_status.setObjectName('init_task_status')
+        lb_status.setObjectName('task_status')
         lb_status.setCursor(Qt.WaitCursor)
         lb_status.setMinimumWidth(50)
         lb_status.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
-        self.table.setCellWidget(task_row, 1, lb_status)
+        lb_status_col = 1
+        self.table.setCellWidget(task_row, lb_status_col, lb_status)
 
         lb_progress = QLabel('{0:.2f}'.format(0) + '%')
-        lb_progress.setObjectName('init_task_progress')
+        lb_progress.setObjectName('task_progress')
         lb_progress.setCursor(Qt.WaitCursor)
         lb_progress.setContentsMargins(10, 0, 10, 0)
         lb_progress.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
+        lb_progress_col = 2
 
-        self.table.setCellWidget(task_row, 2, lb_progress)
+        self.table.setCellWidget(task_row, lb_progress_col, lb_progress)
 
         lb_sub = QLabel()
         lb_status.setCursor(Qt.WaitCursor)
@@ -335,10 +339,13 @@ class PreparePanel(QWidget, TaskManager):
 
         self.tasks[id_] = {'bt_icon': bt_icon,
                            'lb_status': lb_status,
+                           'lb_status_col': lb_status_col,
                            'lb_prog': lb_progress,
+                           'lb_prog_col': lb_progress_col,
                            'progress': 0,
                            'lb_sub': lb_sub,
-                           'finished': False}
+                           'finished': False,
+                           'row': task_row}
 
     def update_progress(self, task_id: str, progress: float, substatus: str):
         task = self.tasks[task_id]
@@ -375,8 +382,9 @@ class PreparePanel(QWidget, TaskManager):
         task['lb_sub'].setText('')
 
         for key in ('lb_prog', 'lb_status'):
-            # FIXME not changing the style after the object name is changed
-            task[key].setObjectName('{}_finished'.format(task[key].objectName()))
+            new_lb = QLabel(task[key].text())
+            new_lb.setObjectName('{}_finished'.format(task[key].objectName()))
+            self.table.setCellWidget(task['row'], task['{}_col'.format(key)], new_lb)
 
         task['finished'] = True
         self._resize_columns()
