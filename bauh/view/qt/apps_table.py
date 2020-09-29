@@ -15,6 +15,7 @@ from bauh.api.abstract.model import PackageStatus, CustomSoftwareAction
 from bauh.commons.html import strip_html, bold
 from bauh.view.qt import dialog
 from bauh.view.qt.components import IconButton
+from bauh.view.qt.dialog import ConfirmationDialog
 from bauh.view.qt.view_model import PackageView
 from bauh.view.util import resource
 from bauh.view.util.translation import I18n
@@ -136,10 +137,9 @@ class TablePackages(QTableWidget):
                 action_downgrade = QAction(self.i18n["manage_window.apps_table.row.actions.downgrade"])
 
                 def downgrade():
-                    if dialog.ask_confirmation(
-                            title=self.i18n['manage_window.apps_table.row.actions.downgrade'],
-                            body=self._parag(self.i18n['manage_window.apps_table.row.actions.downgrade.popup.body'].format(self._bold(str(pkg)))),
-                            i18n=self.i18n):
+                    if ConfirmationDialog(title=self.i18n['manage_window.apps_table.row.actions.downgrade'],
+                                          body=self._parag(self.i18n['manage_window.apps_table.row.actions.downgrade.popup.body'].format(self._bold(str(pkg)))),
+                                          i18n=self.i18n).ask():
                         self.window.begin_downgrade(pkg)
 
                 action_downgrade.triggered.connect(downgrade)
@@ -181,10 +181,10 @@ class TablePackages(QTableWidget):
             else:
                 body = '{} ?'.format(self.i18n[action.i18n_label_key])
 
-            if dialog.ask_confirmation(
-                    title=self.i18n[action.i18n_label_key],
-                    body=self._parag(body),
-                    i18n=self.i18n):
+            if ConfirmationDialog(icon=QIcon(pkg.model.get_type_icon_path()),
+                                  title=self.i18n[action.i18n_label_key],
+                                  body=self._parag(body),
+                                  i18n=self.i18n).ask():
                 self.window.begin_execute_custom_action(pkg, action)
 
         item.triggered.connect(custom_action)
@@ -202,9 +202,9 @@ class TablePackages(QTableWidget):
         self._update_row(pkg, change_update_col=change_update_col)
 
     def _uninstall(self, pkg: PackageView):
-        if dialog.ask_confirmation(title=self.i18n['manage_window.apps_table.row.actions.uninstall.popup.title'],
-                                   body=self._parag(self.i18n['manage_window.apps_table.row.actions.uninstall.popup.body'].format(self._bold(str(pkg)))),
-                                   i18n=self.i18n):
+        if ConfirmationDialog(title=self.i18n['manage_window.apps_table.row.actions.uninstall.popup.title'],
+                              body=self._parag(self.i18n['manage_window.apps_table.row.actions.uninstall.popup.body'].format(self._bold(str(pkg)))),
+                              i18n=self.i18n).ask():
             self.window.begin_uninstall(pkg)
 
     def _bold(self, text: str) -> str:
@@ -222,10 +222,9 @@ class TablePackages(QTableWidget):
         if warning:
             body += '<br/><br/> {}'.format('<br/>'.join(('{}.'.format(phrase) for phrase in warning.split('.') if phrase)))
 
-        if dialog.ask_confirmation(
-                title=self.i18n['manage_window.apps_table.row.actions.install.popup.title'],
-                body=self._parag(body),
-                i18n=self.i18n):
+        if ConfirmationDialog(title=self.i18n['manage_window.apps_table.row.actions.install.popup.title'],
+                              body=self._parag(body),
+                              i18n=self.i18n).ask():
 
             self.window.install(pkgv)
 

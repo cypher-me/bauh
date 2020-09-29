@@ -12,6 +12,7 @@ from bauh.api.abstract.view import MessageType
 from bauh.view.core.controller import GenericSoftwareManager
 from bauh.view.qt import dialog
 from bauh.view.qt.components import to_widget, new_spacer
+from bauh.view.qt.dialog import ConfirmationDialog
 from bauh.view.qt.qt_utils import centralize
 from bauh.view.util import util
 from bauh.view.util.translation import I18n
@@ -83,10 +84,10 @@ class SettingsWindow(QWidget):
                                     body=self.i18n['settings.changed.success.warning'],
                                     type_=MessageType.INFO)
                 QCoreApplication.exit()
-            elif dialog.ask_confirmation(title=self.i18n['warning'].capitalize(),
-                                         body="<p>{}</p><p>{}</p>".format(self.i18n['settings.changed.success.warning'],
-                                                                          self.i18n['settings.changed.success.reboot']),
-                                         i18n=self.i18n):
+            elif ConfirmationDialog(title=self.i18n['warning'].capitalize(),
+                                    body="<p>{}</p><p>{}</p>".format(self.i18n['settings.changed.success.warning'],
+                                                                     self.i18n['settings.changed.success.reboot']),
+                                    i18n=self.i18n).ask():
                 self.close()
                 util.restart_app()
             else:
