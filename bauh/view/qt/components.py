@@ -24,7 +24,7 @@ class QtComponentsManager:
         self.group_of_groups = {}
         self._saved_states = {}
 
-    def register_component(self, component_id: int, instance: QWidget, action: QAction = None):
+    def register_component(self, component_id: int, instance: QWidget, action: Optional[QAction] = None):
         comp = (instance, action, {'v': True, 'e': True, 'r': False})
         self.components[component_id] = comp
         self._save_state(comp)

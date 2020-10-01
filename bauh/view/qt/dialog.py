@@ -31,7 +31,7 @@ def show_message(title: str, body: str, type_: MessageType, icon: QIcon = QIcon(
 
 class ConfirmationDialog(QDialog):
 
-    def __init__(self, title: str, body: str, i18n: I18n, icon: QIcon = QIcon(resource.get_path('img/logo.svg')),
+    def __init__(self, title: str, body: Optional[str], i18n: I18n, icon: QIcon = QIcon(resource.get_path('img/logo.svg')),
                  widgets: Optional[List[QWidget]] = None, confirmation_button: bool = True, deny_button: bool = True,
                  window_cancel: bool = False, confirmation_label: Optional[str] = None, deny_label: Optional[str] = None):
         super(ConfirmationDialog, self).__init__()

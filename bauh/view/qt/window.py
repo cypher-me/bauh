@@ -9,7 +9,7 @@ from PyQt5.QtCore import QEvent, Qt, QSize, pyqtSignal
 from PyQt5.QtGui import QIcon, QWindowStateChangeEvent, QCursor
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QCheckBox, QHeaderView, QToolBar, \
     QLabel, QPlainTextEdit, QProgressBar, QPushButton, QComboBox, QApplication, QListView, QSizePolicy, \
-    QMenu, QAction
+    QMenu, QAction, QHBoxLayout
 
 from bauh import LOGS_PATH
 from bauh.api.abstract.cache import MemoryCache
@@ -128,8 +128,9 @@ class ManageWindow(QWidget):
         self.toolbar_status.addWidget(new_spacer())
         self.layout.addWidget(self.toolbar_status)
 
-        self.toolbar_filters = QToolBar()
-        self.toolbar_filters.setObjectName('toolbar_filters')
+        self.toolbar_filters = QWidget()
+        self.toolbar_filters.setObjectName('table_filters')
+        self.toolbar_filters.setLayout(QHBoxLayout())
         self.toolbar_filters.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
         self.toolbar_filters.setContentsMargins(0, 0, 0, 0)
 
@@ -139,7 +140,8 @@ class ManageWindow(QWidget):
         self.check_updates.setText(self.i18n['updates'].capitalize())
         self.check_updates.stateChanged.connect(self._handle_updates_filter)
         self.check_updates.sizePolicy().setRetainSizeWhenHidden(True)
-        self.comp_manager.register_component(CHECK_UPDATES, self.check_updates, self.toolbar_filters.addWidget(self.check_updates))
+        self.toolbar_filters.layout().addWidget(self.check_updates)
+        self.comp_manager.register_component(CHECK_UPDATES, self.check_updates)
 
         self.check_apps = QCheckBox()
         self.check_apps.setObjectName('check_apps')
@@ -148,7 +150,8 @@ class ManageWindow(QWidget):
         self.check_apps.setChecked(True)
         self.check_apps.stateChanged.connect(self._handle_filter_only_apps)
         self.check_apps.sizePolicy().setRetainSizeWhenHidden(True)
-        self.comp_manager.register_component(CHECK_APPS, self.check_apps, self.toolbar_filters.addWidget(self.check_apps))
+        self.toolbar_filters.layout().addWidget(self.check_apps)
+        self.comp_manager.register_component(CHECK_APPS, self.check_apps)
 
         self.any_type_filter = 'any'
         self.cache_type_filter_icons = {}
@@ -164,7 +167,8 @@ class ManageWindow(QWidget):
         self.combo_filter_type.activated.connect(self._handle_type_filter)
         self.combo_filter_type.addItem('--- {} ---'.format(self.i18n['type'].capitalize()), self.any_type_filter)
         self.combo_filter_type.sizePolicy().setRetainSizeWhenHidden(True)
-        self.comp_manager.register_component(COMBO_TYPES, self.combo_filter_type, self.toolbar_filters.addWidget(self.combo_filter_type))
+        self.toolbar_filters.layout().addWidget(self.combo_filter_type)
+        self.comp_manager.register_component(COMBO_TYPES, self.combo_filter_type)
 
         self.any_category_filter = 'any'
         self.combo_categories = QComboBox()
@@ -177,7 +181,8 @@ class ManageWindow(QWidget):
         self.combo_categories.activated.connect(self._handle_category_filter)
         self.combo_categories.sizePolicy().setRetainSizeWhenHidden(True)
         self.combo_categories.addItem('--- {} ---'.format(self.i18n['category'].capitalize()), self.any_category_filter)
-        self.comp_manager.register_component(COMBO_CATEGORIES, self.combo_categories, self.toolbar_filters.addWidget(self.combo_categories))
+        self.toolbar_filters.layout().addWidget(self.combo_categories)
+        self.comp_manager.register_component(COMBO_CATEGORIES, self.combo_categories)
 
         self.input_name = InputFilter(self.begin_apply_filters)
         self.input_name.setObjectName('name_filter')
@@ -185,9 +190,10 @@ class ManageWindow(QWidget):
         self.input_name.setToolTip(self.i18n['manage_window.name_filter.tooltip'])
         self.input_name.setFixedWidth(130)
         self.input_name.sizePolicy().setRetainSizeWhenHidden(True)
-        self.comp_manager.register_component(INP_NAME, self.input_name, self.toolbar_filters.addWidget(self.input_name))
+        self.toolbar_filters.layout().addWidget(self.input_name)
+        self.comp_manager.register_component(INP_NAME, self.input_name)
 
-        self.toolbar_filters.addWidget(new_spacer())
+        self.toolbar_filters.layout().addWidget(new_spacer())
 
         toolbar_bts = []
 
@@ -200,9 +206,9 @@ class ManageWindow(QWidget):
             bt_sugs.setIcon(QIcon(resource.get_path('img/suggestions.svg')))
             bt_sugs.clicked.connect(lambda: self._begin_load_suggestions(filter_installed=True))
             bt_sugs.sizePolicy().setRetainSizeWhenHidden(True)
-            ref_bt_sugs = self.toolbar_filters.addWidget(bt_sugs)
+            self.toolbar_filters.layout().addWidget(bt_sugs)
             toolbar_bts.append(bt_sugs)
-            self.comp_manager.register_component(BT_SUGGESTIONS, bt_sugs, ref_bt_sugs)
+            self.comp_manager.register_component(BT_SUGGESTIONS, bt_sugs)
 
         bt_inst = QPushButton()
         bt_inst.setObjectName('bt_installed')
@@ -213,7 +219,8 @@ class ManageWindow(QWidget):
         bt_inst.clicked.connect(self._begin_loading_installed)
         bt_inst.sizePolicy().setRetainSizeWhenHidden(True)
         toolbar_bts.append(bt_inst)
-        self.comp_manager.register_component(BT_INSTALLED, bt_inst, self.toolbar_filters.addWidget(bt_inst))
+        self.toolbar_filters.layout().addWidget(bt_inst)
+        self.comp_manager.register_component(BT_INSTALLED, bt_inst)
 
         bt_ref = QPushButton()
         bt_ref.setObjectName('bt_refresh')
@@ -224,7 +231,8 @@ class ManageWindow(QWidget):
         bt_ref.clicked.connect(self.begin_refresh_packages)
         bt_ref.sizePolicy().setRetainSizeWhenHidden(True)
         toolbar_bts.append(bt_ref)
-        self.comp_manager.register_component(BT_REFRESH, bt_ref, self.toolbar_filters.addWidget(bt_ref))
+        self.toolbar_filters.layout().addWidget(bt_ref)
+        self.comp_manager.register_component(BT_REFRESH, bt_ref)
 
         self.bt_upgrade = QPushButton()
         self.bt_upgrade.setObjectName('bt_upgrade')
@@ -235,7 +243,8 @@ class ManageWindow(QWidget):
         self.bt_upgrade.clicked.connect(self.upgrade_selected)
         self.bt_upgrade.sizePolicy().setRetainSizeWhenHidden(True)
         toolbar_bts.append(self.bt_upgrade)
-        self.comp_manager.register_component(BT_UPGRADE, self.bt_upgrade, self.toolbar_filters.addWidget(self.bt_upgrade))
+        self.toolbar_filters.layout().addWidget(self.bt_upgrade)
+        self.comp_manager.register_component(BT_UPGRADE, self.bt_upgrade)
 
         # setting all buttons to the same size:
         bt_biggest_size = 0
@@ -1013,13 +1022,14 @@ class ManageWindow(QWidget):
         self.progress_controll_enabled = enabled
 
     def upgrade_selected(self):
+        body = QWidget()
+        body.setLayout(QHBoxLayout())
+        body.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
+        body.layout().addWidget(QLabel(self.i18n['manage_window.upgrade_all.popup.body']))
+        body.layout().addWidget(UpgradeToggleButton(pkg=None, root=self, i18n=self.i18n, clickable=False))
         if ConfirmationDialog(title=self.i18n['manage_window.upgrade_all.popup.title'],
-                              body=self.i18n['manage_window.upgrade_all.popup.body'],
-                              i18n=self.i18n,
-                              widgets=[UpgradeToggleButton(pkg=None,
-                                                           root=self,
-                                                           i18n=self.i18n,
-                                                           clickable=False)]).ask():
+                              i18n=self.i18n, body=None,
+                              widgets=[body]).ask():
 
             self._begin_action(action_label=self.i18n['manage_window.status.upgrading'],
                                action_id=ACTION_UPGRADE)

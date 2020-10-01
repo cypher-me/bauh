@@ -67,10 +67,7 @@ QLineEdit#inp_search {
      border-top: 1px solid lightgrey;
 }
 
-QToolBar#toolbar_filters {
-    spacing: 4px;
-    margin-top: 15px;
-}
+ManageWindow QWidget#table_filters { }
 
 QCheckBox#check_updates { }
 
@@ -80,7 +77,7 @@ QComboBox#combo_types > QLineEdit, QComboBox#combo_categories > QLineEdit {
     height: 2px;
 }
 
-InputFilter#name_filter {
+ManageWindow InputFilter#name_filter {
     color: grey;
 }
 

@@ -2,7 +2,7 @@ import operator
 import os
 from functools import reduce
 from threading import Lock
-from typing import List
+from typing import List, Optional
 
 from PyQt5.QtCore import Qt, QUrl, QSize
 from PyQt5.QtGui import QPixmap, QIcon, QCursor
@@ -27,7 +27,7 @@ PUBLISHER_MAX_SIZE = 25
 
 class UpgradeToggleButton(QWidget):
 
-    def __init__(self, pkg: PackageView, root: QWidget, i18n: I18n, checked: bool = True, clickable: bool = True):
+    def __init__(self, pkg: Optional[PackageView], root: QWidget, i18n: I18n, checked: bool = True, clickable: bool = True):
         super(UpgradeToggleButton, self).__init__()
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         self.app_view = pkg
