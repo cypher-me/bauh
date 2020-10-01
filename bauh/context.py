@@ -44,6 +44,7 @@ def new_qt_application(app_config: dict, quit_on_last_closed: bool = False, name
 
             if stylesheet_str:
                 var_map = _read_var_file(stylesheet_file)
+                var_map['root_img_path'] = resource.get_path('img')
 
                 if var_map:
                     for var, value in var_map.items():
@@ -56,8 +57,8 @@ def new_qt_application(app_config: dict, quit_on_last_closed: bool = False, name
 
 def _read_var_file(stylesheet_file: str) -> dict:
     vars_file = stylesheet_file.replace('.qss', '.vars')
+    var_map = {}
     if os.path.isfile(vars_file):
-        var_map = {}
         with open(vars_file) as f:
             for line in f.readlines():
                 if line:
@@ -71,7 +72,8 @@ def _read_var_file(stylesheet_file: str) -> dict:
                             if var and value:
                                 var_map[var] = value
 
-        return var_map
+    return var_map
+
 
 def _gen_i18n_data(app_config: dict, locale_dir: str) -> Tuple[str, dict, str, dict]:
     i18n_key, current_i18n = translation.get_locale_keys(app_config['locale'], locale_dir=locale_dir)

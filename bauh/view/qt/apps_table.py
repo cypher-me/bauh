@@ -13,7 +13,6 @@ from PyQt5.QtWidgets import QTableWidget, QTableView, QMenu, QAction, QTableWidg
 from bauh.api.abstract.cache import MemoryCache
 from bauh.api.abstract.model import PackageStatus, CustomSoftwareAction
 from bauh.commons.html import strip_html, bold
-from bauh.view.qt import dialog
 from bauh.view.qt.components import IconButton
 from bauh.view.qt.dialog import ConfirmationDialog
 from bauh.view.qt.view_model import PackageView
@@ -55,12 +54,10 @@ class UpgradeToggleButton(QWidget):
             self.bt.click()
 
         if clickable:
-            self.bt.setIcon(QIcon(resource.get_path('img/app_update.svg')))
             self.setToolTip('{} {}'.format(i18n['manage_window.apps_table.upgrade_toggle.tooltip'],
                                            i18n['manage_window.apps_table.upgrade_toggle.enabled.tooltip']))
         else:
             if not checked:
-                self.bt.setIcon(QIcon(resource.get_path('img/exclamation.svg')))
                 self.bt.setEnabled(False)
 
                 tooltip = i18n['{}.update.disabled.tooltip'.format(pkg.model.gem_name)]
@@ -71,7 +68,6 @@ class UpgradeToggleButton(QWidget):
                     self.setToolTip('{} {}'.format(i18n['manage_window.apps_table.upgrade_toggle.tooltip'],
                                                    i18n['manage_window.apps_table.upgrade_toggle.disabled.tooltip']))
             else:
-                self.bt.setIcon(QIcon(resource.get_path('img/app_update.svg')))
                 self.bt.setCheckable(False)
 
     def change_state(self, not_checked: bool):

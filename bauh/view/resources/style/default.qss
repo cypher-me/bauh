@@ -85,9 +85,22 @@ QPushButton#bt_installed, QPushButton#bt_refresh, QPushButton#bt_suggestions, QP
     font-weight: @upper_toolbar.bt_weight;
 }
 
+QPushButton#bt_refresh {
+    qproperty-icon: url("@root_img_path/refresh.svg")
+}
+
+QPushButton#bt_installed {
+    qproperty-icon: url("@root_img_path/disk.svg")
+}
+
+QPushButton#bt_suggestions {
+    qproperty-icon: url("@root_img_path/suggestions.svg")
+}
+
 QPushButton#bt_upgrade {
     background: @color_green;
     color: white;
+    qproperty-icon: url("@root_img_path/app_update.svg")
 }
 
 QWidget#table_container { }
@@ -143,6 +156,7 @@ FormQt::title {
 }
 
 UpgradeToggleButton > QToolButton {
+    qproperty-icon: url("@root_img_path/app_update.svg");
     background: @color_green;
 }
 
@@ -151,6 +165,7 @@ UpgradeToggleButton > QToolButton:checked {
 }
 
 QToolButton#bt_check_upgrade_disabled:disabled {
+    qproperty-icon: url("@root_img_path/exclamation.svg");
     background: #dda739;
 }
 
