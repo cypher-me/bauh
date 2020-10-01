@@ -224,6 +224,10 @@ RadioSelectQt {
     font-weight: bold;
 }
 
+RadioSelectQt#radio_select_notitle {
+    padding-top: 5px;
+}
+
 ComboSelectQt QGridLayout, RangeInputQt QGridLayout, TextInputQt QGridLayout {
     margin-left: 0;
 }

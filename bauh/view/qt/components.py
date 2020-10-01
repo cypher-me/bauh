@@ -399,8 +399,10 @@ class RadioSelectQt(QGroupBox):
 
     def __init__(self, model: SingleSelectComponent):
         super(RadioSelectQt, self).__init__(model.label + ' :' if model.label else None)
+        if not model.label:
+            self.setObjectName('radio_select_notitle')
+
         self.model = model
-        self.setStyleSheet("QGroupBox { font-weight: bold }")
 
         grid = QGridLayout()
         self.setLayout(grid)
