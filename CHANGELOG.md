@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     - info window: not displaying all installed files
 - AppImage
     - "Checking symlinks" initial task hanging if an installed AppImage data does not contain the installed directory field ('install_dir')
+- Flatpak
+    - not displaying the runtimes icons on the summary window
 - UI
     - wrong tooltips
 
