@@ -431,10 +431,10 @@ class ComboSelectQt(QGroupBox):
     def __init__(self, model: SingleSelectComponent):
         super(ComboSelectQt, self).__init__()
         self.model = model
-        self.setLayout(QGridLayout())
-        self.setStyleSheet('QGridLayout {margin-left: 0} QLabel { font-weight: bold}')
-        self.layout().addWidget(QLabel(model.label + ' :' if model.label else ''), 0, 0)
-        self.layout().addWidget(FormComboBoxQt(model), 0, 1)
+        self._layout = QGridLayout()
+        self.setLayout(self._layout)
+        self._layout.addWidget(QLabel(model.label + ' :' if model.label else ''), 0, 0)
+        self._layout.addWidget(FormComboBoxQt(model), 0, 1)
 
 
 class QLineEditObserver(QLineEdit, ViewObserver):
@@ -925,7 +925,7 @@ class FormQt(QGroupBox):
             traceback.print_exc()
             icon = QIcon()
 
-        bt = IconButton(icon, i18n=self.i18n['clean'].capitalize(), action=clean_path, tooltip=self.i18n['action.run.tooltip'])
+        bt = IconButton(icon, i18n=self.i18n['clean'].capitalize(), action=clean_path, tooltip=self.i18n['clean'].capitalize())
 
         wrapped.layout().addWidget(bt)
         return label, wrapped
