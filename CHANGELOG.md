@@ -4,27 +4,29 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.9.8]
+## [0.9.9]
 ### Improvements
 - new parameter **--offline**: it assumes the internet connection is off. Useful if the connection is bad or unstable.
 - UI
     - root dialog design and behavior
 
 ### Fixes
-- Arch
-    - info window: not displaying all installed files
-    - upgrade: 
-        - sometimes crashing when there are packages to be removed 
-- AppImage
-    - "Checking symlinks" initial task hanging if an installed AppImage data does not contain the installed directory field ('install_dir')
-- Flatpak
-    - not displaying the runtimes icons on the summary window
 - UI
     - wrong tooltips
 
 ### UI
 - clean icon color changed (broom)
-   
+
+## [0.9.8] 2020-10-02
+### Fixes
+- Arch
+    - info window: not displaying all installed files
+    - upgrade: 
+        - sometimes crashing when there are packages to be removed 
+- AppImage
+    - "Checking symlinks" initial task hanging if an installed AppImage data does not contain the installed directory field ('install_dir')   
+- Flatpak
+    - not displaying the runtimes icons on the summary window
 
 ## [0.9.7] 2020-09-11
 ### Features
