@@ -268,21 +268,30 @@ class ManageWindow(QWidget):
 
         self.layout.addWidget(self.table_container)
 
-        toolbar_console = QToolBar()
+        self.toolbar_console = QWidget()
+        self.toolbar_console.setObjectName('console_toolbar')
+        self.toolbar_console.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.toolbar_console.setLayout(QHBoxLayout())
+        self.toolbar_console.setContentsMargins(0, 0, 0, 0)
 
         self.check_details = QCheckBox()
         self.check_details.setObjectName('check_details')
         self.check_details.setCursor(QCursor(Qt.PointingHandCursor))
         self.check_details.setText(self.i18n['manage_window.checkbox.show_details'])
         self.check_details.stateChanged.connect(self._handle_console)
-        self.comp_manager.register_component(CHECK_DETAILS, self.check_details, toolbar_console.addWidget(self.check_details))
+        self.toolbar_console.layout().addWidget(self.check_details)
+        self.comp_manager.register_component(CHECK_DETAILS, self.check_details)
 
-        toolbar_console.addWidget(new_spacer())
+        self.toolbar_console.layout().addWidget(new_spacer())
 
         self.label_displayed = QLabel()
-        toolbar_console.addWidget(self.label_displayed)
+        self.label_displayed.setObjectName('apps_displayed')
+        self.label_displayed.setCursor(QCursor(Qt.WhatsThisCursor))
+        self.label_displayed.setToolTip(self.i18n['manage_window.label.apps_displayed.tip'])
+        self.toolbar_console.layout().addWidget(self.label_displayed)
+        self.label_displayed.hide()
 
-        self.layout.addWidget(toolbar_console)
+        self.layout.addWidget(self.toolbar_console)
 
         self.textarea_details = QPlainTextEdit(self)
         self.textarea_details.setObjectName('textarea_details')
@@ -780,12 +789,13 @@ class ManageWindow(QWidget):
         self.table_apps.update_packages(self.pkgs, update_check_enabled=pkgs_info['not_installed'] == 0)
 
         if not self._maximized:
+            self.label_displayed.show()
             self.table_apps.change_headers_policy(QHeaderView.Stretch)
             self.table_apps.change_headers_policy()
             self._resize(accept_lower_width=len(self.pkgs) > 0)
             self.label_displayed.setText('{} / {}'.format(len(self.pkgs), len(self.pkgs_available)))
         else:
-            self.label_displayed.setText('')
+            self.label_displayed.hide()
 
         if signal:
             self.signal_table_update.emit()

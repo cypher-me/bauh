@@ -105,6 +105,10 @@ QPushButton#bt_upgrade {
 
 QWidget#table_container { }
 
+ManageWindow QWidget#console_toolbar { }
+
+ManageWindow QLabel#apps_displayed { }
+
 QPlainTextEdit#textarea_details {
     background: black;
     color: white;

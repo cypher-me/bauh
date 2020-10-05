@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - new parameter **--offline**: it assumes the internet connection is off. Useful if the connection is bad or unstable.
 - UI
     - root dialog design and behavior
-
+    - tooltip for the label displaying the number of applications on the table / available [#138](https://github.com/vinifmor/bauh/issues/138)
 ### Fixes
 - UI
     - wrong tooltips
