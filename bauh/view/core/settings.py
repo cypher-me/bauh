@@ -227,8 +227,8 @@ class GenericSettingsManager:
                                              max_width=default_width,
                                              id_="style")
 
-        input_maxd = TextInputComponent(label=self.i18n['core.config.ui.max_displayed'].capitalize(),
-                                        tooltip=self.i18n['core.config.ui.max_displayed.tip'].capitalize(),
+        input_maxd = TextInputComponent(label=self.i18n['core.config.ui.max_displayed'],
+                                        tooltip=self.i18n['core.config.ui.max_displayed.tip'],
                                         only_int=True,
                                         id_="table_max",
                                         max_width=default_width,

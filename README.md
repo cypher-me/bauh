@@ -298,7 +298,7 @@ system:
 ui:
   style: null  # the current QT style set. A null value will map to 'Fusion', 'Breeze' or 'Oxygen' (depending on what is installed)
   table:
-    max_displayed: 50  # defines the maximum number of displayed applications on the table.
+    max_displayed: 50  # defines the maximum number of displayed applications on the table. Use 0 for no limit.
   tray:  # system tray settings
     default_icon: null  # defines a path to a custom icon
     updates_icon: null  # defines a path to a custom icon indicating updates
