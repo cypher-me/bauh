@@ -4,7 +4,8 @@ from typing import List
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QPixmap, QCursor
-from PyQt5.QtWidgets import QDialog, QLabel, QPushButton, QToolBar, QVBoxLayout, QProgressBar, QApplication
+from PyQt5.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QProgressBar, QApplication, QWidget, \
+    QSizePolicy, QHBoxLayout
 
 from bauh.api.abstract.cache import MemoryCache
 from bauh.api.http import HttpClient
@@ -52,30 +53,29 @@ class ScreenshotsDialog(QDialog):
         self.layout().addWidget(self.img)
         self.layout().addWidget(new_spacer())
 
-        self.bottom_bar = QToolBar()
+        self.container_buttons = QWidget()
+        self.container_buttons.setObjectName('buttons_container')
+        self.container_buttons.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.container_buttons.setContentsMargins(0, 0, 0, 0)
+        self.container_buttons.setLayout(QHBoxLayout())
 
         self.bt_back = QPushButton(' < ' + self.i18n['screenshots.bt_back.label'].capitalize())
         self.bt_back.setObjectName('back')
         self.bt_back.setCursor(QCursor(Qt.PointingHandCursor))
         self.bt_back.clicked.connect(self.back)
-        self.ref_bt_back = self.bottom_bar.addWidget(self.bt_back)
-        self.bottom_bar.addWidget(new_spacer(50))
+        self.container_buttons.layout().addWidget(self.bt_back)
+        self.container_buttons.layout().addWidget(new_spacer())
 
-        self.label_screenshot = QLabel()
-        self.label_screenshot.setObjectName('image_label')
-        self.label_screenshot.setCursor(QCursor(Qt.WaitCursor))
-        self.ref_img_label = self.bottom_bar.addWidget(self.label_screenshot)
-        self.ref_img_label.setVisible(False)
-        self.ref_progress_bar = self.bottom_bar.addWidget(self.progress_bar)
-        self.bottom_bar.addWidget(new_spacer(50))
+        self.container_buttons.layout().addWidget(self.progress_bar)
+        self.container_buttons.layout().addWidget(new_spacer())
 
         self.bt_next = QPushButton(self.i18n['screenshots.bt_next.label'].capitalize() + ' > ')
         self.bt_next.setObjectName('next')
         self.bt_next.setCursor(QCursor(Qt.PointingHandCursor))
         self.bt_next.clicked.connect(self.next)
-        self.ref_bt_next = self.bottom_bar.addWidget(self.bt_next)
+        self.container_buttons.layout().addWidget(self.bt_next)
 
-        self.layout().addWidget(self.bottom_bar)
+        self.layout().addWidget(self.container_buttons)
 
         self.img_idx = 0
         screen_size = QApplication.primaryScreen().size()
@@ -98,30 +98,28 @@ class ScreenshotsDialog(QDialog):
             img = self.loaded_imgs[self.img_idx]
 
             if isinstance(img, QPixmap):
-                self.label_screenshot.setText('')
+                self.img.setText('')
                 self.img.setPixmap(img)
             else:
-                self.label_screenshot.setText(img)
+                self.img.setText(img)
                 self.img.setPixmap(QPixmap())
 
             self.img.unsetCursor()
             self.thread_progress.stop = True
-            self.ref_progress_bar.setVisible(False)
-            self.ref_img_label.setVisible(True)
+            self.progress_bar.setVisible(False)
         else:
             self.img.setPixmap(QPixmap())
             self.img.setCursor(QCursor(Qt.WaitCursor))
             self.img.setText('{}...'.format(self.i18n['screenshots.image.loading']))
-            self.ref_img_label.setVisible(False)
-            self.ref_progress_bar.setVisible(True)
+            self.progress_bar.setVisible(True)
             self.thread_progress.start()
 
         if len(self.screenshots) == 1:
-            self.ref_bt_back.setVisible(False)
-            self.ref_bt_next.setVisible(False)
+            self.bt_back.setVisible(False)
+            self.bt_next.setVisible(False)
         else:
-            self.ref_bt_back.setEnabled(self.img_idx != 0)
-            self.ref_bt_next.setEnabled(self.img_idx != len(self.screenshots) - 1)
+            self.bt_back.setEnabled(self.img_idx != 0)
+            self.bt_next.setEnabled(self.img_idx != len(self.screenshots) - 1)
 
     def _download_img(self, idx: int, url: str):
         self.logger.info('Downloading image [{}] from {}'.format(idx, url))
