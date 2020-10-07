@@ -6,12 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.9.9]
 ### Improvements
-- new parameter **--offline**: it assumes the internet connection is off. Useful if the connection is bad or unstable.
 - UI
     - root dialog design and behavior
     - tooltip for the label displaying the number of applications on the table / available [#138](https://github.com/vinifmor/bauh/issues/138)
+    - screenshots dialog resizing behavior
 - Settings
     - "Applications displayed" property (Interface) tooltip now informs that 0 (zero) can be used for no limit [#138](https://github.com/vinifmor/bauh/issues/138)
+
+- Paramets
+    - new parameter **--offline**: it assumes the internet connection is off. Useful if the connection is bad/unstable and you just want to check your installed packages.
 ### Fixes
 - UI
     - wrong tooltips

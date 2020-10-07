@@ -102,13 +102,13 @@ class GenericSettingsManager:
                                             id_="icon_exp")
 
         select_trim_up = new_select(label=self.i18n['core.config.trim.after_upgrade'],
-                                          tip=self.i18n['core.config.trim.after_upgrade.tip'],
-                                          value=core_config['disk']['trim']['after_upgrade'],
-                                          max_width=default_width,
-                                          opts=[(self.i18n['yes'].capitalize(), True, None),
-                                                (self.i18n['no'].capitalize(), False, None),
-                                                (self.i18n['ask'].capitalize(), None, None)],
-                                          id_='trim_after_upgrade')
+                                    tip=self.i18n['core.config.trim.after_upgrade.tip'],
+                                    value=core_config['disk']['trim']['after_upgrade'],
+                                    max_width=default_width,
+                                    opts=[(self.i18n['yes'].capitalize(), True, None),
+                                          (self.i18n['no'].capitalize(), False, None),
+                                          (self.i18n['ask'].capitalize(), None, None)],
+                                    id_='trim_after_upgrade')
 
         select_dep_check = self._gen_bool_component(label=self.i18n['core.config.system.dep_checking'],
                                                     tooltip=self.i18n['core.config.system.dep_checking.tip'],

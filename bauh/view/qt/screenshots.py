@@ -17,9 +17,6 @@ from bauh.view.util.translation import I18n
 
 class ScreenshotsDialog(QDialog):
 
-    MAX_HEIGHT = 600
-    MAX_WIDTH = 800
-
     def __init__(self, pkg: PackageView, http_client: HttpClient, icon_cache: MemoryCache, i18n: I18n, screenshots: List[QPixmap], logger: logging.Logger):
         super(ScreenshotsDialog, self).__init__()
         self.setWindowTitle(str(pkg))
@@ -27,7 +24,6 @@ class ScreenshotsDialog(QDialog):
         self.logger = logger
         self.loaded_imgs = []
         self.download_threads = []
-        self.resize(1280, 720)
         self.i18n = i18n
         self.http_client = http_client
         self.progress_bar = QProgressBar()
@@ -50,26 +46,31 @@ class ScreenshotsDialog(QDialog):
         self.setWindowIcon(QIcon(pkg.model.get_type_icon_path()))
         self.setLayout(QVBoxLayout())
 
+        self.layout().addWidget(new_spacer())
         self.img = QLabel()
+        self.img.setObjectName('image')
         self.layout().addWidget(self.img)
+        self.layout().addWidget(new_spacer())
 
         self.bottom_bar = QToolBar()
 
         self.bt_back = QPushButton(' < ' + self.i18n['screenshots.bt_back.label'].capitalize())
+        self.bt_back.setObjectName('back')
         self.bt_back.setCursor(QCursor(Qt.PointingHandCursor))
         self.bt_back.clicked.connect(self.back)
         self.ref_bt_back = self.bottom_bar.addWidget(self.bt_back)
         self.bottom_bar.addWidget(new_spacer(50))
 
-        self.img_label = QLabel()
-        self.img_label.setCursor(QCursor(Qt.WaitCursor))
-        self.img_label.setStyleSheet('QLabel { font-weight: bold; text-align: center }')
-        self.ref_img_label = self.bottom_bar.addWidget(self.img_label)
+        self.label_screenshot = QLabel()
+        self.label_screenshot.setObjectName('image_label')
+        self.label_screenshot.setCursor(QCursor(Qt.WaitCursor))
+        self.ref_img_label = self.bottom_bar.addWidget(self.label_screenshot)
         self.ref_img_label.setVisible(False)
         self.ref_progress_bar = self.bottom_bar.addWidget(self.progress_bar)
         self.bottom_bar.addWidget(new_spacer(50))
 
         self.bt_next = QPushButton(self.i18n['screenshots.bt_next.label'].capitalize() + ' > ')
+        self.bt_next.setObjectName('next')
         self.bt_next.setCursor(QCursor(Qt.PointingHandCursor))
         self.bt_next.clicked.connect(self.next)
         self.ref_bt_next = self.bottom_bar.addWidget(self.bt_next)
@@ -77,12 +78,17 @@ class ScreenshotsDialog(QDialog):
         self.layout().addWidget(self.bottom_bar)
 
         self.img_idx = 0
+        screen_size = QApplication.primaryScreen().size()
+        self.max_img_width = int(screen_size.width() * 0.585651537)
+        self.max_img_height = int(screen_size.height() * 0.78125)
 
         for idx, s in enumerate(self.screenshots):
             t = Thread(target=self._download_img, args=(idx, s), daemon=True)
             t.start()
 
+        self.resize(self.max_img_width, self.max_img_height)
         self._load_img()
+        qt_utils.centralize(self)
 
     def _update_progress(self, val: int):
         self.progress_bar.setValue(val)
@@ -92,10 +98,10 @@ class ScreenshotsDialog(QDialog):
             img = self.loaded_imgs[self.img_idx]
 
             if isinstance(img, QPixmap):
-                self.img_label.setText('')
+                self.label_screenshot.setText('')
                 self.img.setPixmap(img)
             else:
-                self.img_label.setText(img)
+                self.label_screenshot.setText(img)
                 self.img.setPixmap(QPixmap())
 
             self.img.unsetCursor()
@@ -105,6 +111,7 @@ class ScreenshotsDialog(QDialog):
         else:
             self.img.setPixmap(QPixmap())
             self.img.setCursor(QCursor(Qt.WaitCursor))
+            self.img.setText('{}...'.format(self.i18n['screenshots.image.loading']))
             self.ref_img_label.setVisible(False)
             self.ref_progress_bar.setVisible(True)
             self.thread_progress.start()
@@ -115,9 +122,6 @@ class ScreenshotsDialog(QDialog):
         else:
             self.ref_bt_back.setEnabled(self.img_idx != 0)
             self.ref_bt_next.setEnabled(self.img_idx != len(self.screenshots) - 1)
-
-        self.adjustSize()
-        qt_utils.centralize(self)
 
     def _download_img(self, idx: int, url: str):
         self.logger.info('Downloading image [{}] from {}'.format(idx, url))
@@ -133,8 +137,8 @@ class ScreenshotsDialog(QDialog):
                 pixmap = QPixmap()
                 pixmap.loadFromData(res.content)
 
-                if pixmap.size().height() > self.MAX_HEIGHT or pixmap.size().width() > self.MAX_WIDTH:
-                    pixmap = pixmap.scaled(self.MAX_WIDTH, self.MAX_HEIGHT, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+                if pixmap.size().height() > self.max_img_height or pixmap.size().width() > self.max_img_width:
+                    pixmap = pixmap.scaled(self.max_img_width, self.max_img_height, Qt.KeepAspectRatio, Qt.SmoothTransformation)
 
                 self.loaded_imgs.append(pixmap)
 

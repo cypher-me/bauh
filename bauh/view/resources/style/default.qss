@@ -126,8 +126,6 @@ QToolBar#toolbar_bottom {
 
 QProgressBar#progress_manage { }
 
-QProgressBar#progress_screenshots { }
-
 QToolButton#bt_install {
     background: @color_green;
     color: white;
@@ -283,3 +281,20 @@ RootDialog QLabel#error {
     qproperty-alignment: AlignCenter;
     color: red;
 }
+
+ScreenshotsDialog {}
+
+ScreenshotsDialog QLabel#image {
+    qproperty-alignment: AlignCenter;
+}
+
+ScreenshotsDialog QLabel#image_label {
+    font-weight: bold;
+    text-align: center
+}
+
+ScreenshotsDialog QPushButton#back { }
+
+ScreenshotsDialog QPushButton#next { }
+
+ScreenshotsDialog QProgressBar#progress_screenshots { }
