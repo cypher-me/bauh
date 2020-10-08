@@ -103,43 +103,102 @@ QPushButton#bt_upgrade {
     qproperty-icon: url("@root_img_path/app_update.svg")
 }
 
-QWidget#table_container { }
+ManageWindow QWidget#table_container { }
+
+ManageWindow PackagesTable { }
+
+ManageWindow PackagesTable IconButton#app_run > QToolButton {
+    qproperty-icon: url("@root_img_path/app_play.svg");
+}
+
+ManageWindow PackagesTable IconButton#app_actions > QToolButton {
+    qproperty-icon: url("@root_img_path/app_actions.svg");
+}
+
+ManageWindow PackagesTable IconButton#app_screenshots > QToolButton {
+    qproperty-icon: url("@root_img_path/camera.svg");
+}
+
+ManageWindow PackagesTable IconButton#app_info > QToolButton {
+    qproperty-icon: url("@root_img_path/app_info.svg");
+}
+
+ManageWindow PackagesTable QMenu#app_actions { }
+
+QMenu QPushButton {
+    border: 0px;
+    background: none;
+    padding: 5px;
+    text-align: left;
+}
+
+QMenu QPushButton:hover {
+    background-color: #37abc8ff;
+}
+
+QMenu#app_actions QPushButton#app_history {
+    qproperty-icon: url("@root_img_path/history.svg");
+}
+
+QMenu#app_actions QPushButton#app_downgrade {
+    qproperty-icon: url("@root_img_path/downgrade.svg");
+}
+
+QMenu#app_actions QPushButton#ignore_updates {
+    qproperty-icon: url("@root_img_path/ignore_update.svg");
+}
+
+QMenu#app_actions QPushButton#revert_ignore_updates {
+    qproperty-icon: url("@root_img_path/revert_update_ignored.svg");
+}
 
 ManageWindow QWidget#console_toolbar { }
 
 ManageWindow QLabel#apps_displayed { }
 
-QPlainTextEdit#textarea_details {
+ManageWindow QPlainTextEdit#textarea_details {
     background: black;
     color: white;
 }
 
-QToolBar#toolbar_substatus { }
+ManageWindow QToolBar#toolbar_substatus { }
 
-QCheckBox#check_details { }
+ManageWindow QCheckBox#check_details { }
 
-QLabel#label_substatus { }
+ManageWindow QLabel#label_substatus { }
 
-QToolBar#toolbar_bottom {
+ManageWindow QToolBar#toolbar_bottom {
     spacing: 3px;
 }
 
-QProgressBar#progress_manage { }
+ManageWindow IconButton#custom_actions > QToolButton {
+    qproperty-icon: url("@root_img_path/custom_actions.svg");
+}
 
-QToolButton#bt_install {
+ManageWindow IconButton#settings > QToolButton {
+    qproperty-icon: url("@root_img_path/settings.svg");
+}
+
+ManageWindow IconButton#about > QToolButton {
+    qproperty-icon: url("@root_img_path/info.svg");
+}
+
+ManageWindow QProgressBar#progress_manage { }
+
+ManageWindow QToolButton#bt_install {
     background: @color_green;
     color: white;
     font-size: 10px;
     font-weight: bold;
 }
 
-QToolButton#bt_uninstall {
+ManageWindow QToolButton#bt_uninstall {
     color: @color_brown;
     font-size: 10px;
     font-weight: bold;
 }
 
-QLabel#publisher_unknown {
+ManageWindow QLabel#publisher_unknown {
     color: red;
 }
 
@@ -156,6 +215,11 @@ FormQt::title {
     left: 7px;
     padding: 0px 5px 0px 5px;
 }
+
+FormQt IconButton#clean_field > QToolButton {
+    qproperty-icon: url("@root_img_path/clean.svg");
+}
+
 
 UpgradeToggleButton > QToolButton {
     qproperty-icon: url("@root_img_path/app_update.svg");

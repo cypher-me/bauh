@@ -7,13 +7,13 @@ from typing import List, Optional
 from PyQt5.QtCore import Qt, QUrl, QSize
 from PyQt5.QtGui import QPixmap, QIcon, QCursor
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
-from PyQt5.QtWidgets import QTableWidget, QTableView, QMenu, QAction, QTableWidgetItem, QToolButton, QWidget, \
+from PyQt5.QtWidgets import QTableWidget, QTableView, QMenu, QTableWidgetItem, QToolButton, QWidget, \
     QHeaderView, QLabel, QHBoxLayout, QToolBar, QSizePolicy
 
 from bauh.api.abstract.cache import MemoryCache
 from bauh.api.abstract.model import PackageStatus, CustomSoftwareAction
 from bauh.commons.html import strip_html, bold
-from bauh.view.qt.components import IconButton
+from bauh.view.qt.components import IconButton, QCustomMenuAction
 from bauh.view.qt.dialog import ConfirmationDialog
 from bauh.view.qt.view_model import PackageView
 from bauh.view.util import resource
@@ -75,12 +75,12 @@ class UpgradeToggleButton(QWidget):
         self.root.update_bt_upgrade()
 
 
-class TablePackages(QTableWidget):
+class PackagesTable(QTableWidget):
 
     COL_NUMBER = 8
 
     def __init__(self, parent: QWidget, icon_cache: MemoryCache, download_icons: bool):
-        super(TablePackages, self).__init__()
+        super(PackagesTable, self).__init__()
         self.setObjectName('table_packages')
         self.setParent(parent)
         self.window = parent
@@ -115,22 +115,23 @@ class TablePackages(QTableWidget):
 
     def show_pkg_actions(self, pkg: PackageView):
         menu_row = QMenu()
+        menu_row.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
+        menu_row.setObjectName('app_actions')
         menu_row.setCursor(QCursor(Qt.PointingHandCursor))
 
         if pkg.model.installed:
 
             if pkg.model.has_history():
-                action_history = QAction(self.i18n["manage_window.apps_table.row.actions.history"])
-                action_history.setIcon(QIcon(resource.get_path('img/history.svg')))
 
                 def show_history():
                     self.window.begin_show_history(pkg)
 
-                action_history.triggered.connect(show_history)
-                menu_row.addAction(action_history)
+                menu_row.addAction(QCustomMenuAction(parent=menu_row,
+                                                     label=self.i18n["manage_window.apps_table.row.actions.history"],
+                                                     action=show_history,
+                                                     button_name='app_history'))
 
             if pkg.model.can_be_downgraded():
-                action_downgrade = QAction(self.i18n["manage_window.apps_table.row.actions.downgrade"])
 
                 def downgrade():
                     if ConfirmationDialog(title=self.i18n['manage_window.apps_table.row.actions.downgrade'],
@@ -138,39 +139,36 @@ class TablePackages(QTableWidget):
                                           i18n=self.i18n).ask():
                         self.window.begin_downgrade(pkg)
 
-                action_downgrade.triggered.connect(downgrade)
-                action_downgrade.setIcon(QIcon(resource.get_path('img/downgrade.svg')))
-                menu_row.addAction(action_downgrade)
+                menu_row.addAction(QCustomMenuAction(parent=menu_row,
+                                                     label=self.i18n["manage_window.apps_table.row.actions.downgrade"],
+                                                     action=downgrade,
+                                                     button_name='app_downgrade'))
 
             if pkg.model.supports_ignored_updates():
                 if pkg.model.is_update_ignored():
-                    action_ignore_updates = QAction(
-                        self.i18n["manage_window.apps_table.row.actions.ignore_updates_reverse"])
-                    action_ignore_updates.setIcon(QIcon(resource.get_path('img/revert_update_ignored.svg')))
+                    action_label = self.i18n["manage_window.apps_table.row.actions.ignore_updates_reverse"]
+                    button_name = 'revert_ignore_updates'
                 else:
-                    action_ignore_updates = QAction(self.i18n["manage_window.apps_table.row.actions.ignore_updates"])
-                    action_ignore_updates.setIcon(QIcon(resource.get_path('img/ignore_update.svg')))
+                    action_label = self.i18n["manage_window.apps_table.row.actions.ignore_updates"]
+                    button_name = 'ignore_updates'
 
                 def ignore_updates():
                     self.window.begin_ignore_updates(pkg)
 
-                action_ignore_updates.triggered.connect(ignore_updates)
-                menu_row.addAction(action_ignore_updates)
+                menu_row.addAction(QCustomMenuAction(parent=menu_row,
+                                                     label=action_label,
+                                                     button_name=button_name,
+                                                     action=ignore_updates))
 
         if bool(pkg.model.get_custom_supported_actions()):
-            actions = [self._map_custom_action(pkg, a) for a in pkg.model.get_custom_supported_actions()]
+            actions = [self._map_custom_action(pkg, a, menu_row) for a in pkg.model.get_custom_supported_actions()]
             menu_row.addActions(actions)
 
         menu_row.adjustSize()
         menu_row.popup(QCursor.pos())
         menu_row.exec_()
 
-    def _map_custom_action(self, pkg: PackageView, action: CustomSoftwareAction) -> QAction:
-        item = QAction(self.i18n[action.i18n_label_key])
-
-        if action.icon_path:
-            item.setIcon(QIcon(action.icon_path))
-
+    def _map_custom_action(self, pkg: PackageView, action: CustomSoftwareAction, parent: QWidget) -> QCustomMenuAction:
         def custom_action():
             if action.i18n_confirm_key:
                 body = self.i18n[action.i18n_confirm_key].format(bold(pkg.model.name))
@@ -183,8 +181,10 @@ class TablePackages(QTableWidget):
                                   i18n=self.i18n).ask():
                 self.window.begin_execute_custom_action(pkg, action)
 
-        item.triggered.connect(custom_action)
-        return item
+        return QCustomMenuAction(parent=parent,
+                                 label=self.i18n[action.i18n_label_key],
+                                 icon=QIcon(action.icon_path) if action.icon_path else None,
+                                 action=custom_action)
 
     def refresh(self, pkg: PackageView):
         self._update_row(pkg, update_check_enabled=False, change_update_col=False)
@@ -501,7 +501,8 @@ class TablePackages(QTableWidget):
             def run():
                 self.window.begin_launch_package(pkg)
 
-            bt = IconButton(QIcon(resource.get_path('img/app_play.svg')), i18n=self.i18n, action=run, tooltip=self.i18n['action.run.tooltip'])
+            bt = IconButton(i18n=self.i18n, action=run, tooltip=self.i18n['action.run.tooltip'])
+            bt.setObjectName('app_run')
             bt.setEnabled(pkg.model.can_be_run())
             item.addWidget(bt)
 
@@ -510,7 +511,8 @@ class TablePackages(QTableWidget):
 
         settings = self.has_any_settings(pkg)
         if pkg.model.installed:
-            bt = IconButton(QIcon(resource.get_path('img/app_actions.svg')), i18n=self.i18n, action=handle_click, tooltip=self.i18n['action.settings.tooltip'])
+            bt = IconButton(i18n=self.i18n, action=handle_click, tooltip=self.i18n['action.settings.tooltip'])
+            bt.setObjectName('app_actions')
             bt.setEnabled(bool(settings))
             item.addWidget(bt)
 
@@ -518,15 +520,17 @@ class TablePackages(QTableWidget):
             def show_screenshots():
                 self.window.begin_show_screenshots(pkg)
 
-            bt = IconButton(QIcon(resource.get_path('img/camera.svg')), i18n=self.i18n, action=show_screenshots,
+            bt = IconButton(i18n=self.i18n, action=show_screenshots,
                             tooltip=self.i18n['action.screenshots.tooltip'])
+            bt.setObjectName('app_screenshots')
             bt.setEnabled(bool(pkg.model.has_screenshots()))
             item.addWidget(bt)
 
         def show_info():
             self.window.begin_show_info(pkg)
 
-        bt = IconButton(QIcon(resource.get_path('img/app_info.svg')), i18n=self.i18n, action=show_info, tooltip=self.i18n['action.info.tooltip'])
+        bt = IconButton(i18n=self.i18n, action=show_info, tooltip=self.i18n['action.info.tooltip'])
+        bt.setObjectName('app_info')
         bt.setEnabled(bool(pkg.model.has_info()))
         item.addWidget(bt)
 

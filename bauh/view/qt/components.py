@@ -7,7 +7,7 @@ from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtGui import QIcon, QPixmap, QIntValidator, QCursor
 from PyQt5.QtWidgets import QRadioButton, QGroupBox, QCheckBox, QComboBox, QGridLayout, QWidget, \
     QLabel, QSizePolicy, QLineEdit, QToolButton, QHBoxLayout, QFormLayout, QFileDialog, QTabWidget, QVBoxLayout, \
-    QSlider, QScrollArea, QFrame, QAction, QSpinBox, QPlainTextEdit
+    QSlider, QScrollArea, QFrame, QAction, QSpinBox, QPlainTextEdit, QWidgetAction, QPushButton
 
 from bauh.api.abstract.view import SingleSelectComponent, InputOption, MultipleSelectComponent, SelectViewType, \
     TextInputComponent, FormComponent, FileChooserComponent, ViewComponent, TabGroupComponent, PanelComponent, \
@@ -667,11 +667,10 @@ class InputFilter(QLineEdit):
 
 class IconButton(QWidget):
 
-    def __init__(self, icon: QIcon, action, i18n: I18n, align: int = Qt.AlignCenter, tooltip: str = None, expanding: bool = False):
+    def __init__(self, action, i18n: I18n, align: int = Qt.AlignCenter, tooltip: str = None, expanding: bool = False):
         super(IconButton, self).__init__()
         self.bt = QToolButton()
         self.bt.setCursor(QCursor(Qt.PointingHandCursor))
-        self.bt.setIcon(icon)
         self.bt.clicked.connect(action)
         self.i18n = i18n
         self.default_tootip = tooltip
@@ -919,13 +918,8 @@ class FormQt(QGroupBox):
         label = self._new_label(c)
         wrapped = self._wrap(chooser, c)
 
-        try:
-            icon = QIcon(resource.get_path('img/clean.svg'))
-        except:
-            traceback.print_exc()
-            icon = QIcon()
-
-        bt = IconButton(icon, i18n=self.i18n['clean'].capitalize(), action=clean_path, tooltip=self.i18n['clean'].capitalize())
+        bt = IconButton(i18n=self.i18n['clean'].capitalize(), action=clean_path, tooltip=self.i18n['clean'].capitalize())
+        bt.setObjectName('clean_field')
 
         wrapped.layout().addWidget(bt)
         return label, wrapped
@@ -1068,3 +1062,30 @@ class QSearchBar(QWidget):
 
     def setFocus(self):
         self.inp_search.setFocus()
+
+
+class QCustomMenuAction(QWidgetAction):
+
+    def __init__(self, parent: QWidget, label: Optional[str] = None, action=None, button_name: Optional[str] = None,
+                 icon: Optional[QIcon] = None):
+        super(QCustomMenuAction, self).__init__(parent)
+        self.button = QPushButton()
+        self.set_label(label)
+        self.set_action(action)
+        self.set_button_name(button_name)
+        self.set_icon(icon)
+        self.setDefaultWidget(self.button)
+
+    def set_label(self, label: str):
+        self.button.setText(label)
+
+    def set_action(self, action):
+        self.button.clicked.connect(action)
+
+    def set_button_name(self, name: str):
+        if name:
+            self.button.setObjectName(name)
+
+    def set_icon(self, icon: QIcon):
+        if icon:
+            self.button.setIcon(icon)

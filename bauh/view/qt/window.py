@@ -23,7 +23,7 @@ from bauh.commons.html import bold
 from bauh.view.core.tray_client import notify_tray
 from bauh.view.qt import dialog, commons, qt_utils
 from bauh.view.qt.about import AboutDialog
-from bauh.view.qt.apps_table import TablePackages, UpgradeToggleButton
+from bauh.view.qt.apps_table import PackagesTable, UpgradeToggleButton
 from bauh.view.qt.components import new_spacer, InputFilter, IconButton, QtComponentsManager, to_widget, QSearchBar
 from bauh.view.qt.dialog import ConfirmationDialog
 from bauh.view.qt.history import HistoryDialog
@@ -262,7 +262,7 @@ class ManageWindow(QWidget):
         self.table_container.setLayout(QVBoxLayout())
         self.table_container.layout().setContentsMargins(0, 0, 0, 0)
 
-        self.table_apps = TablePackages(self, self.icon_cache, download_icons=bool(self.config['download']['icons']))
+        self.table_apps = PackagesTable(self, self.icon_cache, download_icons=bool(self.config['download']['icons']))
         self.table_apps.change_headers_policy()
         self.table_container.layout().addWidget(self.table_apps)
 
@@ -360,23 +360,24 @@ class ManageWindow(QWidget):
         self.toolbar_bottom.addWidget(new_spacer())
 
         self.custom_actions = manager.get_custom_actions()
-        bt_custom_actions = IconButton(QIcon(resource.get_path('img/custom_actions.svg')),
-                                       action=self.show_custom_actions,
+        bt_custom_actions = IconButton(action=self.show_custom_actions,
                                        i18n=self.i18n,
                                        tooltip=self.i18n['manage_window.bt_custom_actions.tip'])
+        bt_custom_actions.setObjectName('custom_actions')
+
         bt_custom_actions.setVisible(bool(self.custom_actions))
         self.comp_manager.register_component(BT_CUSTOM_ACTIONS, bt_custom_actions, self.toolbar_bottom.addWidget(bt_custom_actions))
 
-        bt_settings = IconButton(QIcon(resource.get_path('img/settings.svg')),
-                                 action=self.show_settings,
+        bt_settings = IconButton(action=self.show_settings,
                                  i18n=self.i18n,
                                  tooltip=self.i18n['manage_window.bt_settings.tooltip'])
+        bt_settings.setObjectName('settings')
         self.comp_manager.register_component(BT_SETTINGS, bt_settings, self.toolbar_bottom.addWidget(bt_settings))
 
-        bt_about = IconButton(QIcon(resource.get_path('img/info.svg')),
-                              action=self._show_about,
+        bt_about = IconButton(action=self._show_about,
                               i18n=self.i18n,
                               tooltip=self.i18n['manage_window.settings.about'])
+        bt_about.setObjectName('about')
         self.comp_manager.register_component(BT_ABOUT, bt_about, self.toolbar_bottom.addWidget(bt_about))
 
         self.layout.addWidget(self.toolbar_bottom)
