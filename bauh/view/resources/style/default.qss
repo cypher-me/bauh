@@ -229,14 +229,6 @@ QInputDialog#dialog_password > QLineEdit {
     border: 1px solid lightblue;
 }
 
-QLabel#info_field {
-    font-weight: bold;
-}
-
-QLineEdit#info_field_val {
-    width: 400px;
-}
-
 RadioSelectQt {
     font-weight: bold;
 }
@@ -281,6 +273,32 @@ RootDialog QLabel#error {
     qproperty-alignment: AlignCenter;
     color: red;
 }
+
+InfoDialog { }
+
+InfoDialog QScrollArea { }
+
+InfoDialog QWidget#root_container { }
+
+InfoDialog QPlainTextEdit#full_field { }
+
+InfoDialog QGroupBox#fields { }
+
+InfoDialog QLabel#field_name {
+    font-weight: bold;
+}
+
+InfoDialog QLineEdit#field_value {
+    width: 400px;
+}
+
+InfoDialog QWidget#lower_container { }
+
+InfoDialog QPushButton#back { }
+
+InfoDialog QPushButton#close { }
+
+InfoDialog QPushButton#show { }
 
 ScreenshotsDialog {}
 
