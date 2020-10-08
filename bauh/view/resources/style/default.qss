@@ -167,9 +167,7 @@ ManageWindow QCheckBox#check_details { }
 
 ManageWindow QLabel#label_substatus { }
 
-ManageWindow QToolBar#toolbar_bottom {
-    spacing: 3px;
-}
+ManageWindow QWidget#container_bottom { }
 
 ManageWindow IconButton#custom_actions > QToolButton {
     qproperty-icon: url("@root_img_path/custom_actions.svg");

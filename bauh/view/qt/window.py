@@ -344,11 +344,14 @@ class ManageWindow(QWidget):
         self.thread_ignore_updates = IgnorePackageUpdates(manager=self.manager)
         self._bind_async_action(self.thread_ignore_updates, finished_call=self.finish_ignore_updates)
 
-        self.toolbar_bottom = QToolBar()
-        self.toolbar_bottom.setObjectName('toolbar_bottom')
-        self.toolbar_bottom.setIconSize(QSize(16, 16))
+        self.container_bottom = QWidget()
+        self.container_bottom.setObjectName('container_bottom')
+        self.container_bottom.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.container_bottom.setLayout(QHBoxLayout())
+        self.setContentsMargins(0, 0, 0, 0)
+        self.container_bottom.layout().setContentsMargins(0, 0, 0, 0)
 
-        self.toolbar_bottom.addWidget(new_spacer())
+        self.container_bottom.layout().addWidget(new_spacer())
 
         self.progress_bar = QProgressBar()
         self.progress_bar.setObjectName('progress_manage')
@@ -356,9 +359,9 @@ class ManageWindow(QWidget):
         self.progress_bar.setMaximumHeight(10 if QApplication.instance().style().objectName().lower() == 'windows' else 4)
 
         self.progress_bar.setTextVisible(False)
-        self.ref_progress_bar = self.toolbar_bottom.addWidget(self.progress_bar)
+        self.container_bottom.layout().addWidget(self.progress_bar)
 
-        self.toolbar_bottom.addWidget(new_spacer())
+        self.container_bottom.layout().addWidget(new_spacer())
 
         self.custom_actions = manager.get_custom_actions()
         bt_custom_actions = IconButton(action=self.show_custom_actions,
@@ -367,21 +370,24 @@ class ManageWindow(QWidget):
         bt_custom_actions.setObjectName('custom_actions')
 
         bt_custom_actions.setVisible(bool(self.custom_actions))
-        self.comp_manager.register_component(BT_CUSTOM_ACTIONS, bt_custom_actions, self.toolbar_bottom.addWidget(bt_custom_actions))
+        self.container_bottom.layout().addWidget(bt_custom_actions)
+        self.comp_manager.register_component(BT_CUSTOM_ACTIONS, bt_custom_actions)
 
         bt_settings = IconButton(action=self.show_settings,
                                  i18n=self.i18n,
                                  tooltip=self.i18n['manage_window.bt_settings.tooltip'])
         bt_settings.setObjectName('settings')
-        self.comp_manager.register_component(BT_SETTINGS, bt_settings, self.toolbar_bottom.addWidget(bt_settings))
+        self.container_bottom.layout().addWidget(bt_settings)
+        self.comp_manager.register_component(BT_SETTINGS, bt_settings)
 
         bt_about = IconButton(action=self._show_about,
                               i18n=self.i18n,
                               tooltip=self.i18n['manage_window.settings.about'])
         bt_about.setObjectName('about')
-        self.comp_manager.register_component(BT_ABOUT, bt_about, self.toolbar_bottom.addWidget(bt_about))
+        self.container_bottom.layout().addWidget(bt_about)
+        self.comp_manager.register_component(BT_ABOUT, bt_about)
 
-        self.layout.addWidget(self.toolbar_bottom)
+        self.layout.addWidget(self.container_bottom)
 
         qt_utils.centralize(self)
 
@@ -1095,7 +1101,7 @@ class ManageWindow(QWidget):
     def _begin_action(self, action_label: str, action_id: int = None):
         self.thread_animate_progress.stop = False
         self.thread_animate_progress.start()
-        self.ref_progress_bar.setVisible(True)
+        self.progress_bar.setVisible(True)
 
         if action_id is not None:
             self.comp_manager.save_states(action_id, only_visible=True)
@@ -1114,7 +1120,7 @@ class ManageWindow(QWidget):
         self.thread_animate_progress.stop = True
         self.thread_animate_progress.wait(msecs=1000)
 
-        self.ref_progress_bar.setVisible(False)
+        self.progress_bar.setVisible(False)
         self.progress_bar.setValue(0)
         self.progress_bar.setTextVisible(False)
 
