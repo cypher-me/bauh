@@ -9,7 +9,7 @@ from PyQt5.QtCore import QEvent, Qt, QSize, pyqtSignal
 from PyQt5.QtGui import QIcon, QWindowStateChangeEvent, QCursor
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QCheckBox, QHeaderView, QToolBar, \
     QLabel, QPlainTextEdit, QProgressBar, QPushButton, QComboBox, QApplication, QListView, QSizePolicy, \
-    QMenu, QAction, QHBoxLayout
+    QMenu, QHBoxLayout
 
 from bauh import LOGS_PATH
 from bauh.api.abstract.cache import MemoryCache
@@ -24,7 +24,8 @@ from bauh.view.core.tray_client import notify_tray
 from bauh.view.qt import dialog, commons, qt_utils
 from bauh.view.qt.about import AboutDialog
 from bauh.view.qt.apps_table import PackagesTable, UpgradeToggleButton
-from bauh.view.qt.components import new_spacer, InputFilter, IconButton, QtComponentsManager, to_widget, QSearchBar
+from bauh.view.qt.components import new_spacer, InputFilter, IconButton, QtComponentsManager, to_widget, QSearchBar, \
+    QCustomMenuAction
 from bauh.view.qt.dialog import ConfirmationDialog
 from bauh.view.qt.history import HistoryDialog
 from bauh.view.qt.info import InfoDialog
@@ -1357,7 +1358,7 @@ class ManageWindow(QWidget):
     def _update_progress(self, value: int):
         self.progress_bar.setValue(value)
 
-    def begin_execute_custom_action(self, pkg: PackageView, action: CustomSoftwareAction):
+    def begin_execute_custom_action(self, pkg: Optional[PackageView], action: CustomSoftwareAction):
         if pkg is None and not ConfirmationDialog(title=self.i18n['confirmation'].capitalize(),
                                                   body='<p>{}</p>'.format(self.i18n['custom_action.proceed_with'].capitalize().format(bold(self.i18n[action.i18n_label_key]))),
                                                   icon=QIcon(action.icon_path) if action.icon_path else QIcon(resource.get_path('img/logo.svg')),
@@ -1414,8 +1415,7 @@ class ManageWindow(QWidget):
             qt_utils.centralize(self.settings_window)
             self.settings_window.show()
 
-    def _map_custom_action(self, action: CustomSoftwareAction) -> QAction:
-        custom_action = QAction(self.i18n[action.i18n_label_key])
+    def _map_custom_action(self, action: CustomSoftwareAction, parent: QWidget) -> QCustomMenuAction:
 
         if action.icon_path:
             try:
@@ -1423,20 +1423,21 @@ class ManageWindow(QWidget):
                     icon = QIcon(action.icon_path)
                 else:
                     icon = QIcon.fromTheme(action.icon_path)
-
-                custom_action.setIcon(icon)
-
             except:
-                pass
+                icon = None
+        else:
+            icon = None
 
-        custom_action.triggered.connect(lambda: self.begin_execute_custom_action(None, action))
-        return custom_action
+        return QCustomMenuAction(parent=parent,
+                                 label=self.i18n[action.i18n_label_key],
+                                 action=lambda: self.begin_execute_custom_action(None, action),
+                                 icon=icon)
 
     def show_custom_actions(self):
         if self.custom_actions:
             menu_row = QMenu()
             menu_row.setCursor(QCursor(Qt.PointingHandCursor))
-            actions = [self._map_custom_action(a) for a in self.custom_actions]
+            actions = [self._map_custom_action(a, menu_row) for a in self.custom_actions]
             menu_row.addActions(actions)
             menu_row.adjustSize()
             menu_row.popup(QCursor.pos())
