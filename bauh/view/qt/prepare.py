@@ -315,6 +315,7 @@ class PreparePanel(QWidget, TaskManager):
 
         lb_status = QLabel(label)
         lb_status.setObjectName('task_status')
+        lb_status.setProperty('status', 'running')
         lb_status.setCursor(Qt.WaitCursor)
         lb_status.setMinimumWidth(50)
         lb_status.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
@@ -323,6 +324,7 @@ class PreparePanel(QWidget, TaskManager):
 
         lb_progress = QLabel('{0:.2f}'.format(0) + '%')
         lb_progress.setObjectName('task_progress')
+        lb_progress.setProperty('status', 'running')
         lb_progress.setCursor(Qt.WaitCursor)
         lb_progress.setContentsMargins(10, 0, 10, 0)
         lb_progress.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
@@ -382,9 +384,11 @@ class PreparePanel(QWidget, TaskManager):
         task['lb_sub'].setText('')
 
         for key in ('lb_prog', 'lb_status'):
-            new_lb = QLabel(task[key].text())
-            new_lb.setObjectName('{}_finished'.format(task[key].objectName()))
-            self.table.setCellWidget(task['row'], task['{}_col'.format(key)], new_lb)
+            label = task[key]
+            label.setProperty('status', 'done')
+            label.style().unpolish(label)
+            label.style().polish(label)
+            label.update()
 
         task['finished'] = True
         self._resize_columns()

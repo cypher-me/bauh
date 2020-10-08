@@ -18,11 +18,11 @@ PreparePanel QPushButton#bt_hide_details {
     background: none;
 }
 
-PreparePanel QLabel#task_status, QLabel#task_progress {
+PreparePanel QLabel#task_status[status = "running"], QLabel#task_progress[status = "running"] {
     font-weight: bold;
 }
 
-PreparePanel QLabel#task_status_finished, QLabel#task_progress_finished {
+PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress_finished[status = "done"] {
     color: @color_green;
     text-decoration: line-through;
 }
