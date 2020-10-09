@@ -243,13 +243,13 @@ QLabel#label_version_ignored {
     font-weight: bold;
 }
 
-QPushButton#bt_ok {
+QPushButton#ok {
     background: @color_green;
     color: white;
     font-weight: bold;
 }
 
-QPushButton#bt_ok:disabled {
+QPushButton#ok:disabled {
     background-color: grey;
 }
 
@@ -401,4 +401,4 @@ SettingsWindow QWidget#lower_container { }
 
 SettingsWindow QPushButton#cancel { }
 
-SettingsWindow QPushButton#bt_ok { }
+SettingsWindow QPushButton#ok { }

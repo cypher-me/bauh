@@ -90,7 +90,7 @@ class ConfirmationDialog(QDialog):
 
         if confirmation_button:
             bt_confirm = QPushButton(confirmation_label.capitalize() if confirmation_label else i18n['popup.button.yes'])
-            bt_confirm.setObjectName('bt_ok')
+            bt_confirm.setObjectName('ok')
             bt_confirm.setCursor(QCursor(Qt.PointingHandCursor))
             bt_confirm.setDefault(True)
             bt_confirm.setAutoDefault(True)

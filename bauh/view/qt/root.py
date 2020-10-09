@@ -71,7 +71,7 @@ class RootDialog(QDialog):
         self.bt_ok.setAutoDefault(True)
         self.bt_ok.setCursor(QCursor(Qt.PointingHandCursor))
         self.bt_ok.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
-        self.bt_ok.setObjectName('bt_ok')
+        self.bt_ok.setObjectName('ok')
         self.bt_ok.clicked.connect(self._validate_password)
         self.lower_bar.addWidget(self.bt_ok)
 
