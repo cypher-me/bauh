@@ -587,7 +587,7 @@ class FormMultipleSelectQt(QWidget):
 
         if model.label:
             line = 1
-            self.layout().addWidget(QLabel(), 0, 1)
+            self._layout.addWidget(QLabel(), 0, 1)
         else:
             line = 0
 
@@ -777,7 +777,7 @@ class FormQt(QGroupBox):
         if hasattr(comp, 'get_label'):
             text = comp.get_label()
         else:
-            attr = 'label' if hasattr(comp,'label') else 'value'
+            attr = 'label' if hasattr(comp, 'label') else 'value'
             text = getattr(comp, attr)
 
         if text:
