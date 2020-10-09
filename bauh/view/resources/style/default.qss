@@ -253,26 +253,41 @@ QPushButton#bt_ok:disabled {
     background-color: grey;
 }
 
-AboutDialog > QLabel#app_name {
+AboutDialog { }
+
+AboutDialog QLabel {
+    qproperty-alignment: AlignCenter;
+}
+
+AboutDialog QWidget#logo_container { }
+
+AboutDialog QLabel#logo {
+    qproperty-pixmap: url("@root_img_path/logo.svg");
+    qproperty-scaledContents: true;
+    min-height: 54.56;
+    max-height: 54.56;
+    min-width: 64;
+    max-width: 64;
+}
+
+AboutDialog QLabel#app_name {
     font-size: 14px;
     font-weight: bold;
 }
 
-AboutDialog > QLabel#app_version {
+AboutDialog QLabel#app_version {
     font-size: 11px;
     font-weight: bold;
 }
 
-AboutDialog > QLabel#app_description {
+AboutDialog QLabel#app_description {
     font-size: 12px;
     font-weight: bold;
 }
 
-AboutDialog > QLabel#app_more_information {
-    font-size: 11px;
-}
+AboutDialog QLabel#gem_logo { }
 
-AboutDialog > QLabel#app_license {
+AboutDialog QLabel#app_more_information, AboutDialog QLabel#app_license {
     font-size: 11px;
 }
 

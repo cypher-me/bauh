@@ -1,8 +1,7 @@
 from glob import glob
 
-from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QVBoxLayout, QDialog, QLabel, QWidget, QHBoxLayout
+from PyQt5.QtWidgets import QVBoxLayout, QDialog, QLabel, QWidget, QHBoxLayout, QSizePolicy
 
 from bauh import __version__, __app_name__, ROOT_DIR
 from bauh.context import generate_i18n
@@ -21,27 +20,29 @@ class AboutDialog(QDialog):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
+        logo_container = QWidget()
+        logo_container.setObjectName('logo_container')
+        logo_container.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
+        logo_container.setLayout(QHBoxLayout())
+
         label_logo = QLabel()
-        icon = QIcon(resource.get_path('img/logo.svg')).pixmap(64, 64)
-        label_logo.setPixmap(icon)
-        label_logo.setAlignment(Qt.AlignCenter)
-        layout.addWidget(label_logo)
+        label_logo.setObjectName('logo')
+
+        logo_container.layout().addWidget(label_logo)
+        layout.addWidget(logo_container)
 
         label_name = QLabel(__app_name__)
         label_name.setObjectName('app_name')
-        label_name.setAlignment(Qt.AlignCenter)
         layout.addWidget(label_name)
 
         label_version = QLabel(i18n['about.version'].lower() + ' ' + __version__)
         label_version.setObjectName('app_version')
-        label_version.setAlignment(Qt.AlignCenter)
         layout.addWidget(label_version)
 
         layout.addWidget(QLabel(''))
 
         line_desc = QLabel(i18n['about.info.desc'])
         line_desc.setObjectName('app_description')
-        line_desc.setAlignment(Qt.AlignCenter)
         line_desc.setMinimumWidth(400)
         layout.addWidget(line_desc)
 
@@ -54,11 +55,14 @@ class AboutDialog(QDialog):
         gems_widget.setLayout(QHBoxLayout())
 
         gems_widget.layout().addWidget(QLabel())
+
         for gem_path in available_gems:
             icon = QLabel()
+            icon.setObjectName('gem_logo')
             icon_path = gem_path + '/resources/img/{}.svg'.format(gem_path.split('/')[-1])
-            icon.setPixmap(QIcon(icon_path).pixmap(QSize(25, 25)))
+            icon.setPixmap(QIcon(icon_path).pixmap(25, 25))
             gems_widget.layout().addWidget(icon)
+
         gems_widget.layout().addWidget(QLabel())
 
         layout.addWidget(gems_widget)
@@ -68,27 +72,23 @@ class AboutDialog(QDialog):
         label_more_info.setObjectName('app_more_information')
         label_more_info.setText(i18n['about.info.link'] + " <a href='{url}'>{url}</a>".format(url=PROJECT_URL))
         label_more_info.setOpenExternalLinks(True)
-        label_more_info.setAlignment(Qt.AlignCenter)
         layout.addWidget(label_more_info)
 
         label_license = QLabel()
         label_license.setObjectName('app_license')
         label_license.setText("<a href='{}'>{}</a>".format(LICENSE_URL, i18n['about.info.license']))
         label_license.setOpenExternalLinks(True)
-        label_license.setAlignment(Qt.AlignCenter)
         layout.addWidget(label_license)
 
         layout.addWidget(QLabel(''))
 
         label_trouble_question = QLabel(i18n['about.info.trouble.question'])
         label_trouble_question.setObjectName('app_trouble_question')
-        label_trouble_question.setAlignment(Qt.AlignCenter)
 
         layout.addWidget(label_trouble_question)
 
         label_trouble_answer = QLabel(i18n['about.info.trouble.answer'])
         label_trouble_answer.setObjectName('app_trouble_answer')
-        label_trouble_answer.setAlignment(Qt.AlignCenter)
 
         layout.addWidget(label_trouble_answer)
 
@@ -96,12 +96,10 @@ class AboutDialog(QDialog):
 
         label_rate_question = QLabel(i18n['about.info.rate.question'])
         label_rate_question.setObjectName('app_rate_question')
-        label_rate_question.setAlignment(Qt.AlignCenter)
         layout.addWidget(label_rate_question)
 
         label_rate_answer = QLabel(i18n['about.info.rate.answer'])
         label_rate_answer.setObjectName('app_rate_answer')
-        label_rate_answer.setAlignment(Qt.AlignCenter)
         layout.addWidget(label_rate_answer)
 
         layout.addWidget(QLabel(''))
