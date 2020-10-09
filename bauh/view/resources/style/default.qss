@@ -390,3 +390,15 @@ ScreenshotsDialog QPushButton#back { }
 ScreenshotsDialog QPushButton#next { }
 
 ScreenshotsDialog QProgressBar#progress_screenshots { }
+
+SettingsWindow { }
+
+SettingsWindow TabGroupQt#settings {
+    min-width: 400px;
+}
+
+SettingsWindow QWidget#lower_container { }
+
+SettingsWindow QPushButton#cancel { }
+
+SettingsWindow QPushButton#bt_ok { }

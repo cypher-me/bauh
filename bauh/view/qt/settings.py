@@ -3,8 +3,8 @@ from io import StringIO
 from typing import Optional
 
 from PyQt5.QtCore import QSize, Qt, QCoreApplication
-from PyQt5.QtGui import QCursor, QKeyEvent
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QToolBar, QSizePolicy, QPushButton
+from PyQt5.QtGui import QCursor
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QSizePolicy, QPushButton, QHBoxLayout
 
 from bauh import __app_name__
 from bauh.api.abstract.controller import SoftwareManager
@@ -32,21 +32,23 @@ class SettingsWindow(QWidget):
         self.settings_model = self.manager.get_settings(screen_size.width(), screen_size.height())
 
         tab_group = to_widget(self.settings_model, i18n)
-        tab_group.setMinimumWidth(int(screen_size.width() / 3))
+        tab_group.setObjectName('settings')
         self.layout().addWidget(tab_group)
 
-        action_bar = QToolBar()
-        action_bar.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        lower_container = QWidget()
+        lower_container.setObjectName('lower_container')
+        lower_container.setLayout(QHBoxLayout())
+        lower_container.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 
         bt_close = QPushButton()
-        bt_close.setObjectName('bt_cancel')
+        bt_close.setObjectName('cancel')
         bt_close.setAutoDefault(True)
         bt_close.setCursor(QCursor(Qt.PointingHandCursor))
         bt_close.setText(self.i18n['close'].capitalize())
         bt_close.clicked.connect(lambda: self.close())
-        action_bar.addWidget(bt_close)
+        lower_container.layout().addWidget(bt_close)
 
-        action_bar.addWidget(new_spacer())
+        lower_container.layout().addWidget(new_spacer())
 
         bt_change = QPushButton()
         bt_change.setAutoDefault(True)
@@ -54,9 +56,9 @@ class SettingsWindow(QWidget):
         bt_change.setCursor(QCursor(Qt.PointingHandCursor))
         bt_change.setText(self.i18n['change'].capitalize())
         bt_change.clicked.connect(self._save_settings)
-        action_bar.addWidget(bt_change)
+        lower_container.layout().addWidget(bt_change)
 
-        self.layout().addWidget(action_bar)
+        self.layout().addWidget(lower_container)
 
     def show(self):
         super(SettingsWindow, self).show()
@@ -114,4 +116,4 @@ class SettingsWindow(QWidget):
                 msg.write('<p style="font-weight: bold">* ' + w + '</p><br/>')
 
             msg.seek(0)
-            dialog.show_message(title="Warning", body=msg.read(), type_=MessageType.WARNING)
+            dialog.show_message(title=self.i18n['warning'].capitalize(), body=msg.read(), type_=MessageType.WARNING)

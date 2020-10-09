@@ -274,7 +274,7 @@ class SoftwareManager(ABC):
         pass
 
     @abstractmethod
-    def prepare(self, task_manager: TaskManager, root_password: str, internet_available: Optional[bool]):
+    def prepare(self, task_manager: Optional[TaskManager], root_password: Optional[str], internet_available: Optional[bool]):
         """
         It prepares the manager to start working. It will be called by GUI. Do not call it within.
         :param task_manager: a task manager instance used to register ongoing tasks during prepare
