@@ -1,5 +1,4 @@
 import glob
-import os
 import sys
 from typing import Tuple
 
@@ -7,6 +6,7 @@ from PyQt5.QtWidgets import QApplication
 
 from bauh import __app_name__, __version__
 from bauh.api.constants import STYLES_PATH
+from bauh.stylesheet import process_stylesheet
 from bauh.view.util import util, translation, resource
 from bauh.view.util.translation import I18n
 
@@ -39,40 +39,12 @@ def new_qt_application(app_config: dict, quit_on_last_closed: bool = False, name
             stylesheet_file = custom_styles.get(stylesheet) if custom_styles else None
 
         if stylesheet_file:
-            with open(stylesheet_file) as f:
-                stylesheet_str = f.read()
+            stylesheet_str = process_stylesheet(stylesheet_file)
 
             if stylesheet_str:
-                var_map = _read_var_file(stylesheet_file)
-                var_map['root_img_path'] = resource.get_path('img')
-
-                if var_map:
-                    for var, value in var_map.items():
-                        stylesheet_str = stylesheet_str.replace('@' + var, value)
-
-            app.setStyleSheet(stylesheet_str)
+                app.setStyleSheet(stylesheet_str)
 
     return app
-
-
-def _read_var_file(stylesheet_file: str) -> dict:
-    vars_file = stylesheet_file.replace('.qss', '.vars')
-    var_map = {}
-    if os.path.isfile(vars_file):
-        with open(vars_file) as f:
-            for line in f.readlines():
-                if line:
-                    line_strip = line.strip()
-                    if line_strip:
-                        var_value = line_strip.split('=')
-
-                        if var_value and len(var_value) == 2:
-                            var, value = var_value[0].strip(), var_value[1].strip()
-
-                            if var and value:
-                                var_map[var] = value
-
-    return var_map
 
 
 def _gen_i18n_data(app_config: dict, locale_dir: str) -> Tuple[str, dict, str, dict]:

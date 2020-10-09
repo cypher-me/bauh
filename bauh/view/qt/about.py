@@ -1,7 +1,7 @@
 from glob import glob
 
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QVBoxLayout, QDialog, QLabel, QWidget, QHBoxLayout, QSizePolicy
+from PyQt5.QtWidgets import QVBoxLayout, QDialog, QLabel, QWidget, QHBoxLayout, QSizePolicy, QApplication
 
 from bauh import __version__, __app_name__, ROOT_DIR
 from bauh.context import generate_i18n
@@ -43,7 +43,6 @@ class AboutDialog(QDialog):
 
         line_desc = QLabel(i18n['about.info.desc'])
         line_desc.setObjectName('app_description')
-        line_desc.setMinimumWidth(400)
         layout.addWidget(line_desc)
 
         layout.addWidget(QLabel(''))
@@ -55,12 +54,13 @@ class AboutDialog(QDialog):
         gems_widget.setLayout(QHBoxLayout())
 
         gems_widget.layout().addWidget(QLabel())
+        gem_logo_size = int(0.032552083 * QApplication.primaryScreen().size().height())
 
         for gem_path in available_gems:
             icon = QLabel()
             icon.setObjectName('gem_logo')
             icon_path = gem_path + '/resources/img/{}.svg'.format(gem_path.split('/')[-1])
-            icon.setPixmap(QIcon(icon_path).pixmap(25, 25))
+            icon.setPixmap(QIcon(icon_path).pixmap(gem_logo_size, gem_logo_size))
             gems_widget.layout().addWidget(icon)
 
         gems_widget.layout().addWidget(QLabel())

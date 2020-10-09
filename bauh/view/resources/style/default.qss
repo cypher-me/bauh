@@ -264,40 +264,41 @@ AboutDialog QWidget#logo_container { }
 AboutDialog QLabel#logo {
     qproperty-pixmap: url("@root_img_path/logo.svg");
     qproperty-scaledContents: true;
-    min-height: 54.56;
-    max-height: 54.56;
-    min-width: 64;
-    max-width: 64;
+    min-height: 0.071041667%h;
+    max-height: 0.071041667%h;
+    min-width: 0.046852123%w;
+    max-width: 0.046852123%w;
 }
 
 AboutDialog QLabel#app_name {
-    font-size: 14px;
+    font-size: 0.018229167%h;
     font-weight: bold;
 }
 
 AboutDialog QLabel#app_version {
-    font-size: 11px;
+    font-size: 0.014322917%h;
     font-weight: bold;
 }
 
 AboutDialog QLabel#app_description {
-    font-size: 12px;
+    min-width: 0.292397661%w;
+    font-size: 0.015625%h;
     font-weight: bold;
 }
 
 AboutDialog QLabel#gem_logo { }
 
 AboutDialog QLabel#app_more_information, AboutDialog QLabel#app_license {
-    font-size: 11px;
+    font-size: 0.014322917%h;
 }
 
 AboutDialog > QLabel#app_trouble_question, AboutDialog > QLabel#app_rate_question {
-    font-size: 10px;
+    font-size: 0.013020833%h;
     font-weight: bold;
 }
 
 AboutDialog > QLabel#app_trouble_answer, AboutDialog > QLabel#app_rate_answer {
-    font-size: 10px;
+    font-size: 0.013020833%h;
 }
 
 QInputDialog#dialog_password > QLineEdit {
