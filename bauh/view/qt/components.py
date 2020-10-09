@@ -551,6 +551,7 @@ class MultipleSelectQt(QGroupBox):
 
             if op.tooltip:
                 help_icon = QLabel()
+                help_icon.setCursor(QCursor(Qt.WhatsThisCursor))
                 help_icon.setPixmap(pixmap_help)
                 help_icon.setToolTip(op.tooltip)
                 widget.layout().addWidget(help_icon)
@@ -618,7 +619,7 @@ class FormMultipleSelectQt(QWidget):
                 help_icon = QLabel()
                 help_icon.setPixmap(pixmap_help)
                 help_icon.setToolTip(op.tooltip)
-                help_icon.setCursor(QCursor(Qt.PointingHandCursor))
+                help_icon.setCursor(QCursor(Qt.WhatsThisCursor))
                 widget.layout().addWidget(help_icon)
 
             self._layout.addWidget(widget, line, col)
