@@ -1,0 +1,77 @@
+QWidget {
+    background-color: @color_container_grey;
+}
+
+QTableWidget {
+    background-color: @color_inner_widget;
+}
+
+QLabel, QRadioButton, QPushButton, QLineEdit, QCheckBox, QComboBox, QSpinBox, QTabBar::tab {
+    color: @color_font;
+}
+
+QTabBar::tab:selected {
+    color: @color_selected_font;
+    font-weight: bold;
+}
+
+QComboBox QAbstractItemView {
+    color: @color_font;
+}
+
+PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress_finished[status = "done"] {
+    color: @color_task_done;
+}
+
+QProgressBar::chunk {
+    background-color: @color_progress_bar;
+}
+
+QPushButton#bt_upgrade {
+    background: @color_bt_upgrade;
+}
+
+QLabel#label_version {
+    color: @color_version_update;
+    font-weight: normal;
+}
+
+UpgradeToggleButton > QToolButton {
+    background: @color_bt_upgrade;
+}
+
+ManageWindow QToolButton#bt_uninstall {
+    color: #FF6B68;
+}
+
+ManageWindow PackagesTable IconButton#app_run > QToolButton {
+    qproperty-icon: url("@style_dir/img/app_play.svg");
+}
+
+ManageWindow PackagesTable IconButton#app_info > QToolButton {
+    qproperty-icon: url("@style_dir/img/app_info.svg");
+}
+
+QPushButton#bt_refresh {
+    qproperty-icon: url("@style_dir/img/refresh.svg")
+}
+
+QPushButton#bt_suggestions {
+    qproperty-icon: url("@style_dir/img/suggestions.svg")
+}
+
+ManageWindow PackagesTable IconButton#app_actions > QToolButton {
+    qproperty-icon: url("@style_dir/img/app_actions.svg");
+}
+
+ManageWindow IconButton#settings > QToolButton {
+    qproperty-icon: url("@style_dir/img/settings.svg");
+}
+
+ManageWindow IconButton#custom_actions > QToolButton {
+    qproperty-icon: url("@style_dir/img/custom_actions.svg");
+}
+
+QMenu#app_actions QPushButton#app_history {
+    qproperty-icon: url("@style_dir/img/history.svg");
+}

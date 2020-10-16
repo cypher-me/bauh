@@ -7,11 +7,12 @@ from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtGui import QIcon, QPixmap, QIntValidator, QCursor
 from PyQt5.QtWidgets import QRadioButton, QGroupBox, QCheckBox, QComboBox, QGridLayout, QWidget, \
     QLabel, QSizePolicy, QLineEdit, QToolButton, QHBoxLayout, QFormLayout, QFileDialog, QTabWidget, QVBoxLayout, \
-    QSlider, QScrollArea, QFrame, QAction, QSpinBox, QPlainTextEdit, QWidgetAction, QPushButton
+    QSlider, QScrollArea, QFrame, QAction, QSpinBox, QPlainTextEdit, QWidgetAction, QPushButton, QApplication
 
 from bauh.api.abstract.view import SingleSelectComponent, InputOption, MultipleSelectComponent, SelectViewType, \
     TextInputComponent, FormComponent, FileChooserComponent, ViewComponent, TabGroupComponent, PanelComponent, \
     TwoStateButtonComponent, TextComponent, SpacerComponent, RangeInputComponent, ViewObserver, TextInputType
+from bauh.context import PROPERTY_HARDCODED_STYLESHEET
 from bauh.view.util import resource
 from bauh.view.util.translation import I18n
 
@@ -948,6 +949,7 @@ class TabGroupQt(QTabWidget):
             self.addTab(scroll, icon, c.label)
 
 
+
 def new_single_select(model: SingleSelectComponent) -> QWidget:
     if model.type == SelectViewType.RADIO:
         return RadioSelectQt(model)
@@ -1044,7 +1046,10 @@ class QSearchBar(QWidget):
 
         search_left_corner = QLabel()
         search_left_corner.setObjectName('lb_left_corner')
-        search_left_corner.setStyleSheet('QLabel#lb_left_corner { background: %s; }' % search_background_color)
+
+        if QApplication.instance().property(PROPERTY_HARDCODED_STYLESHEET):
+            search_left_corner.setStyleSheet('QLabel#lb_left_corner { background: %s; }' % search_background_color)
+
         self.layout().addWidget(search_left_corner)
 
         self.layout().addWidget(self.inp_search)
@@ -1052,7 +1057,10 @@ class QSearchBar(QWidget):
         search_right_corner = QLabel()
         search_right_corner.setObjectName('lb_right_corner')
         search_right_corner.setPixmap(QIcon(resource.get_path('img/search.svg')).pixmap(QSize(10, 10)))
-        search_right_corner.setStyleSheet("QLabel#lb_right_corner { background: %s; }" % search_background_color)
+
+        if QApplication.instance().property(PROPERTY_HARDCODED_STYLESHEET):
+            search_right_corner.setStyleSheet("QLabel#lb_right_corner { background: %s; }" % search_background_color)
+
         self.layout().addWidget(search_right_corner)
 
     def clear(self):

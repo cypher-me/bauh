@@ -1,0 +1,8 @@
+name=Default
+name[pt]=Padrão
+name[es]=Predeterminada
+description=Default stylesheet
+description[pt]=Folha de estilo padrão
+description[es]=Hoja de estilo predeterminada
+version=1.0
+allow_hardcoded_stylesheets=true

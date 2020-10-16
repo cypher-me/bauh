@@ -1,0 +1,6 @@
+name=Darcula
+description=Dark stylesheet based on the JetBrains' Darcula theme
+description[pt]=Folha de estilo escura baseada no tema Darcula da JetBrains
+description[es]=Hoja de estilo oscura basada en el tema Darcula de JetBrains
+version=1.0
+root_sheet=default

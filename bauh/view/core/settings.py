@@ -2,6 +2,7 @@ import logging
 import os
 import traceback
 from math import floor
+from operator import attrgetter
 from typing import List, Tuple
 
 from PyQt5.QtWidgets import QApplication, QStyleFactory
@@ -13,6 +14,7 @@ from bauh.api.abstract.view import ViewComponent, TabComponent, InputOption, Tex
     PanelComponent, FormComponent, TabGroupComponent, SingleSelectComponent, SelectViewType, TextInputComponent, \
     FileChooserComponent, RangeInputComponent
 from bauh.commons.view_utils import new_select
+from bauh.stylesheet import read_all_stylesheets_metadata
 from bauh.view.core import config, timeshift
 from bauh.view.core.config import read_config
 from bauh.view.core.downloader import AdaptableFileDownloader
@@ -227,6 +229,34 @@ class GenericSettingsManager:
                                              max_width=default_width,
                                              id_="style")
 
+        stylesheet_opts = [InputOption(label=s.get_i18n_name(self.i18n),
+                                       tooltip=s.get_i18n_description(self.i18n),
+                                       value=s.key) for s in read_all_stylesheets_metadata()]
+        stylesheet_opts.sort(key=attrgetter('label'))
+
+        stylesheet, default_stylesheet = core_config['ui']['stylesheet'], None
+
+        if stylesheet is not None:
+            default_stylesheet = [s for s in stylesheet_opts if s.value == stylesheet]
+
+            if default_stylesheet:
+                default_stylesheet = default_stylesheet[0]
+
+        if not default_stylesheet:
+            default_stylesheet = InputOption(label=self.i18n['core.config.ui.stylesheet.invalid'],
+                                             tooltip=stylesheet,
+                                             value=None,
+                                             invalid=True)
+            stylesheet_opts.insert(0, default_stylesheet)
+
+        select_stylesheet = SingleSelectComponent(label=self.i18n['core.config.ui.stylesheet'],
+                                                  tooltip=self.i18n['core.config.ui.stylesheet.tip'].format(style=self.i18n['style']),
+                                                  options=stylesheet_opts,
+                                                  default_option=default_stylesheet,
+                                                  type_=SelectViewType.COMBO,
+                                                  max_width=default_width,
+                                                  id_="stylesheet")
+
         input_maxd = TextInputComponent(label=self.i18n['core.config.ui.max_displayed'],
                                         tooltip=self.i18n['core.config.ui.max_displayed.tip'],
                                         only_int=True,
@@ -240,7 +270,9 @@ class GenericSettingsManager:
                                                  max_width=default_width,
                                                  value=core_config['download']['icons'])
 
-        sub_comps = [FormComponent([select_hdpi, select_ascale, select_scale, select_dicons, select_style, input_maxd], spaces=False)]
+        sub_comps = [FormComponent([select_hdpi, select_ascale, select_scale,
+                                    select_dicons, select_style, select_stylesheet, input_maxd], spaces=False)]
+
         return TabComponent(self.i18n['core.config.tab.ui'].capitalize(), PanelComponent(sub_comps), None, 'core.ui')
 
     def _gen_general_settings(self, core_config: dict, screen_width: int, screen_height: int) -> TabComponent:
@@ -295,11 +327,12 @@ class GenericSettingsManager:
                                       id_="sugs_by_type")
 
         inp_reboot = new_select(label=self.i18n['core.config.updates.reboot'],
-                                      tip=self.i18n['core.config.updates.reboot.tip'],
-                                      id_='ask_for_reboot',
-                                      max_width=default_width,
-                                      value=bool(core_config['updates']['ask_for_reboot']),
-                                      opts=[(self.i18n['ask'].capitalize(), True, None), (self.i18n['no'].capitalize(), False, None)])
+                                tip=self.i18n['core.config.updates.reboot.tip'],
+                                id_='ask_for_reboot',
+                                max_width=default_width,
+                                value=bool(core_config['updates']['ask_for_reboot']),
+                                opts=[(self.i18n['ask'].capitalize(), True, None),
+                                      (self.i18n['no'].capitalize(), False, None)])
 
         sub_comps = [FormComponent([select_locale, select_store_pwd, select_sysnotify, select_sugs, inp_sugs, inp_reboot], spaces=False)]
         return TabComponent(self.i18n['core.config.tab.general'].capitalize(), PanelComponent(sub_comps), None, 'core.gen')
@@ -410,6 +443,8 @@ class GenericSettingsManager:
         cur_style = core_config['ui']['style'] if core_config['ui']['style'] else QApplication.instance().style().objectName().lower()
         if style != cur_style:
             core_config['ui']['style'] = style
+
+        core_config['ui']['stylesheet'] = ui_form.get_component('stylesheet').get_selected()
 
         # gems
         checked_gems = gems_panel.components[1].get_component('gems').get_selected_values()

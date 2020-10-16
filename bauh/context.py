@@ -1,16 +1,16 @@
-import glob
+import os
 import sys
 from typing import Tuple
 
 from PyQt5.QtWidgets import QApplication
 
 from bauh import __app_name__, __version__
-from bauh.api.constants import STYLES_PATH
-from bauh.stylesheet import process_stylesheet
-from bauh.view.util import util, translation, resource
+from bauh.stylesheet import process_stylesheet, read_default_stylesheets, read_user_stylesheets
+from bauh.view.util import util, translation
 from bauh.view.util.translation import I18n
 
 DEFAULT_I18N_KEY = 'en'
+PROPERTY_HARDCODED_STYLESHEET = 'hcqss'
 
 
 def new_qt_application(app_config: dict, quit_on_last_closed: bool = False, name: str = None) -> QApplication:
@@ -26,23 +26,33 @@ def new_qt_application(app_config: dict, quit_on_last_closed: bool = False, name
         if app.style().objectName().lower() not in {'fusion', 'breeze', 'oxygen'}:
             app.setStyle('Fusion')
 
-    stylesheet = app_config['ui']['stylesheet']
-    stylesheet = stylesheet.strip().lower() if stylesheet else None
+    stylesheet_key = app_config['ui']['stylesheet'].strip() if app_config['ui']['stylesheet'] else None
 
-    if stylesheet:
-        default_styles = {f.split('/')[-1].split('.')[0].lower(): f for f in glob.glob(resource.get_path('style/*.qss'))}
+    if stylesheet_key:
+        available_stylesheets = {}
+        default_styles = read_default_stylesheets()
+        available_stylesheets.update(default_styles)
 
-        stylesheet_file = default_styles.get(stylesheet)
+        stylesheet_file = None
 
-        if not stylesheet_file:
-            custom_styles = {f.split('/')[-1].split('.')[0].lower(): f for f in glob.glob('{}/*.qss'.format(STYLES_PATH))}
-            stylesheet_file = custom_styles.get(stylesheet) if custom_styles else None
+        if '/' in stylesheet_key:
+            if os.path.isfile(stylesheet_key):
+                user_sheets = read_user_stylesheets()
+
+                if user_sheets:
+                    available_stylesheets.update(user_sheets)
+
+                    if stylesheet_key in user_sheets:
+                        stylesheet_file = stylesheet_key
+        else:
+            stylesheet_file = default_styles.get(stylesheet_key)
 
         if stylesheet_file:
-            stylesheet_str = process_stylesheet(stylesheet_file)
+            stylesheet_metadata = process_stylesheet(stylesheet_key, stylesheet_file, default_styles)
 
-            if stylesheet_str:
-                app.setStyleSheet(stylesheet_str)
+            if stylesheet_metadata:
+                app.setStyleSheet(stylesheet_metadata[0])
+                app.setProperty(PROPERTY_HARDCODED_STYLESHEET, stylesheet_metadata[1].hardcoded_stylesheets)
 
     return app
 

@@ -56,12 +56,15 @@ class InputOption:
     Represents a select component option.
     """
 
-    def __init__(self, label: str, value: object, tooltip: str = None, icon_path: str = None, read_only: bool = False, id_: str = None):
+    def __init__(self, label: str, value: object, tooltip: Optional[str] = None,
+                 icon_path: Optional[str] = None, read_only: bool = False, id_: Optional[str] = None,
+                 invalid: bool = False):
         """
         :param label: the string that will be shown to the user
         :param value: the option value (not shown)
         :param tooltip: an optional tooltip
         :param icon_path: an optional icon path
+        :param invalid: if this option is considered invalid
         """
         if not label:
             raise Exception("'label' must be a not blank string")
@@ -72,6 +75,7 @@ class InputOption:
         self.tooltip = tooltip
         self.icon_path = icon_path
         self.read_only = read_only
+        self.invalid = invalid
 
     def __hash__(self):
         return hash(self.label) + hash(self.value)
