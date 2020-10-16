@@ -41,11 +41,7 @@ UpgradeToggleButton > QToolButton {
 }
 
 ManageWindow QToolButton#bt_uninstall {
-    color: #FF6B68;
-}
-
-ManageWindow PackagesTable IconButton#app_run > QToolButton {
-    qproperty-icon: url("@style_dir/img/app_play.svg");
+    color: @color_red;
 }
 
 ManageWindow PackagesTable IconButton#app_info > QToolButton {
@@ -58,6 +54,10 @@ QPushButton#bt_refresh {
 
 QPushButton#bt_suggestions {
     qproperty-icon: url("@style_dir/img/suggestions.svg")
+}
+
+ManageWindow PackagesTable IconButton#app_run > QToolButton {
+    qproperty-icon: url("@style_dir/img/app_play.svg");
 }
 
 ManageWindow PackagesTable IconButton#app_actions > QToolButton {
@@ -75,3 +75,4 @@ ManageWindow IconButton#custom_actions > QToolButton {
 QMenu#app_actions QPushButton#app_history {
     qproperty-icon: url("@style_dir/img/history.svg");
 }
+
