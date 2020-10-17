@@ -7,7 +7,7 @@ from typing import List, Optional
 from PyQt5.QtCore import Qt, QUrl, QSize
 from PyQt5.QtGui import QPixmap, QIcon, QCursor
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
-from PyQt5.QtWidgets import QTableWidget, QTableView, QMenu, QTableWidgetItem, QToolButton, QWidget, \
+from PyQt5.QtWidgets import QTableWidget, QTableView, QMenu, QToolButton, QWidget, \
     QHeaderView, QLabel, QHBoxLayout, QToolBar, QSizePolicy
 
 from bauh.api.abstract.cache import MemoryCache
@@ -15,6 +15,7 @@ from bauh.api.abstract.model import PackageStatus, CustomSoftwareAction
 from bauh.commons.html import strip_html, bold
 from bauh.view.qt.components import IconButton, QCustomMenuAction
 from bauh.view.qt.dialog import ConfirmationDialog
+from bauh.view.qt.qt_utils import measure_based_on_height
 from bauh.view.qt.view_model import PackageView
 from bauh.view.util import resource
 from bauh.view.util.translation import I18n
@@ -77,7 +78,7 @@ class UpgradeToggleButton(QWidget):
 
 class PackagesTable(QTableWidget):
 
-    COL_NUMBER = 8
+    COL_NUMBER = 9
 
     def __init__(self, parent: QWidget, icon_cache: MemoryCache, download_icons: bool):
         super(PackagesTable, self).__init__()
@@ -106,6 +107,10 @@ class PackagesTable(QTableWidget):
         self.setRowHeight(80, 80)
         self.cache_type_icon = {}
         self.i18n = self.window.i18n
+
+    def icon_size(self) -> QSize:
+        pixels = measure_based_on_height(0.02083)
+        return QSize(pixels, pixels)
 
     def has_any_settings(self, pkg: PackageView):
         return pkg.model.has_history() or \
@@ -248,8 +253,7 @@ class PackagesTable(QTableWidget):
         if icon_data:
             for idx, app in enumerate(self.window.pkgs):
                 if app.model.icon_url == icon_url:
-                    col_name = self.item(idx, 0)
-                    col_name.setIcon(icon_data['icon'])
+                    self._update_icon(self.cellWidget(idx, 0), icon_data['icon'])
 
                     if app.model.supports_disk_cache() and app.model.get_disk_icon_path() and icon_data['bytes']:
                         if not icon_was_cached or not os.path.exists(app.model.get_disk_icon_path()):
@@ -275,13 +279,14 @@ class PackagesTable(QTableWidget):
             self.scrollToTop()
 
     def _update_row(self, pkg: PackageView, update_check_enabled: bool = True, change_update_col: bool = True):
-        self._set_col_name(0, pkg)
-        self._set_col_version(1, pkg)
-        self._set_col_description(2, pkg)
-        self._set_col_publisher(3, pkg)
-        self._set_col_type(4, pkg)
-        self._set_col_installed(5, pkg)
-        self._set_col_actions(6, pkg)
+        self._set_col_icon(0, pkg)
+        self._set_col_name(1, pkg)
+        self._set_col_version(2, pkg)
+        self._set_col_description(3, pkg)
+        self._set_col_publisher(4, pkg)
+        self._set_col_type(5, pkg)
+        self._set_col_installed(6, pkg)
+        self._set_col_actions(7, pkg)
 
         if change_update_col:
             col_update = None
@@ -295,7 +300,7 @@ class PackagesTable(QTableWidget):
                                                          checked=pkg.update_checked if pkg.model.can_be_updated() else False,
                                                          clickable=pkg.model.can_be_updated()))
 
-            self.setCellWidget(pkg.table_index, 7, col_update)
+            self.setCellWidget(pkg.table_index, 8, col_update)
 
     def _gen_row_button(self, text: str, name: str, callback) -> QWidget:
         col = QWidget()
@@ -346,23 +351,25 @@ class PackagesTable(QTableWidget):
         icon_data = self.cache_type_icon.get(pkg.model.get_type())
 
         if icon_data is None:
-            pixmap = QIcon(pkg.model.get_type_icon_path()).pixmap(QSize(16, 16))
+            pixmap = QIcon(pkg.model.get_type_icon_path()).pixmap(self.icon_size())
             icon_data = {'px': pixmap, 'tip': '{}: {}'.format(self.i18n['type'], pkg.get_type_label())}
             self.cache_type_icon[pkg.model.get_type()] = icon_data
 
-        item = QLabel()
-        item.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
-        item.setPixmap(icon_data['px'])
-        item.setAlignment(Qt.AlignCenter)
-
-        item.setToolTip(icon_data['tip'])
-        self.setCellWidget(pkg.table_index, col, item)
+        col_type_icon = QLabel()
+        col_type_icon.setCursor(QCursor(Qt.WhatsThisCursor))
+        col_type_icon.setObjectName('app_type')
+        col_type_icon.setProperty('icon', 'true')
+        col_type_icon.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
+        col_type_icon.setPixmap(icon_data['px'])
+        col_type_icon.setToolTip(icon_data['tip'])
+        self.setCellWidget(pkg.table_index, col, col_type_icon)
 
     def _set_col_version(self, col: int, pkg: PackageView):
         label_version = QLabel(str(pkg.model.version if pkg.model.version else '?'))
         label_version.setAlignment(Qt.AlignCenter)
 
         item = QWidget()
+        item.setCursor(QCursor(Qt.WhatsThisCursor))
         item.setLayout(QHBoxLayout())
         item.layout().addWidget(label_version)
 
@@ -386,25 +393,7 @@ class PackagesTable(QTableWidget):
         item.setToolTip(tooltip)
         self.setCellWidget(pkg.table_index, col, item)
 
-    def _set_col_name(self, col: int, pkg: PackageView):
-        item = QTableWidgetItem()
-        item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
-
-        name = pkg.model.get_display_name()
-        if name:
-            item.setToolTip('{}: {}'.format(self.i18n['app.name'].lower(), pkg.model.get_name_tooltip()))
-        else:
-            name = '...'
-            item.setToolTip(self.i18n['app.name'].lower())
-
-        if len(name) > NAME_MAX_SIZE:
-            name = name[0:NAME_MAX_SIZE - 3] + '...'
-
-        if len(name) < NAME_MAX_SIZE:
-            name = name + ' ' * (NAME_MAX_SIZE-len(name))
-
-        item.setText(name)
-
+    def _set_col_icon(self, col: int, pkg: PackageView):
         icon_path = pkg.model.get_disk_icon_path()
         if pkg.model.installed and pkg.model.supports_disk_cache() and icon_path:
             if icon_path.startswith('/'):
@@ -435,8 +424,37 @@ class PackagesTable(QTableWidget):
             icon_data = self.icon_cache.get(pkg.model.icon_url)
             icon = icon_data['icon'] if icon_data else QIcon(pkg.model.get_default_icon_path())
 
-        item.setIcon(icon)
-        self.setItem(pkg.table_index, col, item)
+        col_icon = QLabel()
+        col_icon.setObjectName('app_icon')
+        col_icon.setProperty('icon', 'true')
+        col_icon.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
+        self._update_icon(col_icon, icon)
+        self.setCellWidget(pkg.table_index, col, col_icon)
+
+    def _set_col_name(self, col: int, pkg: PackageView):
+        col_name = QLabel()
+        col_name.setObjectName('app_name')
+        col_name.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
+        col_name.setCursor(QCursor(Qt.WhatsThisCursor))
+
+        name = pkg.model.get_display_name()
+        if name:
+            col_name.setToolTip('{}: {}'.format(self.i18n['app.name'].lower(), pkg.model.get_name_tooltip()))
+        else:
+            name = '...'
+            col_name.setToolTip(self.i18n['app.name'].lower())
+
+        if len(name) > NAME_MAX_SIZE:
+            name = name[0:NAME_MAX_SIZE - 3] + '...'
+
+        if len(name) < NAME_MAX_SIZE:
+            name = name + ' ' * (NAME_MAX_SIZE-len(name))
+
+        col_name.setText(name)
+        self.setCellWidget(pkg.table_index, col, col_name)
+
+    def _update_icon(self, label: QLabel, icon: QIcon):
+        label.setPixmap(icon.pixmap(QSize(self.icon_size())))
 
     def _set_col_description(self, col: int, pkg: PackageView):
         item = QLabel()
@@ -458,6 +476,7 @@ class PackagesTable(QTableWidget):
 
     def _set_col_publisher(self, col: int, pkg: PackageView):
         item = QToolBar()
+        item.setCursor(QCursor(Qt.WhatsThisCursor))
 
         publisher = pkg.model.get_publisher()
         full_publisher = None

@@ -86,44 +86,52 @@ QPushButton#bt_installed, QPushButton#bt_refresh, QPushButton#bt_suggestions, QP
 }
 
 QPushButton#bt_refresh {
-    qproperty-icon: url("@root_img_path/refresh.svg")
+    qproperty-icon: url("@root_img_path/refresh.svg");
 }
 
 QPushButton#bt_installed {
-    qproperty-icon: url("@root_img_path/disk.svg")
+    qproperty-icon: url("@root_img_path/disk.svg");
 }
 
 QPushButton#bt_suggestions {
-    qproperty-icon: url("@root_img_path/suggestions.svg")
+    qproperty-icon: url("@root_img_path/suggestions.svg");
 }
 
 QPushButton#bt_upgrade {
     background: @color_green;
     color: white;
-    qproperty-icon: url("@root_img_path/app_update.svg")
+    qproperty-icon: url("@root_img_path/app_update.svg");
 }
 
 ManageWindow QWidget#table_container { }
 
 ManageWindow PackagesTable { }
 
-ManageWindow PackagesTable IconButton#app_run > QToolButton {
+PackagesTable QLabel#app_name { }
+
+PackagesTable QLabel#app_icon { }
+
+PackagesTable QLabel[icon = "true"]  {
+    qproperty-alignment: AlignCenter;
+}
+
+PackagesTable IconButton#app_run > QToolButton {
     qproperty-icon: url("@root_img_path/app_play.svg");
 }
 
-ManageWindow PackagesTable IconButton#app_actions > QToolButton {
+PackagesTable IconButton#app_actions > QToolButton {
     qproperty-icon: url("@root_img_path/app_actions.svg");
 }
 
-ManageWindow PackagesTable IconButton#app_screenshots > QToolButton {
+PackagesTable IconButton#app_screenshots > QToolButton {
     qproperty-icon: url("@root_img_path/camera.svg");
 }
 
-ManageWindow PackagesTable IconButton#app_info > QToolButton {
+PackagesTable IconButton#app_info > QToolButton {
     qproperty-icon: url("@root_img_path/app_info.svg");
 }
 
-ManageWindow PackagesTable QMenu#app_actions { }
+PackagesTable QMenu#app_actions { }
 
 QMenu QPushButton {
     border: 0px;
