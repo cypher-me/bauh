@@ -1,13 +1,10 @@
 QWidget {
     background-color: @color_container_grey;
-}
-
-QTableWidget {
-    background-color: @color_inner_widget;
-}
-
-QLabel, QRadioButton, QPushButton, QLineEdit, QCheckBox, QComboBox, QSpinBox, QTabBar::tab {
     color: @color_font;
+}
+
+QTableWidget, QPlainTextEdit {
+    background-color: @color_inner_widget;
 }
 
 QTabBar::tab:selected {
@@ -76,3 +73,7 @@ QMenu#app_actions QPushButton#app_history {
     qproperty-icon: url("@style_dir/img/history.svg");
 }
 
+ManageWindow QPlainTextEdit#textarea_details {
+    background: @color_inner_widget;
+    color: white;
+}
