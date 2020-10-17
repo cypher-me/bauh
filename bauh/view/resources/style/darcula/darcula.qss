@@ -16,12 +16,16 @@ QComboBox QAbstractItemView {
     color: @color_font;
 }
 
+QProgressBar::chunk {
+    background-color: @color_progress_bar;
+}
+
 PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress_finished[status = "done"] {
     color: @color_task_done;
 }
 
-QProgressBar::chunk {
-    background-color: @color_progress_bar;
+ManageWindow InputFilter#name_filter {
+    color: @color_font;
 }
 
 QPushButton#bt_upgrade {
