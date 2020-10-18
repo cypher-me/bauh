@@ -369,6 +369,7 @@ class PackagesTable(QTableWidget):
         label_version.setAlignment(Qt.AlignCenter)
 
         item = QWidget()
+        item.setProperty('container', 'true')
         item.setCursor(QCursor(Qt.WhatsThisCursor))
         item.setLayout(QHBoxLayout())
         item.layout().addWidget(label_version)

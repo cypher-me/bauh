@@ -279,6 +279,7 @@ class PreparePanel(QWidget, TaskManager):
         task_row = self.added_tasks - 1
 
         icon_widget = QWidget()
+        icon_widget.setProperty('container', 'true')
         icon_widget.setLayout(QHBoxLayout())
         icon_widget.layout().setContentsMargins(10, 0, 10, 0)
         bt_icon = QToolButton()

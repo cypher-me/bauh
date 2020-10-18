@@ -3,9 +3,10 @@ QWidget {
     color: @color_font;
 }
 
-QTableWidget, QPlainTextEdit {
+QTableWidget, QPlainTextEdit, QTableWidget QWidget[container = "true"],  QTableWidget QLabel, QTableWidget QToolBar {
     background-color: @color_inner_widget;
 }
+
 
 QPlainTextEdit[console = 'true'] {
     background: @color_inner_widget;
@@ -29,6 +30,10 @@ QPushButton#ok {
     background-color: @color_container_grey;
     color: @color_bt_upgrade;
     font-weight: bold;
+}
+
+PreparePanel QTableWidget#tasks {
+    background-color: @color_inner_widget;
 }
 
 PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress_finished[status = "done"] {
