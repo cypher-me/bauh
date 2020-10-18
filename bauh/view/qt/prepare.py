@@ -175,6 +175,7 @@ class PreparePanel(QWidget, TaskManager):
 
         self.textarea_details = QPlainTextEdit(self)
         self.textarea_details.setObjectName('task_details')
+        self.textarea_details.setProperty('console', 'true')
         self.textarea_details.resize(self.table.size())
         self.layout().addWidget(self.textarea_details)
         self.textarea_details.setVisible(False)

@@ -7,6 +7,11 @@ QTableWidget, QPlainTextEdit {
     background-color: @color_inner_widget;
 }
 
+QPlainTextEdit[console = 'true'] {
+    background: @color_inner_widget;
+    color: @color_console_font;
+}
+
 QTabBar::tab:selected {
     color: @color_selected_font;
     font-weight: bold;
@@ -18,6 +23,12 @@ QComboBox QAbstractItemView {
 
 QProgressBar::chunk {
     background-color: @color_progress_bar;
+}
+
+QPushButton#ok {
+    background-color: @color_container_grey;
+    color: @color_bt_upgrade;
+    font-weight: bold;
 }
 
 PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress_finished[status = "done"] {
@@ -75,9 +86,4 @@ ManageWindow IconButton#custom_actions > QToolButton {
 
 QMenu#app_actions QPushButton#app_history {
     qproperty-icon: url("@style_dir/img/history.svg");
-}
-
-ManageWindow QPlainTextEdit#textarea_details {
-    background: @color_inner_widget;
-    color: white;
 }

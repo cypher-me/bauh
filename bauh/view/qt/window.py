@@ -296,6 +296,7 @@ class ManageWindow(QWidget):
 
         self.textarea_details = QPlainTextEdit(self)
         self.textarea_details.setObjectName('textarea_details')
+        self.textarea_details.setProperty('console', 'true')
         self.textarea_details.resize(self.table_apps.size())
         self.layout.addWidget(self.textarea_details)
         self.textarea_details.setVisible(False)

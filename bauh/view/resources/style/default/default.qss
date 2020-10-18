@@ -1,3 +1,8 @@
+QPlainTextEdit[console = 'true'] {
+    background: black;
+    color: white;
+}
+
 PreparePanel QLabel#prepare_status {
     font-size: 14px;
     font-weight: bold;
@@ -7,10 +12,7 @@ PreparePanel QTableWidget#tasks {
     background-color: transparent;
 }
 
-PreparePanel QPlainTextEdit#task_details {
-    background: black;
-    color: white;
-}
+PreparePanel QPlainTextEdit#task_details { }
 
 PreparePanel QPushButton#bt_hide_details {
     text-decoration: underline;
@@ -164,10 +166,7 @@ ManageWindow QWidget#console_toolbar { }
 
 ManageWindow QLabel#apps_displayed { }
 
-ManageWindow QPlainTextEdit#textarea_details {
-    background: black;
-    color: white;
-}
+ManageWindow QPlainTextEdit#textarea_details { }
 
 ManageWindow QToolBar#toolbar_substatus { }
 
