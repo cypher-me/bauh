@@ -62,7 +62,7 @@ class AsyncAction(QThread, ProcessWatcher):
         self.wait_user()
         return self.confirmation_res
 
-    def request_root_password(self) -> Tuple[bool, str]:
+    def request_root_password(self) -> Tuple[bool, Optional[str]]:
         self.wait_confirmation = True
         self.signal_root_password.emit()
         self.wait_user()
@@ -286,9 +286,9 @@ class UpgradeSelected(AsyncAction):
 
         return FormComponent(label=lb, components=comps), (required_size, extra_size)
 
-    def _request_password(self) -> Tuple[bool, str]:
+    def _request_password(self) -> Tuple[bool, Optional[str]]:
         if not user.is_root():
-            pwd, success = self.request_root_password()
+            success, pwd = self.request_root_password()
 
             if not success:
                 return False, None
