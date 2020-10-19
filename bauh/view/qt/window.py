@@ -188,11 +188,12 @@ class ManageWindow(QWidget):
         self.toolbar_filters.layout().addWidget(self.combo_categories)
         self.comp_manager.register_component(COMBO_CATEGORIES, self.combo_categories)
 
-        self.input_name = InputFilter(self.begin_apply_filters)
+        self.input_name = QSearchBar(search_callback=self.begin_apply_filters)
+        self.input_name.palette().swap(self.combo_categories.palette())
         self.input_name.setObjectName('name_filter')
-        self.input_name.setPlaceholderText(self.i18n['manage_window.name_filter.placeholder'] + '...')
-        self.input_name.setToolTip(self.i18n['manage_window.name_filter.tooltip'])
-        self.input_name.setFixedWidth(130)
+        self.input_name.set_placeholder(self.i18n['manage_window.name_filter.placeholder'] + '...')
+        self.input_name.set_tooltip(self.i18n['manage_window.name_filter.tooltip'])
+        self.input_name.set_button_tooltip(self.i18n['manage_window.name_filter.button_tooltip'])
         self.input_name.sizePolicy().setRetainSizeWhenHidden(True)
         self.toolbar_filters.layout().addWidget(self.input_name)
         self.comp_manager.register_component(INP_NAME, self.input_name)
@@ -556,7 +557,7 @@ class ManageWindow(QWidget):
 
     def _begin_loading_installed(self):
         self.search_bar.clear()
-        self.input_name.setText('')
+        self.input_name.set_text('')
         self._begin_action(self.i18n['manage_window.status.installed'])
         self._handle_console_option(False)
         self.comp_manager.set_components_visible(False)
@@ -861,12 +862,12 @@ class ManageWindow(QWidget):
             'type': self.type_filter,
             'category': self.category_filter,
             'updates': False if ignore_updates else self.filter_updates,
-            'name': self.input_name.get_text().lower() if self.input_name.get_text() else None,
+            'name': self.input_name.text().lower() if self.input_name.text() else None,
             'display_limit': None if self.filter_updates else self.display_limit
         }
 
     def update_pkgs(self, new_pkgs: List[SoftwarePackage], as_installed: bool, types: Set[type] = None, ignore_updates: bool = False, keep_filters: bool = False) -> bool:
-        self.input_name.setText('')
+        self.input_name.set_text('')
         pkgs_info = commons.new_pkgs_info()
         filters = self._gen_filters(ignore_updates=ignore_updates)
 

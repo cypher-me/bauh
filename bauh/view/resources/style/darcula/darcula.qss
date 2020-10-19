@@ -29,8 +29,39 @@ QProgressBar::chunk {
     background-color: @color_progress_bar;
 }
 
+QSearchBar QLabel#lb_left_corner {
+     border-left-color: @color_search_icon;
+     border-top-color: @color_search_icon;
+     border-bottom-color: @color_search_icon;
+}
+
 QSearchBar QPushButton#search_button {
-    qproperty-icon: url("@style_dir/img/search.svg");
+    border-right-color: @color_search_icon;
+    border-top-color: @color_search_icon;
+    border-bottom-color: @color_search_icon;
+}
+
+QSearchBar QLineEdit#inp_search {
+     border-bottom-color: @color_search_icon;
+     border-top-color: @color_search_icon;
+}
+
+QSearchBar#name_filter QLabel#lb_left_corner {
+     border-left-color: @color_inner_widget;
+     border-top-color: @color_inner_widget;
+     border-bottom-color: @color_inner_widget;
+}
+
+QSearchBar#name_filter QPushButton#search_button {
+    border-right-color: @color_inner_widget;
+    border-top-color: @color_inner_widget;
+    border-bottom-color: @color_inner_widget;
+    qproperty-icon: url("@style_dir/img/filter.svg");
+}
+
+QSearchBar#name_filter QLineEdit#inp_search {
+     border-bottom-color: @color_inner_widget;
+     border-top-color: @color_inner_widget;
 }
 
 QPushButton#ok {
@@ -43,15 +74,11 @@ PreparePanel QTableWidget#tasks {
     background-color: @color_inner_widget;
 }
 
-ManageWindow QLabel#publisher_unknown {
-    color: red;
-}
-
 PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress_finished[status = "done"] {
     color: @color_task_done;
 }
 
-ManageWindow InputFilter#name_filter {
+ManageWindow QSearchBar#name_filter {
     color: @color_font;
 }
 
@@ -66,6 +93,10 @@ QLabel#label_version {
 
 UpgradeToggleButton > QToolButton {
     background: @color_bt_upgrade;
+}
+
+ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types {
+    border-color: @color_inner_widget;
 }
 
 ManageWindow PackagesTable IconButton#app_info > QToolButton {

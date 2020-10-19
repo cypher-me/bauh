@@ -1008,11 +1008,12 @@ class QSearchBar(QWidget):
         self.setLayout(QHBoxLayout())
         self.setContentsMargins(0, 0, 0, 0)
         self.layout().setSpacing(0)
+        self.callback = search_callback
 
         self.inp_search = QLineEdit()
         self.inp_search.setObjectName('inp_search')
         self.inp_search.setFrame(False)
-        self.inp_search.returnPressed.connect(search_callback)
+        self.inp_search.returnPressed.connect(self._execute_callback)
         search_background_color = self.inp_search.palette().color(self.inp_search.backgroundRole()).name()
 
         search_left_corner = QLabel()
@@ -1028,7 +1029,7 @@ class QSearchBar(QWidget):
         self.search_button = QPushButton()
         self.search_button.setObjectName('search_button')
         self.search_button.setCursor(QCursor(Qt.PointingHandCursor))
-        self.search_button.clicked.connect(search_callback)
+        self.search_button.clicked.connect(self._execute_callback)
 
         if QApplication.instance().property(PROPERTY_HARDCODED_STYLESHEET):
             self.search_button.setStyleSheet("QPushButton#search_button { background: %s; }" % search_background_color)
@@ -1041,6 +1042,9 @@ class QSearchBar(QWidget):
     def text(self) -> str:
         return self.inp_search.text()
 
+    def set_text(self, text: str):
+        self.inp_search.setText(text)
+
     def setFocus(self):
         self.inp_search.setFocus()
 
@@ -1052,6 +1056,10 @@ class QSearchBar(QWidget):
 
     def set_placeholder(self, placeholder: str):
         self.inp_search.setPlaceholderText(placeholder)
+
+    def _execute_callback(self):
+        if self.text().strip():
+            self.callback()
 
 
 class QCustomMenuAction(QWidgetAction):

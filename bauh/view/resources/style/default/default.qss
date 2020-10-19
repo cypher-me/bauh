@@ -66,9 +66,9 @@ QLabel#label_status {
 QSearchBar QLabel#lb_left_corner {
      border-top-left-radius: 5px;
      border-bottom-left-radius: 5px;
-     border-left: 1px solid lightgrey;
-     border-top: 1px solid lightgrey;
-     border-bottom: 1px solid lightgrey;
+     border-left: 1px solid @color_search_border;
+     border-top: 1px solid @color_search_border;
+     border-bottom: 1px solid @color_search_border;
      border-right: 0px;
 }
 
@@ -76,21 +76,30 @@ QSearchBar QPushButton#search_button {
     padding-right: 10px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
-    border-right: 1px solid lightgrey;
-    border-top: 1px solid lightgrey;
-    border-bottom: 1px solid lightgrey;
+    border-right: 1px solid @color_search_border;
+    border-top: 1px solid @color_search_border;
+    border-bottom: 1px solid @color_search_border;
     height: 30px;
     qproperty-icon: url("@style_dir/img/search.svg");
     qproperty-iconSize: 10px 10px;
 }
 
-QLineEdit#inp_search {
+QSearchBar QLineEdit#inp_search {
      spacing: 0;
      height: 30px;
      font-size: 12px;
      width: 300px;
-     border-bottom: 1px solid lightgrey;
-     border-top: 1px solid lightgrey;
+     border-bottom: 1px solid @color_search_border;
+     border-top: 1px solid @color_search_border;
+}
+
+QSearchBar#name_filter QLabel#lb_left_corner, QSearchBar#name_filter QLineEdit#inp_search, QSearchBar#name_filter QPushButton#search_button  {
+    height: 26px;
+}
+
+QSearchBar#name_filter QPushButton#search_button {
+    qproperty-icon: url("@style_dir/img/filter.svg");
+    qproperty-iconSize: 12px 12px;
 }
 
 ManageWindow QWidget#table_filters { }
@@ -99,12 +108,19 @@ QCheckBox#check_updates { }
 
 QCheckBox#check_apps { }
 
+ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types {
+    height: 20px;
+    border-color: @color_search_border;
+}
+
 QComboBox#combo_types > QLineEdit, QComboBox#combo_categories > QLineEdit {
     height: 2px;
 }
 
-ManageWindow InputFilter#name_filter {
+ManageWindow QSearchBar#name_filter {
     color: grey;
+    min-width: 150;
+    max-width: 150;
 }
 
 QPushButton#bt_installed, QPushButton#bt_refresh, QPushButton#bt_suggestions, QPushButton#bt_upgrade {
