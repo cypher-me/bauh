@@ -493,7 +493,7 @@ class PackagesTable(QTableWidget):
 
         if not publisher:
             if not pkg.model.installed:
-                lb_name.setObjectName('publisher_unknown')
+                lb_name.setProperty('publisher_known', 'false')
 
             publisher = self.i18n['unknown']
 

@@ -7,6 +7,9 @@ QTableWidget, QPlainTextEdit, QTableWidget QWidget[container = "true"],  QTableW
     background-color: @color_inner_widget;
 }
 
+QLabel[error = "true"] {
+    color: @color_error;
+}
 
 QPlainTextEdit[console = 'true'] {
     background: @color_inner_widget;
@@ -34,6 +37,10 @@ QPushButton#ok {
 
 PreparePanel QTableWidget#tasks {
     background-color: @color_inner_widget;
+}
+
+ManageWindow QLabel#publisher_unknown {
+    color: red;
 }
 
 PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress_finished[status = "done"] {
@@ -91,4 +98,8 @@ ManageWindow IconButton#custom_actions > QToolButton {
 
 QMenu#app_actions QPushButton#app_history {
     qproperty-icon: url("@style_dir/img/history.svg");
+}
+
+PackagesTable QLabel[publisher_known = "false"]{
+    color: @color_red;
 }

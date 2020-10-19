@@ -1,3 +1,7 @@
+QLabel[error = "true"] {
+    color: @color_error;
+}
+
 QPlainTextEdit[console = 'true'] {
     background: black;
     color: white;
@@ -113,6 +117,10 @@ PackagesTable QLabel#app_name { }
 
 PackagesTable QLabel#app_icon { }
 
+PackagesTable QLabel[publisher_known = "false"]{
+    color: @color_publisher_unknown;
+}
+
 PackagesTable QLabel[icon = "true"]  {
     qproperty-alignment: AlignCenter;
 }
@@ -132,6 +140,7 @@ PackagesTable IconButton#app_screenshots > QToolButton {
 PackagesTable IconButton#app_info > QToolButton {
     qproperty-icon: url("@root_img_path/app_info.svg");
 }
+
 
 PackagesTable QMenu#app_actions { }
 
@@ -203,9 +212,6 @@ ManageWindow QToolButton#bt_uninstall {
     font-weight: bold;
 }
 
-ManageWindow QLabel#publisher_unknown {
-    color: red;
-}
 
 FormQt {
     font-weight: bold;
@@ -354,9 +360,8 @@ RootDialog QLabel#message {
     qproperty-alignment: AlignCenter;
 }
 
-RootDialog QLabel#error {
+RootDialog QLabel[error = "true"] {
     qproperty-alignment: AlignCenter;
-    color: red;
 }
 
 InfoDialog { }

@@ -58,7 +58,7 @@ class RootDialog(QDialog):
         self.layout().addWidget(self.input_password)
 
         self.label_error = QLabel()
-        self.label_error.setObjectName('error')
+        self.label_error.setProperty('error', 'true')
         self.layout().addWidget(self.label_error)
         self.label_error.hide()
 
