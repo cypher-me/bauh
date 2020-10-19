@@ -1027,14 +1027,15 @@ class QSearchBar(QWidget):
 
         self.layout().addWidget(self.inp_search)
 
-        search_right_corner = QLabel()
-        search_right_corner.setObjectName('lb_right_corner')
-        search_right_corner.setPixmap(QIcon(resource.get_path('img/search.svg')).pixmap(QSize(10, 10)))
+        search_button = QPushButton()
+        search_button.setObjectName('search_button')
+        search_button.setCursor(QCursor(Qt.PointingHandCursor))
+        search_button.clicked.connect(search_callback)
 
         if QApplication.instance().property(PROPERTY_HARDCODED_STYLESHEET):
-            search_right_corner.setStyleSheet("QLabel#lb_right_corner { background: %s; }" % search_background_color)
+            search_button.setStyleSheet("QPushButton#search_button { background: %s; }" % search_background_color)
 
-        self.layout().addWidget(search_right_corner)
+        self.layout().addWidget(search_button)
 
     def clear(self):
         self.inp_search.clear()

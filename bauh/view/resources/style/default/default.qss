@@ -72,13 +72,16 @@ QSearchBar QLabel#lb_left_corner {
      border-right: 0px;
 }
 
-QSearchBar QLabel#lb_right_corner {
+QSearchBar QPushButton#search_button {
     padding-right: 10px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-right: 1px solid lightgrey;
     border-top: 1px solid lightgrey;
     border-bottom: 1px solid lightgrey;
+    height: 30px;
+    qproperty-icon: url("@style_dir/img/search.svg");
+    qproperty-iconSize: 10px 10px;
 }
 
 QLineEdit#inp_search {
