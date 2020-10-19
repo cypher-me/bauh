@@ -29,6 +29,10 @@ QProgressBar::chunk {
     background-color: @color_progress_bar;
 }
 
+QSearchBar QPushButton#search_button {
+    qproperty-icon: url("@style_dir/img/search.svg");
+}
+
 QPushButton#ok {
     background-color: @color_container_grey;
     color: @color_bt_upgrade;

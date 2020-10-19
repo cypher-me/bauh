@@ -1003,7 +1003,7 @@ class RangeInputQt(QGroupBox):
 
 class QSearchBar(QWidget):
 
-    def __init__(self, i18n: I18n, search_callback, parent: Optional[QWidget] = None):
+    def __init__(self, search_callback, parent: Optional[QWidget] = None):
         super(QSearchBar, self).__init__(parent=parent)
         self.setLayout(QHBoxLayout())
         self.setContentsMargins(0, 0, 0, 0)
@@ -1012,8 +1012,6 @@ class QSearchBar(QWidget):
         self.inp_search = QLineEdit()
         self.inp_search.setObjectName('inp_search')
         self.inp_search.setFrame(False)
-        self.inp_search.setPlaceholderText(i18n['window_manage.input_search.placeholder'] + "...")
-        self.inp_search.setToolTip(i18n['window_manage.input_search.tooltip'])
         self.inp_search.returnPressed.connect(search_callback)
         search_background_color = self.inp_search.palette().color(self.inp_search.backgroundRole()).name()
 
@@ -1027,15 +1025,15 @@ class QSearchBar(QWidget):
 
         self.layout().addWidget(self.inp_search)
 
-        search_button = QPushButton()
-        search_button.setObjectName('search_button')
-        search_button.setCursor(QCursor(Qt.PointingHandCursor))
-        search_button.clicked.connect(search_callback)
+        self.search_button = QPushButton()
+        self.search_button.setObjectName('search_button')
+        self.search_button.setCursor(QCursor(Qt.PointingHandCursor))
+        self.search_button.clicked.connect(search_callback)
 
         if QApplication.instance().property(PROPERTY_HARDCODED_STYLESHEET):
-            search_button.setStyleSheet("QPushButton#search_button { background: %s; }" % search_background_color)
+            self.search_button.setStyleSheet("QPushButton#search_button { background: %s; }" % search_background_color)
 
-        self.layout().addWidget(search_button)
+        self.layout().addWidget(self.search_button)
 
     def clear(self):
         self.inp_search.clear()
@@ -1045,6 +1043,15 @@ class QSearchBar(QWidget):
 
     def setFocus(self):
         self.inp_search.setFocus()
+
+    def set_tooltip(self, tip: str):
+        self.inp_search.setToolTip(tip)
+
+    def set_button_tooltip(self, tip: str):
+        self.search_button.setToolTip(tip)
+
+    def set_placeholder(self, placeholder: str):
+        self.inp_search.setPlaceholderText(placeholder)
 
 
 class QCustomMenuAction(QWidgetAction):

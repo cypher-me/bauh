@@ -123,7 +123,10 @@ class ManageWindow(QWidget):
         self.label_status.setText('')
         self.toolbar_status.addWidget(self.label_status)
 
-        self.search_bar = QSearchBar(i18n=self.i18n, search_callback=self.search)
+        self.search_bar = QSearchBar(search_callback=self.search)
+        self.search_bar.set_placeholder(i18n['window_manage.search_bar.placeholder'] + "...")
+        self.search_bar.set_tooltip(i18n['window_manage.search_bar.tooltip'])
+        self.search_bar.set_button_tooltip(i18n['window_manage.search_bar.button_tooltip'])
         self.comp_manager.register_component(SEARCH_BAR, self.search_bar, self.toolbar_status.addWidget(self.search_bar))
 
         self.toolbar_status.addWidget(new_spacer())
