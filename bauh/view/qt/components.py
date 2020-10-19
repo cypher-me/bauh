@@ -528,17 +528,6 @@ class MultipleSelectQt(QGroupBox):
 
         col = 0
 
-        pixmap_help = QPixmap()
-
-        for op in model.options:  # loads the help icon if at least one option has a tooltip
-            if op.tooltip:
-                try:
-                    pixmap_help = QIcon(resource.get_path('img/about.svg')).pixmap(QSize(16, 16))
-                except:
-                    traceback.print_exc()
-
-                break
-
         for op in model.options:
             comp = CheckboxQt(op, model, callback)
 
@@ -552,8 +541,8 @@ class MultipleSelectQt(QGroupBox):
 
             if op.tooltip:
                 help_icon = QLabel()
+                help_icon.setProperty('help_icon', 'true')
                 help_icon.setCursor(QCursor(Qt.WhatsThisCursor))
-                help_icon.setPixmap(pixmap_help)
                 help_icon.setToolTip(op.tooltip)
                 widget.layout().addWidget(help_icon)
 
@@ -594,17 +583,6 @@ class FormMultipleSelectQt(QWidget):
 
         col = 0
 
-        pixmap_help = QPixmap()
-
-        for op in model.options:  # loads the help icon if at least one option has a tooltip
-            if op.tooltip:
-                try:
-                    pixmap_help = QIcon(resource.get_path('img/about.svg')).pixmap(QSize(16, 16))
-                except:
-                    traceback.print_exc()
-
-                break
-
         for op in model.options:
             comp = CheckboxQt(op, model, None)
 
@@ -618,7 +596,7 @@ class FormMultipleSelectQt(QWidget):
 
             if op.tooltip:
                 help_icon = QLabel()
-                help_icon.setPixmap(pixmap_help)
+                help_icon.setProperty('help_icon', 'true')
                 help_icon.setToolTip(op.tooltip)
                 help_icon.setCursor(QCursor(Qt.WhatsThisCursor))
                 widget.layout().addWidget(help_icon)
@@ -794,13 +772,8 @@ class FormQt(QGroupBox):
 
     def gen_tip_icon(self, tip: str) -> QLabel:
         tip_icon = QLabel()
+        tip_icon.setProperty('tip_icon', 'true')
         tip_icon.setToolTip(tip.strip())
-
-        try:
-            tip_icon.setPixmap(QIcon(resource.get_path('img/about.svg')).pixmap(QSize(12, 12)))
-        except:
-            traceback.print_exc()
-
         return tip_icon
 
     def _new_text_input(self, c: TextInputComponent) -> Tuple[QLabel, QLineEdit]:

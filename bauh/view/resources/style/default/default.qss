@@ -2,6 +2,24 @@ QLabel[error = "true"] {
     color: @color_error;
 }
 
+QLabel[help_icon = "true"] {
+    qproperty-pixmap: url("@style_dir/img/about.svg");
+    qproperty-scaledContents: True;
+    min-height: 16;
+    max-height: 16;
+    min-width: 16;
+    max-width: 16;
+}
+
+QLabel[tip_icon = "true"] {
+    qproperty-pixmap: url("@style_dir/img/about.svg");
+    qproperty-scaledContents: True;
+    min-height: 12;
+    max-height: 12;
+    min-width: 12;
+    max-width: 12;
+}
+
 QPlainTextEdit[console = 'true'] {
     background: black;
     color: white;
@@ -44,7 +62,6 @@ QToolBar#toolbar_status { }
 QLabel#label_status {
     font-weight: bold
 }
-
 
 QSearchBar QLabel#lb_left_corner {
      border-top-left-radius: 5px;
