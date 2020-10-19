@@ -64,10 +64,6 @@ UpgradeToggleButton > QToolButton {
     background: @color_bt_upgrade;
 }
 
-ManageWindow QToolButton#bt_uninstall {
-    color: @color_red;
-}
-
 ManageWindow PackagesTable IconButton#app_info > QToolButton {
     qproperty-icon: url("@style_dir/img/app_info.svg");
 }
@@ -101,5 +97,18 @@ QMenu#app_actions QPushButton#app_history {
 }
 
 PackagesTable QLabel[publisher_known = "false"]{
+    color: @color_red;
+}
+
+PackagesTable QToolButton#bt_install, PackagesTable QToolButton#bt_uninstall {
+    background-color: @color_container_grey;
+    color: @color_bt_upgrade;
+}
+
+PackagesTable QToolButton#bt_install {
+    color: @color_bt_upgrade;
+}
+
+PackagesTable QToolButton#bt_uninstall {
     color: @color_red;
 }

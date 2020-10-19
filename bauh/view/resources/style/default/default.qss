@@ -92,21 +92,21 @@ QPushButton#bt_installed, QPushButton#bt_refresh, QPushButton#bt_suggestions, QP
 }
 
 QPushButton#bt_refresh {
-    qproperty-icon: url("@root_img_path/refresh.svg");
+    qproperty-icon: url("@style_dir/img/refresh.svg");
 }
 
 QPushButton#bt_installed {
-    qproperty-icon: url("@root_img_path/disk.svg");
+    qproperty-icon: url("@style_dir/img/disk.svg");
 }
 
 QPushButton#bt_suggestions {
-    qproperty-icon: url("@root_img_path/suggestions.svg");
+    qproperty-icon: url("@style_dir/img/suggestions.svg");
 }
 
 QPushButton#bt_upgrade {
     background: @color_green;
     color: white;
-    qproperty-icon: url("@root_img_path/app_update.svg");
+    qproperty-icon: url("@style_dir/img/app_update.svg");
 }
 
 ManageWindow QWidget#table_container { }
@@ -117,6 +117,19 @@ PackagesTable QLabel#app_name { }
 
 PackagesTable QLabel#app_icon { }
 
+PackagesTable QLabel#container_publisher { }
+
+PackagesTable QLabel#app_publisher { }
+
+PackagesTable QLabel#icon_publisher_verified {
+    qproperty-pixmap: url("@style_dir/img/verified.svg");
+    qproperty-scaledContents: True;
+    min-height: 10;
+    max-height: 10;
+    min-width: 10;
+    max-width: 10;
+}
+
 PackagesTable QLabel[publisher_known = "false"]{
     color: @color_publisher_unknown;
 }
@@ -126,21 +139,33 @@ PackagesTable QLabel[icon = "true"]  {
 }
 
 PackagesTable IconButton#app_run > QToolButton {
-    qproperty-icon: url("@root_img_path/app_play.svg");
+    qproperty-icon: url("@style_dir/img/app_play.svg");
 }
 
 PackagesTable IconButton#app_actions > QToolButton {
-    qproperty-icon: url("@root_img_path/app_actions.svg");
+    qproperty-icon: url("@style_dir/img/app_actions.svg");
 }
 
 PackagesTable IconButton#app_screenshots > QToolButton {
-    qproperty-icon: url("@root_img_path/camera.svg");
+    qproperty-icon: url("@style_dir/img/camera.svg");
 }
 
 PackagesTable IconButton#app_info > QToolButton {
-    qproperty-icon: url("@root_img_path/app_info.svg");
+    qproperty-icon: url("@style_dir/img/app_info.svg");
 }
 
+PackagesTable QToolButton#bt_install {
+    background: @color_green;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+PackagesTable QToolButton#bt_uninstall {
+    color: @color_brown;
+    font-size: 10px;
+    font-weight: bold;
+}
 
 PackagesTable QMenu#app_actions { }
 
@@ -156,19 +181,19 @@ QMenu QPushButton:hover {
 }
 
 QMenu#app_actions QPushButton#app_history {
-    qproperty-icon: url("@root_img_path/history.svg");
+    qproperty-icon: url("@style_dir/img/history.svg");
 }
 
 QMenu#app_actions QPushButton#app_downgrade {
-    qproperty-icon: url("@root_img_path/downgrade.svg");
+    qproperty-icon: url("@style_dir/img/downgrade.svg");
 }
 
 QMenu#app_actions QPushButton#ignore_updates {
-    qproperty-icon: url("@root_img_path/ignore_update.svg");
+    qproperty-icon: url("@style_dir/img/ignore_update.svg");
 }
 
 QMenu#app_actions QPushButton#revert_ignore_updates {
-    qproperty-icon: url("@root_img_path/revert_update_ignored.svg");
+    qproperty-icon: url("@style_dir/img/revert_update_ignored.svg");
 }
 
 ManageWindow QWidget#console_toolbar { }
@@ -186,31 +211,18 @@ ManageWindow QLabel#label_substatus { }
 ManageWindow QWidget#container_bottom { }
 
 ManageWindow IconButton#custom_actions > QToolButton {
-    qproperty-icon: url("@root_img_path/custom_actions.svg");
+    qproperty-icon: url("@style_dir/img/custom_actions.svg");
 }
 
 ManageWindow IconButton#settings > QToolButton {
-    qproperty-icon: url("@root_img_path/settings.svg");
+    qproperty-icon: url("@style_dir/img/settings.svg");
 }
 
 ManageWindow IconButton#about > QToolButton {
-    qproperty-icon: url("@root_img_path/info.svg");
+    qproperty-icon: url("@style_dir/img/info.svg");
 }
 
 ManageWindow QProgressBar#progress_manage { }
-
-ManageWindow QToolButton#bt_install {
-    background: @color_green;
-    color: white;
-    font-size: 10px;
-    font-weight: bold;
-}
-
-ManageWindow QToolButton#bt_uninstall {
-    color: @color_brown;
-    font-size: 10px;
-    font-weight: bold;
-}
 
 
 FormQt {
@@ -228,12 +240,12 @@ FormQt::title {
 }
 
 FormQt IconButton#clean_field > QToolButton {
-    qproperty-icon: url("@root_img_path/clean.svg");
+    qproperty-icon: url("@style_dir/img/clean.svg");
 }
 
 
 UpgradeToggleButton > QToolButton {
-    qproperty-icon: url("@root_img_path/app_update.svg");
+    qproperty-icon: url("@style_dir/img/app_update.svg");
     background: @color_green;
 }
 
@@ -242,7 +254,7 @@ UpgradeToggleButton > QToolButton:checked {
 }
 
 QToolButton#bt_check_upgrade_disabled:disabled {
-    qproperty-icon: url("@root_img_path/exclamation.svg");
+    qproperty-icon: url("@style_dir/img/exclamation.svg");
     background: #dda739;
 }
 
@@ -275,7 +287,7 @@ AboutDialog QLabel {
 AboutDialog QWidget#logo_container { }
 
 AboutDialog QLabel#logo {
-    qproperty-pixmap: url("@root_img_path/logo.svg");
+    qproperty-pixmap: url("@resources/img/logo.svg");
     qproperty-scaledContents: true;
     min-height: 0.071041667%h;
     max-height: 0.071041667%h;

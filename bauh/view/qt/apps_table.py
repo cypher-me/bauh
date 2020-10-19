@@ -97,7 +97,6 @@ class PackagesTable(QTableWidget):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         self.icon_logo = QIcon(resource.get_path('img/logo.svg'))
-        self.pixmap_verified = QIcon(resource.get_path('img/verified.svg')).pixmap(QSize(10, 10))
 
         self.network_man = QNetworkAccessManager()
         self.network_man.finished.connect(self._load_icon_and_cache)
@@ -304,6 +303,7 @@ class PackagesTable(QTableWidget):
 
     def _gen_row_button(self, text: str, name: str, callback) -> QWidget:
         col = QWidget()
+        col.setProperty('container', 'true')
         col.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
 
         col_bt = QToolButton()
@@ -459,6 +459,8 @@ class PackagesTable(QTableWidget):
 
     def _set_col_description(self, col: int, pkg: PackageView):
         item = QLabel()
+        item.setObjectName('app_description')
+        item.setCursor(QCursor(Qt.WhatsThisCursor))
 
         if pkg.model.description is not None or not pkg.model.is_application() or pkg.model.status == PackageStatus.READY:
             desc = pkg.model.description.split('\n')[0] if pkg.model.description else pkg.model.description
@@ -477,7 +479,6 @@ class PackagesTable(QTableWidget):
 
     def _set_col_publisher(self, col: int, pkg: PackageView):
         item = QToolBar()
-        item.setCursor(QCursor(Qt.WhatsThisCursor))
 
         publisher = pkg.model.get_publisher()
         full_publisher = None
@@ -490,6 +491,8 @@ class PackagesTable(QTableWidget):
                 publisher = full_publisher[0: PUBLISHER_MAX_SIZE - 3] + '...'
 
         lb_name = QLabel()
+        lb_name.setObjectName('app_publisher')
+        lb_name.setCursor(QCursor(Qt.WhatsThisCursor))
 
         if not publisher:
             if not pkg.model.installed:
@@ -505,7 +508,8 @@ class PackagesTable(QTableWidget):
 
             if pkg.model.is_trustable():
                 lb_verified = QLabel()
-                lb_verified.setPixmap(self.pixmap_verified)
+                lb_verified.setObjectName('icon_publisher_verified')
+                lb_verified.setCursor(QCursor(Qt.WhatsThisCursor))
                 lb_verified.setToolTip(self.i18n['publisher.verified'].capitalize())
                 item.addWidget(lb_verified)
             else:

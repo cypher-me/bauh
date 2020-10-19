@@ -142,7 +142,7 @@ def process_stylesheet(key: str, file_path: str, available_sheets: Optional[Dict
                                             available_sheets=available_sheets)
 
         var_map = _read_var_file(file_path)
-        var_map['root_img_path'] = resource.get_path('img')
+        var_map['resources'] = resource.get_path('')
         var_map['style_dir'] = metadata.file_dir
 
         if var_map:
