@@ -1082,3 +1082,21 @@ class QCustomMenuAction(QWidgetAction):
     def set_icon(self, icon: QIcon):
         if icon:
             self.button.setIcon(icon)
+
+
+class QCustomToolbar(QWidget):
+
+    def __init__(self, spacing: int = 2, parent: Optional[QWidget] = None):
+        super(QCustomToolbar, self).__init__(parent=parent)
+        self.setProperty('container', 'true')
+        self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
+        self.setLayout(QHBoxLayout())
+        self.layout().setContentsMargins(0, 0, 0, 0)
+        self.layout().setSpacing(spacing)
+
+    def add_widget(self, widget: QWidget):
+        if widget:
+            self.layout().addWidget(widget)
+
+    def add_stretch(self):
+        self.layout().addStretch(0)

@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QTableWidget, QTableView, QMenu, QToolButton, QWidge
 from bauh.api.abstract.cache import MemoryCache
 from bauh.api.abstract.model import PackageStatus, CustomSoftwareAction
 from bauh.commons.html import strip_html, bold
-from bauh.view.qt.components import IconButton, QCustomMenuAction
+from bauh.view.qt.components import IconButton, QCustomMenuAction, QCustomToolbar
 from bauh.view.qt.dialog import ConfirmationDialog
 from bauh.view.qt.qt_utils import measure_based_on_height
 from bauh.view.qt.view_model import PackageView
@@ -519,13 +519,8 @@ class PackagesTable(QTableWidget):
         self.setCellWidget(pkg.table_index, col, item)
 
     def _set_col_actions(self, col: int, pkg: PackageView):
-        toolbar = QWidget()
-        toolbar.setProperty('container', 'true')
-        toolbar.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
-        toolbar.setLayout(QHBoxLayout())
-        toolbar.layout().setContentsMargins(0, 0, 0, 0)
-        toolbar.layout().setSpacing(2)
-        toolbar.layout().addStretch(0)
+        toolbar = QCustomToolbar()
+        toolbar.add_stretch()
 
         if pkg.model.installed:
             def run():
@@ -564,7 +559,7 @@ class PackagesTable(QTableWidget):
         bt.setEnabled(bool(pkg.model.has_info()))
         toolbar.layout().addWidget(bt)
 
-        toolbar.layout().addStretch(0)
+        toolbar.add_stretch()
         self.setCellWidget(pkg.table_index, col, toolbar)
 
     def change_headers_policy(self, policy: QHeaderView = QHeaderView.ResizeToContents, maximized: bool = False):
