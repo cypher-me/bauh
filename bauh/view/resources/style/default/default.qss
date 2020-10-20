@@ -13,13 +13,19 @@ QToolButton {
 }
 
 QTableWidget QToolButton {
-    padding: 3px;
+    padding: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
 }
 
-QTableWidget QPushButton {
-    padding: 5px;
+QTableWidget QToolButton[text_only = "true"] {
     min-width: 80px;
 }
+
+PreparePanel QPushButton {
+    min-width: 80px;
+}
+
 
 /** --- */
 
@@ -203,19 +209,19 @@ PackagesTable QLabel[icon = "true"]  {
     qproperty-alignment: AlignCenter;
 }
 
-PackagesTable IconButton#app_run > QToolButton {
+PackagesTable IconButton#app_run {
     qproperty-icon: url("@style_dir/img/app_play.svg");
 }
 
-PackagesTable IconButton#app_actions > QToolButton {
+PackagesTable IconButton#app_actions {
     qproperty-icon: url("@style_dir/img/app_actions.svg");
 }
 
-PackagesTable IconButton#app_screenshots > QToolButton {
+PackagesTable IconButton#app_screenshots {
     qproperty-icon: url("@style_dir/img/camera.svg");
 }
 
-PackagesTable IconButton#app_info > QToolButton {
+PackagesTable IconButton#app_info {
     qproperty-icon: url("@style_dir/img/app_info.svg");
 }
 
@@ -275,15 +281,15 @@ ManageWindow QLabel#label_substatus { }
 
 ManageWindow QWidget#container_bottom { }
 
-ManageWindow IconButton#custom_actions > QToolButton {
+ManageWindow IconButton#custom_actions {
     qproperty-icon: url("@style_dir/img/custom_actions.svg");
 }
 
-ManageWindow IconButton#settings > QToolButton {
+ManageWindow IconButton#settings {
     qproperty-icon: url("@style_dir/img/settings.svg");
 }
 
-ManageWindow IconButton#about > QToolButton {
+ManageWindow IconButton#about {
     qproperty-icon: url("@style_dir/img/info.svg");
 }
 
@@ -304,21 +310,21 @@ FormQt::title {
     padding: 0px 5px 0px 5px;
 }
 
-FormQt IconButton#clean_field > QToolButton {
+FormQt IconButton#clean_field {
     qproperty-icon: url("@style_dir/img/clean.svg");
 }
 
 
-UpgradeToggleButton > QToolButton {
+UpgradeToggleButton {
     qproperty-icon: url("@style_dir/img/app_update.svg");
     background: @color_green;
 }
 
-UpgradeToggleButton > QToolButton:checked {
+UpgradeToggleButton:checked {
     background: grey;
 }
 
-QToolButton#bt_check_upgrade_disabled:disabled {
+UpgradeToggleButton[enabled = "false"] {
     qproperty-icon: url("@style_dir/img/exclamation.svg");
     background: #dda739;
 }

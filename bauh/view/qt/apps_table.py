@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt, QUrl, QSize
 from PyQt5.QtGui import QPixmap, QIcon, QCursor
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PyQt5.QtWidgets import QTableWidget, QTableView, QMenu, QToolButton, QWidget, \
-    QHeaderView, QLabel, QHBoxLayout, QToolBar, QSizePolicy, QSpacerItem, QPushButton
+    QHeaderView, QLabel, QHBoxLayout, QToolBar, QSizePolicy, QPushButton
 
 from bauh.api.abstract.cache import MemoryCache
 from bauh.api.abstract.model import PackageStatus, CustomSoftwareAction
@@ -25,41 +25,32 @@ DESC_MAX_SIZE = 40
 PUBLISHER_MAX_SIZE = 25
 
 
-class UpgradeToggleButton(QWidget):
+class UpgradeToggleButton(QToolButton):
 
-    def __init__(self, pkg: Optional[PackageView], root: QWidget, i18n: I18n, checked: bool = True, clickable: bool = True):
+    def __init__(self, pkg: Optional[PackageView], root: QWidget, i18n: I18n, checked: bool = True,
+                 clickable: bool = True):
         super(UpgradeToggleButton, self).__init__()
-        self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         self.app_view = pkg
         self.root = root
 
-        layout = QHBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setAlignment(Qt.AlignCenter)
-        self.setLayout(layout)
-
-        self.bt = QToolButton()
-        self.bt.setCursor(QCursor(Qt.PointingHandCursor))
-        self.bt.setCheckable(True)
-        self.bt.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
+        self.setCursor(QCursor(Qt.PointingHandCursor))
+        self.setCheckable(True)
 
         if clickable:
-            self.bt.clicked.connect(self.change_state)
+            self.clicked.connect(self.change_state)
 
         if not clickable and not checked:
-            self.bt.setObjectName('bt_check_upgrade_disabled')
-
-        layout.addWidget(self.bt)
+            self.setProperty('enabled', 'false')
 
         if not checked:
-            self.bt.click()
+            self.click()
 
         if clickable:
             self.setToolTip('{} {}'.format(i18n['manage_window.apps_table.upgrade_toggle.tooltip'],
                                            i18n['manage_window.apps_table.upgrade_toggle.enabled.tooltip']))
         else:
             if not checked:
-                self.bt.setEnabled(False)
+                self.setEnabled(False)
 
                 tooltip = i18n['{}.update.disabled.tooltip'.format(pkg.model.gem_name)]
 
@@ -69,7 +60,7 @@ class UpgradeToggleButton(QWidget):
                     self.setToolTip('{} {}'.format(i18n['manage_window.apps_table.upgrade_toggle.tooltip'],
                                                    i18n['manage_window.apps_table.upgrade_toggle.disabled.tooltip']))
             else:
-                self.bt.setCheckable(False)
+                self.setCheckable(False)
 
     def change_state(self, not_checked: bool):
         self.app_view.update_checked = not not_checked
@@ -77,7 +68,6 @@ class UpgradeToggleButton(QWidget):
 
 
 class PackagesTable(QTableWidget):
-
     COL_NUMBER = 9
 
     def __init__(self, parent: QWidget, icon_cache: MemoryCache, download_icons: bool):
@@ -96,7 +86,6 @@ class PackagesTable(QTableWidget):
         self.setHorizontalHeaderLabels(['' for _ in range(self.columnCount())])
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
-        self.icon_logo = QIcon(resource.get_path('img/logo.svg'))
 
         self.network_man = QNetworkAccessManager()
         self.network_man.finished.connect(self._load_icon_and_cache)
@@ -126,7 +115,6 @@ class PackagesTable(QTableWidget):
         if pkg.model.installed:
 
             if pkg.model.has_history():
-
                 def show_history():
                     self.window.begin_show_history(pkg)
 
@@ -139,7 +127,9 @@ class PackagesTable(QTableWidget):
 
                 def downgrade():
                     if ConfirmationDialog(title=self.i18n['manage_window.apps_table.row.actions.downgrade'],
-                                          body=self._parag(self.i18n['manage_window.apps_table.row.actions.downgrade.popup.body'].format(self._bold(str(pkg)))),
+                                          body=self._parag(self.i18n[
+                                                               'manage_window.apps_table.row.actions.downgrade.popup.body'].format(
+                                              self._bold(str(pkg)))),
                                           i18n=self.i18n).ask():
                         self.window.begin_downgrade(pkg)
 
@@ -203,7 +193,9 @@ class PackagesTable(QTableWidget):
 
     def _uninstall(self, pkg: PackageView):
         if ConfirmationDialog(title=self.i18n['manage_window.apps_table.row.actions.uninstall.popup.title'],
-                              body=self._parag(self.i18n['manage_window.apps_table.row.actions.uninstall.popup.body'].format(self._bold(str(pkg)))),
+                              body=self._parag(
+                                  self.i18n['manage_window.apps_table.row.actions.uninstall.popup.body'].format(
+                                      self._bold(str(pkg)))),
                               i18n=self.i18n).ask():
             self.window.begin_uninstall(pkg)
 
@@ -220,12 +212,12 @@ class PackagesTable(QTableWidget):
         warning = self.i18n.get('gem.{}.install.warning'.format(pkgv.model.get_type().lower()))
 
         if warning:
-            body += '<br/><br/> {}'.format('<br/>'.join(('{}.'.format(phrase) for phrase in warning.split('.') if phrase)))
+            body += '<br/><br/> {}'.format(
+                '<br/>'.join(('{}.'.format(phrase) for phrase in warning.split('.') if phrase)))
 
         if ConfirmationDialog(title=self.i18n['manage_window.apps_table.row.actions.install.popup.title'],
                               body=self._parag(body),
                               i18n=self.i18n).ask():
-
             self.window.install(pkgv)
 
     def _load_icon_and_cache(self, http_response: QNetworkReply):
@@ -256,7 +248,8 @@ class PackagesTable(QTableWidget):
 
                     if app.model.supports_disk_cache() and app.model.get_disk_icon_path() and icon_data['bytes']:
                         if not icon_was_cached or not os.path.exists(app.model.get_disk_icon_path()):
-                            self.window.manager.cache_to_disk(pkg=app.model, icon_bytes=icon_data['bytes'], only_icon=True)
+                            self.window.manager.cache_to_disk(pkg=app.model, icon_bytes=icon_data['bytes'],
+                                                              only_icon=True)
 
     def update_packages(self, pkgs: List[PackageView], update_check_enabled: bool = True):
         self.setRowCount(0)  # removes the overwrite effect when updates the table
@@ -290,20 +283,22 @@ class PackagesTable(QTableWidget):
 
         if change_update_col and update_check_enabled:
             if pkg.model.installed and not pkg.model.is_update_ignored() and pkg.model.update:
-                col_update = QToolBar()
-                col_update.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
-                col_update.addWidget(UpgradeToggleButton(pkg=pkg,
-                                                         root=self.window,
-                                                         i18n=self.i18n,
-                                                         checked=pkg.update_checked if pkg.model.can_be_updated() else False,
-                                                         clickable=pkg.model.can_be_updated()))
+                col_update = QCustomToolbar()
+                col_update.add_space()
+                col_update.add_widget(UpgradeToggleButton(pkg=pkg,
+                                                          root=self.window,
+                                                          i18n=self.i18n,
+                                                          checked=pkg.update_checked if pkg.model.can_be_updated() else False,
+                                                          clickable=pkg.model.can_be_updated()))
+                col_update.add_space()
             else:
                 col_update = QLabel()
 
             self.setCellWidget(pkg.table_index, 8, col_update)
 
-    def _gen_row_button(self, text: str, name: str, callback) -> QPushButton:
-        col_bt = QPushButton()
+    def _gen_row_button(self, text: str, name: str, callback) -> QToolButton:
+        col_bt = QToolButton()
+        col_bt.setProperty('text_only', 'true')
         col_bt.setObjectName(name)
         col_bt.setCursor(QCursor(Qt.PointingHandCursor))
         col_bt.setText(text)
@@ -312,7 +307,6 @@ class PackagesTable(QTableWidget):
 
     def _set_col_installed(self, col: int, pkg: PackageView):
         toolbar = QCustomToolbar()
-        toolbar.setObjectName('toolbar_installed')
         toolbar.add_space()
 
         if pkg.model.installed:
@@ -438,7 +432,7 @@ class PackagesTable(QTableWidget):
             name = name[0:NAME_MAX_SIZE - 3] + '...'
 
         if len(name) < NAME_MAX_SIZE:
-            name = name + ' ' * (NAME_MAX_SIZE-len(name))
+            name = name + ' ' * (NAME_MAX_SIZE - len(name))
 
         col_name.setText(name)
         self.setCellWidget(pkg.table_index, col, col_name)
@@ -493,7 +487,8 @@ class PackagesTable(QTableWidget):
         item.addWidget(lb_name)
 
         if publisher and full_publisher:
-            lb_name.setToolTip(self.i18n['publisher'].capitalize() + ((': ' + full_publisher) if full_publisher else ''))
+            lb_name.setToolTip(
+                self.i18n['publisher'].capitalize() + ((': ' + full_publisher) if full_publisher else ''))
 
             if pkg.model.is_trustable():
                 lb_verified = QLabel()

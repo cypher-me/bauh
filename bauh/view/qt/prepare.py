@@ -12,7 +12,7 @@ from bauh import __app_name__
 from bauh.api.abstract.context import ApplicationContext
 from bauh.api.abstract.controller import SoftwareManager
 from bauh.api.abstract.handler import TaskManager
-from bauh.view.qt.components import new_spacer
+from bauh.view.qt.components import new_spacer, QCustomToolbar
 from bauh.view.qt.qt_utils import centralize
 from bauh.view.qt.root import RootDialog
 from bauh.view.qt.thread import AnimateProgress
@@ -196,29 +196,29 @@ class PreparePanel(QWidget, TaskManager):
         self.layout().addWidget(self.bottom_widget)
         self.bottom_widget.setVisible(False)
 
-        self.bt_bar = QToolBar()
+        self.bt_bar = QCustomToolbar()
         self.bt_close = QPushButton(self.i18n['close'].capitalize())
         self.bt_close.setObjectName('bt_cancel')
         self.bt_close.setCursor(QCursor(Qt.PointingHandCursor))
         self.bt_close.clicked.connect(self.close)
         self.bt_close.setVisible(False)
-        self.ref_bt_close = self.bt_bar.addWidget(self.bt_close)
+        self.bt_bar.add_widget(self.bt_close)
+        self.bt_bar.add_widget(new_spacer())
 
-        self.bt_bar.addWidget(new_spacer())
         self.progress_bar = QProgressBar()
         self.progress_bar.setObjectName('prepare_progress')
         self.progress_bar.setMaximumHeight(10 if QApplication.instance().style().objectName().lower() == 'windows' else 4)
         self.progress_bar.setTextVisible(False)
         self.progress_bar.setVisible(False)
         self.progress_bar.setCursor(QCursor(Qt.WaitCursor))
-        self.ref_progress_bar = self.bt_bar.addWidget(self.progress_bar)
-        self.bt_bar.addWidget(new_spacer())
+        self.bt_bar.add_widget(self.progress_bar)
+        self.bt_bar.add_widget(new_spacer())
 
         self.bt_skip = QPushButton(self.i18n['prepare_panel.bt_skip.label'].capitalize())
         self.bt_skip.clicked.connect(self.finish)
         self.bt_skip.setEnabled(False)
         self.bt_skip.setCursor(QCursor(Qt.WaitCursor))
-        self.bt_bar.addWidget(self.bt_skip)
+        self.bt_bar.add_widget(self.bt_skip)
 
         self.layout().addWidget(self.bt_bar)
 
@@ -266,8 +266,8 @@ class PreparePanel(QWidget, TaskManager):
 
         self.progress_thread.start()
 
-        self.ref_bt_close.setVisible(True)
-        self.ref_progress_bar.setVisible(True)
+        self.bt_close.setVisible(True)
+        self.progress_bar.setVisible(True)
 
     def closeEvent(self, ev: QCloseEvent):
         if not self.self_close:

@@ -644,34 +644,32 @@ class InputFilter(QLineEdit):
         self.last_text = p_str
 
 
-class IconButton(QWidget):
+class IconButton(QToolButton):
 
     def __init__(self, action, i18n: I18n, align: int = Qt.AlignCenter, tooltip: str = None, expanding: bool = False):
         super(IconButton, self).__init__()
-        self.bt = QToolButton()
-        self.bt.setCursor(QCursor(Qt.PointingHandCursor))
-        self.bt.clicked.connect(action)
+        self.setCursor(QCursor(Qt.PointingHandCursor))
+        self.clicked.connect(action)
         self.i18n = i18n
         self.default_tootip = tooltip
-        self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
-        self.bt.setSizePolicy(QSizePolicy.Expanding if expanding else QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.setSizePolicy(QSizePolicy.Expanding if expanding else QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         if tooltip:
-            self.bt.setToolTip(tooltip)
+            self.setToolTip(tooltip)
 
-        layout = QHBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setAlignment(align)
-        layout.addWidget(self.bt)
-        self.setLayout(layout)
+        # layout = QHBoxLayout()
+        # layout.setContentsMargins(0, 0, 0, 0)
+        # layout.setAlignment(align)
+        # layout.addWidget(self.bt)
+        #self.setLayout(layout)
 
     def setEnabled(self, enabled):
         super(IconButton, self).setEnabled(enabled)
 
         if not enabled:
-            self.bt.setToolTip(self.i18n['icon_button.tooltip.disabled'])
+            self.setToolTip(self.i18n['icon_button.tooltip.disabled'])
         else:
-            self.bt.setToolTip(self.default_tootip)
+            self.setToolTip(self.default_tootip)
 
 
 class PanelQt(QWidget):

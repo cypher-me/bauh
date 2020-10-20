@@ -95,11 +95,11 @@ QLabel#label_version {
     font-weight: normal;
 }
 
-UpgradeToggleButton > QToolButton {
+UpgradeToggleButton {
     background: @color_bt_upgrade;
 }
 
-ManageWindow PackagesTable IconButton#app_info > QToolButton {
+ManageWindow PackagesTable IconButton#app_info {
     qproperty-icon: url("@style_dir/img/app_info.svg");
 }
 
@@ -111,23 +111,23 @@ QPushButton#bt_suggestions {
     qproperty-icon: url("@style_dir/img/suggestions.svg")
 }
 
-ManageWindow PackagesTable IconButton#app_run > QToolButton {
+ManageWindow PackagesTable IconButton#app_run {
     qproperty-icon: url("@style_dir/img/app_play.svg");
 }
 
-ManageWindow PackagesTable IconButton#app_actions > QToolButton {
+ManageWindow PackagesTable IconButton#app_actions {
     qproperty-icon: url("@style_dir/img/app_actions.svg");
 }
 
-ManageWindow IconButton#settings > QToolButton {
+ManageWindow IconButton#settings {
     qproperty-icon: url("@style_dir/img/settings.svg");
 }
 
-PackagesTable IconButton#app_screenshots > QToolButton {
+PackagesTable IconButton#app_screenshots {
     qproperty-icon: url("@style_dir/img/camera.svg");
 }
 
-ManageWindow IconButton#custom_actions > QToolButton {
+ManageWindow IconButton#custom_actions {
     qproperty-icon: url("@style_dir/img/custom_actions.svg");
 }
 
