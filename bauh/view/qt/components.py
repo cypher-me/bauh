@@ -921,7 +921,6 @@ class TabGroupQt(QTabWidget):
             self.addTab(scroll, icon, c.label)
 
 
-
 def new_single_select(model: SingleSelectComponent) -> QWidget:
     if model.type == SelectViewType.RADIO:
         return RadioSelectQt(model)
@@ -933,6 +932,7 @@ def new_single_select(model: SingleSelectComponent) -> QWidget:
 
 def new_spacer(min_width: int = None) -> QWidget:
     spacer = QWidget()
+    spacer.setProperty('spacer', 'true')
 
     if min_width:
         spacer.setMinimumWidth(min_width)
@@ -1093,10 +1093,14 @@ class QCustomToolbar(QWidget):
         self.setLayout(QHBoxLayout())
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().setSpacing(spacing)
+        self.layout().setAlignment(Qt.AlignCenter)
 
     def add_widget(self, widget: QWidget):
         if widget:
             self.layout().addWidget(widget)
 
-    def add_stretch(self):
-        self.layout().addStretch(0)
+    def add_stretch(self, value: int = 0):
+        self.layout().addStretch(value)
+
+    def add_space(self, min_width: int = 0):
+        self.layout().addWidget(new_spacer(min_width))

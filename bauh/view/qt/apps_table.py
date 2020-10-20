@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt, QUrl, QSize
 from PyQt5.QtGui import QPixmap, QIcon, QCursor
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PyQt5.QtWidgets import QTableWidget, QTableView, QMenu, QToolButton, QWidget, \
-    QHeaderView, QLabel, QHBoxLayout, QToolBar, QSizePolicy, QSpacerItem
+    QHeaderView, QLabel, QHBoxLayout, QToolBar, QSizePolicy, QSpacerItem, QPushButton
 
 from bauh.api.abstract.cache import MemoryCache
 from bauh.api.abstract.model import PackageStatus, CustomSoftwareAction
@@ -302,31 +302,18 @@ class PackagesTable(QTableWidget):
 
             self.setCellWidget(pkg.table_index, 8, col_update)
 
-    def _gen_row_button(self, text: str, name: str, callback) -> QWidget:
-        col = QWidget()
-        col.setProperty('container', 'true')
-        col.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
-
-        col_bt = QToolButton()
+    def _gen_row_button(self, text: str, name: str, callback) -> QPushButton:
+        col_bt = QPushButton()
         col_bt.setObjectName(name)
         col_bt.setCursor(QCursor(Qt.PointingHandCursor))
-        col_bt.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         col_bt.setText(text)
-        col_bt.setMinimumWidth(80)
         col_bt.clicked.connect(callback)
-
-        layout = QHBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setAlignment(Qt.AlignCenter)
-
-        layout.addWidget(col_bt)
-
-        col.setLayout(layout)
-        return col
+        return col_bt
 
     def _set_col_installed(self, col: int, pkg: PackageView):
-        toolbar = QToolBar()
-        toolbar.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
+        toolbar = QCustomToolbar()
+        toolbar.setObjectName('toolbar_installed')
+        toolbar.add_space()
 
         if pkg.model.installed:
             if pkg.model.can_be_uninstalled():
@@ -345,7 +332,8 @@ class PackagesTable(QTableWidget):
         else:
             item = None
 
-        toolbar.addWidget(item)
+        toolbar.add_widget(item)
+        toolbar.add_space()
         self.setCellWidget(pkg.table_index, col, toolbar)
 
     def _set_col_type(self, col: int, pkg: PackageView):
@@ -520,7 +508,8 @@ class PackagesTable(QTableWidget):
 
     def _set_col_actions(self, col: int, pkg: PackageView):
         toolbar = QCustomToolbar()
-        toolbar.add_stretch()
+        toolbar.setObjectName('app_actions')
+        toolbar.add_space()
 
         if pkg.model.installed:
             def run():
@@ -559,14 +548,14 @@ class PackagesTable(QTableWidget):
         bt.setEnabled(bool(pkg.model.has_info()))
         toolbar.layout().addWidget(bt)
 
-        toolbar.add_stretch()
+        toolbar.add_space()
         self.setCellWidget(pkg.table_index, col, toolbar)
 
     def change_headers_policy(self, policy: QHeaderView = QHeaderView.ResizeToContents, maximized: bool = False):
         header_horizontal = self.horizontalHeader()
         for i in range(self.columnCount()):
             if maximized:
-                if i not in (3, 4, 7):
+                if i not in (4, 5, 8):
                     header_horizontal.setSectionResizeMode(i, QHeaderView.ResizeToContents)
                 else:
                     header_horizontal.setSectionResizeMode(i, QHeaderView.Stretch)

@@ -7,7 +7,7 @@ QComboBox {
     border-color: @color_inner_widget;
 }
 
-QTableWidget, QPlainTextEdit, QTableWidget QWidget[container = "true"],  QTableWidget QLabel, QTableWidget QToolBar {
+QTableWidget, QPlainTextEdit, QTableWidget QWidget[container = "true"], QTableWidget QLabel, QTableWidget QToolBar, QTableWidget QWidget[spacer = "true"] {
     background-color: @color_inner_widget;
 }
 
@@ -123,6 +123,10 @@ ManageWindow IconButton#settings > QToolButton {
     qproperty-icon: url("@style_dir/img/settings.svg");
 }
 
+PackagesTable IconButton#app_screenshots > QToolButton {
+    qproperty-icon: url("@style_dir/img/camera.svg");
+}
+
 ManageWindow IconButton#custom_actions > QToolButton {
     qproperty-icon: url("@style_dir/img/custom_actions.svg");
 }
@@ -135,20 +139,19 @@ PackagesTable QLabel[publisher_known = "false"]{
     color: @color_red;
 }
 
-PackagesTable QToolButton#bt_install, PackagesTable QToolButton#bt_uninstall {
+PackagesTable QAbstractButton#bt_install, PackagesTable QAbstractButton#bt_uninstall {
     background-color: @color_container_grey;
     color: @color_bt_upgrade;
 }
 
-PackagesTable QToolButton#bt_install {
+PackagesTable QAbstractButton#bt_install {
     color: @color_bt_upgrade;
 }
 
-PackagesTable QToolButton#bt_uninstall {
+PackagesTable QAbstractButton#bt_uninstall {
     color: @color_red;
 }
 
 QTableWidget {
     selection-background-color: @color_table_row_highlight;
 }
-

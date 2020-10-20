@@ -16,10 +16,19 @@ QTableWidget QToolButton {
     padding: 3px;
 }
 
+QTableWidget QPushButton {
+    padding: 5px;
+    min-width: 80px;
+}
+
 /** --- */
 
 QLabel[error = "true"] {
     color: @color_error;
+}
+
+QCustomToolbar QWidget[spacer = "true"] {
+    min-width: 5px;
 }
 
 QLabel[help_icon = "true"] {
@@ -210,14 +219,14 @@ PackagesTable IconButton#app_info > QToolButton {
     qproperty-icon: url("@style_dir/img/app_info.svg");
 }
 
-PackagesTable QToolButton#bt_install {
+PackagesTable QAbstractButton#bt_install {
     background: @color_green;
     color: white;
     font-size: 10px;
     font-weight: bold;
 }
 
-PackagesTable QToolButton#bt_uninstall {
+PackagesTable QAbstractButton#bt_uninstall {
     color: @color_brown;
     font-size: 10px;
     font-weight: bold;
