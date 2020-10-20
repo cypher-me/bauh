@@ -22,7 +22,7 @@ QTableWidget QToolButton[text_only = "true"] {
     min-width: 80px;
 }
 
-PreparePanel QPushButton {
+QWidget[container = "true"] QPushButton {
     min-width: 80px;
 }
 
@@ -225,14 +225,14 @@ PackagesTable IconButton#app_info {
     qproperty-icon: url("@style_dir/img/app_info.svg");
 }
 
-PackagesTable QAbstractButton#bt_install {
+PackagesTable QToolButton#bt_install {
     background: @color_green;
     color: white;
     font-size: 10px;
     font-weight: bold;
 }
 
-PackagesTable QAbstractButton#bt_uninstall {
+PackagesTable QToolButton#bt_uninstall {
     color: @color_brown;
     font-size: 10px;
     font-weight: bold;

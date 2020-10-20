@@ -139,16 +139,16 @@ PackagesTable QLabel[publisher_known = "false"]{
     color: @color_red;
 }
 
-PackagesTable QAbstractButton#bt_install, PackagesTable QAbstractButton#bt_uninstall {
+PackagesTable QToolButton#bt_install, PackagesTable QToolButton#bt_uninstall {
     background-color: @color_container_grey;
     color: @color_bt_upgrade;
 }
 
-PackagesTable QAbstractButton#bt_install {
+PackagesTable QToolButton#bt_install {
     color: @color_bt_upgrade;
 }
 
-PackagesTable QAbstractButton#bt_uninstall {
+PackagesTable QToolButton#bt_uninstall {
     color: @color_red;
 }
 
