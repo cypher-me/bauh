@@ -3,6 +3,10 @@ QWidget {
     color: @color_font;
 }
 
+QComboBox {
+    border-color: @color_inner_widget;
+}
+
 QTableWidget, QPlainTextEdit, QTableWidget QWidget[container = "true"],  QTableWidget QLabel, QTableWidget QToolBar {
     background-color: @color_inner_widget;
 }
@@ -93,10 +97,6 @@ QLabel#label_version {
 
 UpgradeToggleButton > QToolButton {
     background: @color_bt_upgrade;
-}
-
-ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types {
-    border-color: @color_inner_widget;
 }
 
 ManageWindow PackagesTable IconButton#app_info > QToolButton {

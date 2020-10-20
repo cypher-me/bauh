@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     - root dialog design and behavior
     - tooltip for the label displaying the number of applications on the table / available [#138](https://github.com/vinifmor/bauh/issues/138)
     - screenshots dialog resizing behavior
+    - "name filter" now requires ENTER or click to be triggered
 - Settings
     - "Applications displayed" property (Interface) tooltip now informs that 0 (zero) can be used for no limit [#138](https://github.com/vinifmor/bauh/issues/138)
 
