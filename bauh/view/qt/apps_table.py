@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt, QUrl, QSize
 from PyQt5.QtGui import QPixmap, QIcon, QCursor
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PyQt5.QtWidgets import QTableWidget, QTableView, QMenu, QToolButton, QWidget, \
-    QHeaderView, QLabel, QHBoxLayout, QToolBar, QSizePolicy
+    QHeaderView, QLabel, QHBoxLayout, QToolBar, QSizePolicy, QSpacerItem
 
 from bauh.api.abstract.cache import MemoryCache
 from bauh.api.abstract.model import PackageStatus, CustomSoftwareAction
@@ -519,8 +519,13 @@ class PackagesTable(QTableWidget):
         self.setCellWidget(pkg.table_index, col, item)
 
     def _set_col_actions(self, col: int, pkg: PackageView):
-        item = QToolBar()
-        item.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
+        toolbar = QWidget()
+        toolbar.setProperty('container', 'true')
+        toolbar.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
+        toolbar.setLayout(QHBoxLayout())
+        toolbar.layout().setContentsMargins(0, 0, 0, 0)
+        toolbar.layout().setSpacing(2)
+        toolbar.layout().addStretch(0)
 
         if pkg.model.installed:
             def run():
@@ -529,7 +534,7 @@ class PackagesTable(QTableWidget):
             bt = IconButton(i18n=self.i18n, action=run, tooltip=self.i18n['action.run.tooltip'])
             bt.setObjectName('app_run')
             bt.setEnabled(pkg.model.can_be_run())
-            item.addWidget(bt)
+            toolbar.layout().addWidget(bt)
 
         def handle_click():
             self.show_pkg_actions(pkg)
@@ -539,7 +544,7 @@ class PackagesTable(QTableWidget):
             bt = IconButton(i18n=self.i18n, action=handle_click, tooltip=self.i18n['action.settings.tooltip'])
             bt.setObjectName('app_actions')
             bt.setEnabled(bool(settings))
-            item.addWidget(bt)
+            toolbar.layout().addWidget(bt)
 
         if not pkg.model.installed:
             def show_screenshots():
@@ -549,7 +554,7 @@ class PackagesTable(QTableWidget):
                             tooltip=self.i18n['action.screenshots.tooltip'])
             bt.setObjectName('app_screenshots')
             bt.setEnabled(bool(pkg.model.has_screenshots()))
-            item.addWidget(bt)
+            toolbar.layout().addWidget(bt)
 
         def show_info():
             self.window.begin_show_info(pkg)
@@ -557,9 +562,10 @@ class PackagesTable(QTableWidget):
         bt = IconButton(i18n=self.i18n, action=show_info, tooltip=self.i18n['action.info.tooltip'])
         bt.setObjectName('app_info')
         bt.setEnabled(bool(pkg.model.has_info()))
-        item.addWidget(bt)
+        toolbar.layout().addWidget(bt)
 
-        self.setCellWidget(pkg.table_index, col, item)
+        toolbar.layout().addStretch(0)
+        self.setCellWidget(pkg.table_index, col, toolbar)
 
     def change_headers_policy(self, policy: QHeaderView = QHeaderView.ResizeToContents, maximized: bool = False):
         header_horizontal = self.horizontalHeader()

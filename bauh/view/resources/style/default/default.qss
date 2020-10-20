@@ -1,3 +1,23 @@
+/** Breath-like changes */
+
+QPushButton {
+    padding: 7px;
+}
+
+QSearchBar QPushButton {
+    padding: inherit;
+}
+
+QToolButton {
+    padding: 5px;
+}
+
+QTableWidget QToolButton {
+    padding: 3px;
+}
+
+/** --- */
+
 QLabel[error = "true"] {
     color: @color_error;
 }
