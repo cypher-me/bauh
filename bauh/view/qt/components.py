@@ -3,8 +3,8 @@ import traceback
 from pathlib import Path
 from typing import Tuple, Dict, Optional, Set
 
-from PyQt5.QtCore import Qt, QSize, QTimer
-from PyQt5.QtGui import QIcon, QPixmap, QIntValidator, QCursor
+from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtGui import QIcon, QIntValidator, QCursor
 from PyQt5.QtWidgets import QRadioButton, QGroupBox, QCheckBox, QComboBox, QGridLayout, QWidget, \
     QLabel, QSizePolicy, QLineEdit, QToolButton, QHBoxLayout, QFormLayout, QFileDialog, QTabWidget, QVBoxLayout, \
     QSlider, QScrollArea, QFrame, QAction, QSpinBox, QPlainTextEdit, QWidgetAction, QPushButton, QApplication
@@ -13,7 +13,6 @@ from bauh.api.abstract.view import SingleSelectComponent, InputOption, MultipleS
     TextInputComponent, FormComponent, FileChooserComponent, ViewComponent, TabGroupComponent, PanelComponent, \
     TwoStateButtonComponent, TextComponent, SpacerComponent, RangeInputComponent, ViewObserver, TextInputType
 from bauh.context import PROPERTY_HARDCODED_STYLESHEET
-from bauh.view.util import resource
 from bauh.view.util.translation import I18n
 
 
@@ -1013,7 +1012,7 @@ class QSearchBar(QWidget):
         self.inp_search = QLineEdit()
         self.inp_search.setObjectName('inp_search')
         self.inp_search.setFrame(False)
-        self.inp_search.returnPressed.connect(self._execute_callback)
+        self.inp_search.returnPressed.connect(search_callback)
         search_background_color = self.inp_search.palette().color(self.inp_search.backgroundRole()).name()
 
         search_left_corner = QLabel()
@@ -1029,7 +1028,7 @@ class QSearchBar(QWidget):
         self.search_button = QPushButton()
         self.search_button.setObjectName('search_button')
         self.search_button.setCursor(QCursor(Qt.PointingHandCursor))
-        self.search_button.clicked.connect(self._execute_callback)
+        self.search_button.clicked.connect(search_callback)
 
         if QApplication.instance().property(PROPERTY_HARDCODED_STYLESHEET):
             self.search_button.setStyleSheet("QPushButton#search_button { background: %s; }" % search_background_color)
@@ -1056,10 +1055,6 @@ class QSearchBar(QWidget):
 
     def set_placeholder(self, placeholder: str):
         self.inp_search.setPlaceholderText(placeholder)
-
-    def _execute_callback(self):
-        if self.text().strip():
-            self.callback()
 
 
 class QCustomMenuAction(QWidgetAction):
