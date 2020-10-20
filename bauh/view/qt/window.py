@@ -24,7 +24,8 @@ from bauh.view.core.tray_client import notify_tray
 from bauh.view.qt import dialog, commons, qt_utils
 from bauh.view.qt.about import AboutDialog
 from bauh.view.qt.apps_table import PackagesTable, UpgradeToggleButton
-from bauh.view.qt.components import new_spacer, InputFilter, IconButton, QtComponentsManager, to_widget, QSearchBar, \
+from bauh.view.qt.commons import sum_updates_displayed
+from bauh.view.qt.components import new_spacer, IconButton, QtComponentsManager, to_widget, QSearchBar, \
     QCustomMenuAction
 from bauh.view.qt.dialog import ConfirmationDialog
 from bauh.view.qt.history import HistoryDialog
@@ -799,7 +800,12 @@ class ManageWindow(QWidget):
     def _update_table(self, pkgs_info: dict, signal: bool = False):
         self.pkgs = pkgs_info['pkgs_displayed']
 
-        self.table_apps.update_packages(self.pkgs, update_check_enabled=pkgs_info['not_installed'] == 0)
+        if pkgs_info['not_installed'] == 0:
+            update_check = sum_updates_displayed(pkgs_info) > 0
+        else:
+            update_check = False
+
+        self.table_apps.update_packages(self.pkgs, update_check_enabled=update_check)
 
         if not self._maximized:
             self.label_displayed.show()

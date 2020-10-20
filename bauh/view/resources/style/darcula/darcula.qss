@@ -147,3 +147,8 @@ PackagesTable QToolButton#bt_install {
 PackagesTable QToolButton#bt_uninstall {
     color: @color_red;
 }
+
+QTableWidget {
+    selection-background-color: @color_table_row_highlight;
+}
+

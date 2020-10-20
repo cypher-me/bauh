@@ -263,6 +263,7 @@ class PackagesTable(QTableWidget):
         self.setEnabled(True)
 
         if pkgs:
+            self.setColumnCount(self.COL_NUMBER if update_check_enabled else self.COL_NUMBER - 1)
             self.setRowCount(len(pkgs))
 
             for idx, pkg in enumerate(pkgs):
@@ -287,10 +288,8 @@ class PackagesTable(QTableWidget):
         self._set_col_installed(6, pkg)
         self._set_col_actions(7, pkg)
 
-        if change_update_col:
-            col_update = None
-
-            if update_check_enabled and pkg.model.installed and not pkg.model.is_update_ignored() and pkg.model.update:
+        if change_update_col and update_check_enabled:
+            if pkg.model.installed and not pkg.model.is_update_ignored() and pkg.model.update:
                 col_update = QToolBar()
                 col_update.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
                 col_update.addWidget(UpgradeToggleButton(pkg=pkg,
@@ -298,6 +297,8 @@ class PackagesTable(QTableWidget):
                                                          i18n=self.i18n,
                                                          checked=pkg.update_checked if pkg.model.can_be_updated() else False,
                                                          clickable=pkg.model.can_be_updated()))
+            else:
+                col_update = QLabel()
 
             self.setCellWidget(pkg.table_index, 8, col_update)
 
