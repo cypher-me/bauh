@@ -22,8 +22,13 @@ QPlainTextEdit[console = 'true'] {
 }
 
 QTabBar::tab:selected {
-    color: @color_selected_font;
-    font-weight: bold;
+    color: @color_tab_font;
+    border: 1px solid @color_inner_widget;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: 2px solid @color_tab_underline;
+    background-color: @color_tab_highlight;
+    padding: 5px;
 }
 
 QComboBox QAbstractItemView {
@@ -108,6 +113,10 @@ QPushButton#bt_refresh {
     qproperty-icon: url("@style_dir/img/refresh.svg")
 }
 
+QPushButton#bt_installed {
+    qproperty-icon: url("@style_dir/img/disk.svg");
+}
+
 QPushButton#bt_suggestions {
     qproperty-icon: url("@style_dir/img/suggestions.svg")
 }
@@ -134,6 +143,18 @@ ManageWindow IconButton#custom_actions {
 
 QMenu#app_actions QPushButton#app_history {
     qproperty-icon: url("@style_dir/img/history.svg");
+}
+
+QMenu#app_actions QPushButton#app_downgrade {
+    qproperty-icon: url("@style_dir/img/downgrade.svg");
+}
+
+QMenu#app_actions QPushButton#ignore_updates {
+    qproperty-icon: url("@style_dir/img/ignore_update.svg");
+}
+
+QMenu#app_actions QPushButton#revert_ignore_updates {
+    qproperty-icon: url("@style_dir/img/revert_update_ignored.svg");
 }
 
 PackagesTable QLabel[publisher_known = "false"]{

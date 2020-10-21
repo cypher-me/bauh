@@ -116,14 +116,14 @@
 <g
    id="g1005"
    transform="matrix(19.888964,0,0,19.888964,17.332433,17.332433)"
-   style="fill:none;stroke:#8d5fd3;stroke-width:2.07845"><path
+   style="fill:none;stroke:#8888c6;stroke-width:2.07845;stroke-opacity:1"><path
      id="path920"
      d="M 12,0.27929688 A 11.720572,11.720572 0 0 0 0.27929688,12 11.720572,11.720572 0 0 0 12,23.720703 11.720572,11.720572 0 0 0 23.720703,12 11.720572,11.720572 0 0 0 12,0.27929688 Z M 12,8.59375 A 3.4069197,3.4069195 0 0 1 15.40625,12 3.4069197,3.4069195 0 0 1 12,15.40625 3.4069197,3.4069195 0 0 1 8.59375,12 3.4069197,3.4069195 0 0 1 12,8.59375 Z"
-     style="fill:none;stroke:#8d5fd3;stroke-width:2.07845;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.941176"
+     style="fill:none;stroke:#8888c6;stroke-width:2.07845;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      inkscape:connector-curvature="0" /><ellipse
      cy="12"
      cx="12"
      id="ellipse998"
-     style="fill:none;fill-opacity:0;stroke:#8d5fd3;stroke-width:2.07845;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.941176"
+     style="fill:none;fill-opacity:0;stroke:#8888c6;stroke-width:2.07845;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      rx="3.4069197"
      ry="3.4069195" /></g></svg>
