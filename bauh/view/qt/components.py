@@ -1084,14 +1084,14 @@ class QCustomMenuAction(QWidgetAction):
 
 class QCustomToolbar(QWidget):
 
-    def __init__(self, spacing: int = 2, parent: Optional[QWidget] = None):
+    def __init__(self, spacing: int = 2, parent: Optional[QWidget] = None, alignment: int = Qt.AlignRight):
         super(QCustomToolbar, self).__init__(parent=parent)
         self.setProperty('container', 'true')
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         self.setLayout(QHBoxLayout())
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().setSpacing(spacing)
-        self.layout().setAlignment(Qt.AlignCenter)
+        self.layout().setAlignment(alignment)
 
     def add_widget(self, widget: QWidget):
         if widget:
