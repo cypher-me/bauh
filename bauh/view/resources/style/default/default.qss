@@ -1,7 +1,7 @@
 /** Breath-like changes */
 
 QPushButton {
-    padding: 7px;
+    padding: 5px;
 }
 
 QSearchBar QPushButton {
