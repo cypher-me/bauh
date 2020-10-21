@@ -3,6 +3,10 @@ QWidget {
     color: @color_font;
 }
 
+QAbstractButton, QComboBox, QLineEdit, QSpinBox {
+    selection-background-color: #6591B2;
+}
+
 QComboBox {
     border-color: @color_inner_widget;
 }
@@ -84,7 +88,7 @@ QSearchBar#name_filter QLineEdit#inp_search {
 
 QPushButton#ok {
     background-color: @color_container_grey;
-    color: @color_bt_upgrade;
+    color: @color_focus;
     font-weight: bold;
 }
 
@@ -196,4 +200,16 @@ PackagesTable QToolButton#bt_install {
 
 PackagesTable QToolButton#bt_uninstall {
     color: @color_red;
+}
+
+QLabel[help_icon = "true"] {
+    qproperty-pixmap: url("@style_dir/img/about.svg");
+}
+
+QLabel[tip_icon = "true"] {
+    qproperty-pixmap: url("@style_dir/img/about.svg");
+}
+
+FormQt IconButton#clean_field {
+    qproperty-icon: url("@style_dir/img/clean.svg");
 }
