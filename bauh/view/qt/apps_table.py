@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt, QUrl, QSize
 from PyQt5.QtGui import QPixmap, QIcon, QCursor
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PyQt5.QtWidgets import QTableWidget, QTableView, QMenu, QToolButton, QWidget, \
-    QHeaderView, QLabel, QHBoxLayout, QToolBar, QSizePolicy, QPushButton
+    QHeaderView, QLabel, QHBoxLayout, QToolBar, QSizePolicy
 
 from bauh.api.abstract.cache import MemoryCache
 from bauh.api.abstract.model import PackageStatus, CustomSoftwareAction
@@ -17,7 +17,6 @@ from bauh.view.qt.components import IconButton, QCustomMenuAction, QCustomToolba
 from bauh.view.qt.dialog import ConfirmationDialog
 from bauh.view.qt.qt_utils import measure_based_on_height
 from bauh.view.qt.view_model import PackageView
-from bauh.view.util import resource
 from bauh.view.util.translation import I18n
 
 NAME_MAX_SIZE = 30
@@ -64,7 +63,10 @@ class UpgradeToggleButton(QToolButton):
 
     def change_state(self, not_checked: bool):
         self.app_view.update_checked = not not_checked
+        self.setProperty('toggled', str(self.app_view.update_checked).lower())
         self.root.update_bt_upgrade()
+        self.style().unpolish(self)
+        self.style().polish(self)
 
 
 class PackagesTable(QTableWidget):

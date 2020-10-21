@@ -101,7 +101,11 @@ ManageWindow QSearchBar#name_filter {
 }
 
 QPushButton#bt_upgrade {
-    background: @color_bt_upgrade;
+    qproperty-icon: url("@style_dir/img/update.svg");
+    border: 0.5px solid @color_green;
+    background: @color_container_grey;
+    border-radius: 2px;
+    color: @color_green;
 }
 
 QLabel#label_version {
@@ -109,8 +113,25 @@ QLabel#label_version {
     font-weight: normal;
 }
 
-PackagesTable UpgradeToggleButton {
-    background: @color_bt_upgrade;
+PackagesTable UpgradeToggleButton, ConfirmationDialog UpgradeToggleButton {
+    qproperty-icon: url("@style_dir/img/update.svg");
+    border: 0.5px solid @color_green;
+    border-radius: 2px;
+    background-color: @color_container_grey;
+}
+
+PackagesTable UpgradeToggleButton[toggled = "false"] {
+    qproperty-icon: url("@style_dir/img/update_unchecked.svg");
+    background-color: @color_inner_widget;
+    border-color: @color_container_grey;
+}
+
+PackagesTable UpgradeToggleButton[enabled = "false"] {
+    background: @color_warning;
+}
+
+ConfirmationDialog UpgradeToggleButton {
+    height: 10px;
 }
 
 ManageWindow PackagesTable IconButton#app_info {
