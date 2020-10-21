@@ -22,7 +22,7 @@ QTableWidget QToolButton[text_only = "true"] {
     min-width: 80px;
 }
 
-QWidget[container = "true"] QPushButton {
+ConfirmationDialog QPushButton, QWidget[container = "true"] QPushButton {
     min-width: 80px;
 }
 
