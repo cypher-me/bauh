@@ -7,9 +7,6 @@ QAbstractButton, QComboBox, QLineEdit, QSpinBox {
     selection-background-color: #6591B2;
 }
 
-QComboBox {
-    border-color: @color_inner_widget;
-}
 
 QTableWidget, QPlainTextEdit, QTableWidget QWidget[container = "true"], QTableWidget QLabel, QTableWidget QToolBar, QTableWidget QWidget[spacer = "true"] {
     background-color: @color_inner_widget;
@@ -52,39 +49,43 @@ QProgressBar::chunk {
 }
 
 QSearchBar QLabel#lb_left_corner {
-     border-left-color: @color_search_icon;
-     border-top-color: @color_search_icon;
-     border-bottom-color: @color_search_icon;
-}
-
-QSearchBar QPushButton#search_button {
-    border-right-color: @color_search_icon;
-    border-top-color: @color_search_icon;
-    border-bottom-color: @color_search_icon;
-}
-
-QSearchBar QLineEdit#inp_search {
-     border-bottom-color: @color_search_icon;
-     border-top-color: @color_search_icon;
-}
-
-QSearchBar#name_filter QLabel#lb_left_corner {
      border-left-color: @color_inner_widget;
      border-top-color: @color_inner_widget;
      border-bottom-color: @color_inner_widget;
 }
 
-QSearchBar#name_filter QPushButton#search_button {
+QSearchBar QLabel#lb_left_corner[focused = "true"] {
+     border-left-color: @color_focus;
+     border-top-color: @color_focus;
+     border-bottom-color: @color_focus;
+}
+
+QSearchBar QPushButton#search_button {
     border-right-color: @color_inner_widget;
     border-top-color: @color_inner_widget;
     border-bottom-color: @color_inner_widget;
-    qproperty-icon: url("@style_dir/img/filter.svg");
 }
 
-QSearchBar#name_filter QLineEdit#inp_search {
+QSearchBar QPushButton#search_button[focused = "true"] {
+    border-right-color: @color_focus;
+    border-top-color: @color_focus;
+    border-bottom-color: @color_focus;
+}
+
+QSearchBar QLineEdit#inp_search {
      border-bottom-color: @color_inner_widget;
      border-top-color: @color_inner_widget;
 }
+
+QSearchBar QLineEdit#inp_search:focus {
+     border-bottom-color: @color_focus;
+     border-top-color: @color_focus;
+}
+
+QSearchBar#name_filter QPushButton#search_button {
+    qproperty-icon: url("@style_dir/img/filter.svg");
+}
+
 
 QPushButton#ok {
     background-color: @color_container_grey;

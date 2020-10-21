@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Tuple, Dict, Optional, Set
 
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QIcon, QIntValidator, QCursor
+from PyQt5.QtGui import QIcon, QIntValidator, QCursor, QFocusEvent
 from PyQt5.QtWidgets import QRadioButton, QGroupBox, QCheckBox, QComboBox, QGridLayout, QWidget, \
     QLabel, QSizePolicy, QLineEdit, QToolButton, QHBoxLayout, QFormLayout, QFileDialog, QTabWidget, QVBoxLayout, \
     QSlider, QScrollArea, QFrame, QAction, QSpinBox, QPlainTextEdit, QWidgetAction, QPushButton, QApplication
@@ -998,6 +998,24 @@ class RangeInputQt(QGroupBox):
         self.model.value = self.spinner.value()
 
 
+class QCustomLineEdit(QLineEdit):
+
+    def __init__(self, focus_in_callback, focus_out_callback, **kwargs):
+        super(QCustomLineEdit, self).__init__(**kwargs)
+        self.focus_in_callback = focus_in_callback
+        self.focus_out_callback = focus_out_callback
+
+    def focusInEvent(self, ev: QFocusEvent):
+        super(QCustomLineEdit, self).focusInEvent(ev)
+        if self.focus_in_callback:
+            self.focus_in_callback()
+
+    def focusOutEvent(self, ev: QFocusEvent):
+        super(QCustomLineEdit, self).focusOutEvent(ev)
+        if self.focus_out_callback:
+            self.focus_out_callback()
+
+
 class QSearchBar(QWidget):
 
     def __init__(self, search_callback, parent: Optional[QWidget] = None):
@@ -1007,19 +1025,20 @@ class QSearchBar(QWidget):
         self.layout().setSpacing(0)
         self.callback = search_callback
 
-        self.inp_search = QLineEdit()
+        self.inp_search = QCustomLineEdit(focus_in_callback=self._set_focus_in,
+                                          focus_out_callback=self._set_focus_out)
         self.inp_search.setObjectName('inp_search')
         self.inp_search.setFrame(False)
         self.inp_search.returnPressed.connect(search_callback)
         search_background_color = self.inp_search.palette().color(self.inp_search.backgroundRole()).name()
 
-        search_left_corner = QLabel()
-        search_left_corner.setObjectName('lb_left_corner')
+        self.search_left_corner = QLabel()
+        self.search_left_corner.setObjectName('lb_left_corner')
 
         if QApplication.instance().property(PROPERTY_HARDCODED_STYLESHEET):
-            search_left_corner.setStyleSheet('QLabel#lb_left_corner { background: %s; }' % search_background_color)
+            self.search_left_corner.setStyleSheet('QLabel#lb_left_corner { background: %s; }' % search_background_color)
 
-        self.layout().addWidget(search_left_corner)
+        self.layout().addWidget(self.search_left_corner)
 
         self.layout().addWidget(self.inp_search)
 
@@ -1053,6 +1072,22 @@ class QSearchBar(QWidget):
 
     def set_placeholder(self, placeholder: str):
         self.inp_search.setPlaceholderText(placeholder)
+
+    def _set_focus_in(self):
+        self.search_button.setProperty('focused', 'true')
+        self.search_left_corner.setProperty('focused', 'true')
+
+        for c in (self.search_button, self.search_left_corner):
+            c.style().unpolish(c)
+            c.style().polish(c)
+
+    def _set_focus_out(self):
+        self.search_button.setProperty('focused', 'false')
+        self.search_left_corner.setProperty('focused', 'false')
+
+        for c in (self.search_button, self.search_left_corner):
+            c.style().unpolish(c)
+            c.style().polish(c)
 
 
 class QCustomMenuAction(QWidgetAction):
