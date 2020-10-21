@@ -9,6 +9,7 @@ QComboBox {
 
 QTableWidget, QPlainTextEdit, QTableWidget QWidget[container = "true"], QTableWidget QLabel, QTableWidget QToolBar, QTableWidget QWidget[spacer = "true"] {
     background-color: @color_inner_widget;
+    selection-background-color: @color_inner_widget;
 }
 
 QLabel[error = "true"] {
@@ -150,8 +151,4 @@ PackagesTable QToolButton#bt_install {
 
 PackagesTable QToolButton#bt_uninstall {
     color: @color_red;
-}
-
-QTableWidget {
-    selection-background-color: @color_table_row_highlight;
 }

@@ -543,6 +543,7 @@ class PackagesTable(QTableWidget):
         bt.setEnabled(bool(pkg.model.has_info()))
         toolbar.layout().addWidget(bt)
 
+        toolbar.add_space()
         self.setCellWidget(pkg.table_index, col, toolbar)
 
     def change_headers_policy(self, policy: QHeaderView = QHeaderView.ResizeToContents, maximized: bool = False):
