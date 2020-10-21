@@ -12,6 +12,14 @@ QTableWidget, QPlainTextEdit, QTableWidget QWidget[container = "true"], QTableWi
     selection-background-color: @color_inner_widget;
 }
 
+PackagesTable QPushButton, QTableWidget QToolButton {
+    background-color: @color_inner_widget;
+}
+
+PackagesTable QPushButton:hover, QTableWidget QToolButton:hover {
+    background: @color_container_grey;
+}
+
 QLabel[error = "true"] {
     color: @color_error;
 }
@@ -101,7 +109,7 @@ QLabel#label_version {
     font-weight: normal;
 }
 
-UpgradeToggleButton {
+PackagesTable UpgradeToggleButton {
     background: @color_bt_upgrade;
 }
 
@@ -159,11 +167,6 @@ QMenu#app_actions QPushButton#revert_ignore_updates {
 
 PackagesTable QLabel[publisher_known = "false"]{
     color: @color_red;
-}
-
-PackagesTable QToolButton#bt_install, PackagesTable QToolButton#bt_uninstall {
-    background-color: @color_container_grey;
-    color: @color_bt_upgrade;
 }
 
 PackagesTable QToolButton#bt_install {
