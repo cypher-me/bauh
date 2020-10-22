@@ -18,14 +18,18 @@ QTableWidget QToolButton {
     margin-bottom: 3px;
 }
 
+QTableWidget QToolButton#bt_task {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
 QTableWidget QToolButton[text_only = "true"] {
     min-width: 80px;
 }
 
-ConfirmationDialog QPushButton, QWidget[container = "true"] QPushButton {
+ConfirmationDialog QPushButton, QWidget[container = "true"] QPushButton, InfoDialog QPushButton {
     min-width: 80px;
 }
-
 
 /** --- */
 

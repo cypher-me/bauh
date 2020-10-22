@@ -282,12 +282,12 @@ class PreparePanel(QWidget, TaskManager):
         icon_widget.setProperty('container', 'true')
         icon_widget.setLayout(QHBoxLayout())
         icon_widget.layout().setContentsMargins(10, 0, 10, 0)
+
         bt_icon = QToolButton()
+        bt_icon.setObjectName('bt_task')
         bt_icon.setCursor(QCursor(Qt.WaitCursor))
         bt_icon.setEnabled(False)
         bt_icon.setToolTip(self.i18n['prepare.bt_icon.no_output'])
-        bt_icon.setFixedSize(QSize(24, 24))
-        bt_icon.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
 
         if icon_path:
             bt_icon.setIcon(QIcon(icon_path))

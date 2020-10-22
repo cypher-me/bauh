@@ -214,3 +214,7 @@ QLabel[tip_icon = "true"] {
 FormQt IconButton#clean_field {
     qproperty-icon: url("@style_dir/img/clean.svg");
 }
+
+PreparePanel QLabel#task_status[status = "running"], QLabel#task_progress[status = "running"] {
+    font-weight: normal;
+}
