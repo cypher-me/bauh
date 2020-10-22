@@ -1,16 +1,17 @@
 QWidget {
     background-color: @color_container_grey;
     color: @color_font;
+    selection-background-color: @color_tab_font;
 }
-
-QAbstractButton, QComboBox, QLineEdit, QSpinBox {
-    selection-background-color: #6591B2;
-}
-
 
 QTableWidget, QPlainTextEdit, QTableWidget QWidget[container = "true"], QTableWidget QLabel, QTableWidget QToolBar, QTableWidget QWidget[spacer = "true"] {
     background-color: @color_inner_widget;
     selection-background-color: @color_inner_widget;
+}
+
+QComboBox, QComboBox QAbstractItemView {
+    selection-background-color: @color_combo_item_selection;
+    color: @color_font;
 }
 
 PackagesTable QPushButton, QTableWidget QToolButton {
@@ -38,10 +39,6 @@ QTabBar::tab:selected {
     border-bottom: 2px solid @color_tab_underline;
     background-color: @color_tab_highlight;
     padding: 5px;
-}
-
-QComboBox QAbstractItemView {
-    color: @color_font;
 }
 
 QProgressBar::chunk {
