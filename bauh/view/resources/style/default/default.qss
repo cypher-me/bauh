@@ -111,7 +111,7 @@ PreparePanel QLabel#task_status[status = "running"], QLabel#task_progress[status
     font-weight: bold;
 }
 
-PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress_finished[status = "done"] {
+PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress[status = "done"] {
     color: @color_green;
     text-decoration: line-through;
 }
