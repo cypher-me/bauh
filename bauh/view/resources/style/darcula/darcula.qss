@@ -4,15 +4,6 @@ QWidget {
     selection-background-color: @color_tab_font;
 }
 
-QCheckBox:focus {
-  border: none;
-}
-
-QCheckBox::indicator {
-  height: 25px;
-  width: 25px;
-}
-
 QCheckBox::indicator:unchecked {
   image: url("@style_dir/img/checkbox_unchecked.svg");
 }

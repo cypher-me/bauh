@@ -31,6 +31,29 @@ ConfirmationDialog QPushButton, QWidget[container = "true"] QPushButton, InfoDia
     min-width: 80px;
 }
 
+QCheckBox:focus {
+  border: none;
+}
+
+QCheckBox::indicator {
+  height: 25px;
+  width: 25px;
+}
+
+ManageWindow QCheckBox#check_details::indicator {
+    height: 20px;
+    width: 20px;
+}
+
+QCheckBox::indicator:unchecked {
+  image: url("@style_dir/img/checkbox_unchecked.svg");
+}
+
+QCheckBox::indicator:checked {
+  image: url("@style_dir/img/checkbox_checked.svg");
+}
+
+
 /** --- */
 
 QLabel[error = "true"] {
