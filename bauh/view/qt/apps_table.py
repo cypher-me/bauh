@@ -351,6 +351,7 @@ class PackagesTable(QTableWidget):
 
     def _set_col_version(self, col: int, pkg: PackageView):
         label_version = QLabel(str(pkg.model.version if pkg.model.version else '?'))
+        label_version.setObjectName('app_version')
         label_version.setAlignment(Qt.AlignCenter)
 
         item = QWidget()
@@ -365,7 +366,7 @@ class PackagesTable(QTableWidget):
             tooltip = self.i18n['version.unknown']
 
         if pkg.model.update and not pkg.model.is_update_ignored():
-            label_version.setObjectName('label_version')
+            label_version.setProperty('update', 'true')
             tooltip = self.i18n['version.installed_outdated']
 
         if pkg.model.is_update_ignored():

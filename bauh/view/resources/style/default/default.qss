@@ -53,6 +53,9 @@ QCheckBox::indicator:checked {
   image: url("@style_dir/img/checkbox_checked.svg");
 }
 
+ConfirmationDialog UpgradeToggleButton {
+    height: 10px;
+}
 
 /** --- */
 
@@ -356,9 +359,9 @@ UpgradeToggleButton[enabled = "false"] {
     background: #dda739;
 }
 
-QLabel#label_version {
-    color: @color_green;
-    font-weight: bold;
+PackagesTable QLabel#app_version[update = "true"] {
+    color: @table.app_version.update.color;
+    font-weight: @table.app_version.update.weight;
 }
 
 QLabel#label_version_ignored {
@@ -472,6 +475,20 @@ RootDialog QLabel#message {
 
 RootDialog QLabel[error = "true"] {
     qproperty-alignment: AlignCenter;
+}
+
+HistoryDialog QTableWidget QLabel {
+    qproperty-alignment: AlignCenter;
+}
+
+HistoryDialog QTableWidget QLabel[outdated = "true"] {
+    font-weight: bold;
+    color: white;
+}
+
+HistoryDialog QTableWidget QLabel[outdated = "false"] {
+    font-weight: bold;
+    color: white;
 }
 
 InfoDialog { }
