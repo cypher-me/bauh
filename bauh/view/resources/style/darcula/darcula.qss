@@ -101,7 +101,7 @@ QSearchBar#name_filter QPushButton#search_button {
 
 QPushButton#ok {
     background-color: @outer_widget.background.color;
-    color: @button_ok.color;
+    color: @button_ok.font.color;
     font-weight: bold;
 }
 
@@ -210,7 +210,7 @@ QMenu#app_actions QPushButton#revert_ignore_updates {
 }
 
 PackagesTable QLabel[publisher_known = "false"]{
-    color: @table.unknown_publisher.color;
+    color: @table.app_publisher.unknown.font.color;
 }
 
 PackagesTable QToolButton#bt_install {
