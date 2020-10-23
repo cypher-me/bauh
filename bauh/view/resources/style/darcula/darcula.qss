@@ -8,8 +8,16 @@ QCheckBox::indicator:unchecked {
   image: url("@style_dir/img/checkbox_unchecked.svg");
 }
 
+QCheckBox::indicator:unchecked:disabled {
+  image: url("@style_dir/img/checkbox_unchecked_disabled.svg");
+}
+
 QCheckBox::indicator:checked {
   image: url("@style_dir/img/checkbox_checked.svg");
+}
+
+QCheckBox::indicator:checked:disabled {
+  image: url("@style_dir/img/checkbox_checked_disabled.svg");
 }
 
 
