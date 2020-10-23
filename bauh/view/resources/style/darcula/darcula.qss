@@ -1,5 +1,5 @@
 QWidget {
-    background-color: @color_container_grey;
+    background-color: @color_grey_container;
     color: @color_font;
     selection-background-color: @color_tab_font;
 }
@@ -34,7 +34,7 @@ PackagesTable QPushButton, QTableWidget QToolButton {
 }
 
 PackagesTable QPushButton:hover, QTableWidget QToolButton:hover {
-    background: @color_container_grey;
+    background: @color_grey_container;
 }
 
 QLabel[error = "true"] {
@@ -100,8 +100,8 @@ QSearchBar#name_filter QPushButton#search_button {
 
 
 QPushButton#ok {
-    background-color: @color_container_grey;
-    color: @color_focus;
+    background-color: @color_grey_container;
+    color: @button.ok.color;
     font-weight: bold;
 }
 
@@ -120,7 +120,7 @@ ManageWindow QSearchBar#name_filter {
 QPushButton#bt_upgrade {
     qproperty-icon: url("@style_dir/img/update.svg");
     border: 0.5px solid @color_green;
-    background: @color_container_grey;
+    background: @color_grey_container;
     border-radius: 2px;
     color: @color_green;
 }
@@ -134,13 +134,13 @@ PackagesTable UpgradeToggleButton, ConfirmationDialog UpgradeToggleButton {
     qproperty-icon: url("@style_dir/img/update.svg");
     border: 0.5px solid @color_green;
     border-radius: 2px;
-    background-color: @color_container_grey;
+    background-color: @color_grey_container;
 }
 
 PackagesTable UpgradeToggleButton[toggled = "false"] {
     qproperty-icon: url("@style_dir/img/update_unchecked.svg");
     background-color: @color_inner_widget;
-    border-color: @color_container_grey;
+    border-color: @color_grey_container;
 }
 
 PackagesTable UpgradeToggleButton[enabled = "false"] {
