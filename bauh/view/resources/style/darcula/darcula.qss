@@ -18,10 +18,16 @@ QTableWidget, QPlainTextEdit, QTableWidget QWidget[container = "true"], QTableWi
     selection-background-color: @color_inner_widget;
 }
 
-QComboBox, QComboBox QAbstractItemView {
-    selection-background-color: @color_combo_item_selection;
+QComboBox, QAbstractItemView {
+    selection-background-color: @color_selection_background;
+    selection-color: @color_selection_font;
     color: @color_font;
 }
+
+ QMenu QPushButton:hover {
+    background-color: @color_selection_background;
+    color: @color_selection_font;
+ }
 
 PackagesTable QPushButton, QTableWidget QToolButton {
     background-color: @color_inner_widget;
