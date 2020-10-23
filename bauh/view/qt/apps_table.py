@@ -518,12 +518,13 @@ class PackagesTable(QTableWidget):
             bt.setEnabled(pkg.model.can_be_run())
             toolbar.layout().addWidget(bt)
 
-        def handle_click():
-            self.show_pkg_actions(pkg)
-
         settings = self.has_any_settings(pkg)
+
         if pkg.model.installed:
-            bt = IconButton(i18n=self.i18n, action=handle_click, tooltip=self.i18n['action.settings.tooltip'])
+            def handle_custom_actions():
+                self.show_pkg_actions(pkg)
+
+            bt = IconButton(i18n=self.i18n, action=handle_custom_actions, tooltip=self.i18n['action.settings.tooltip'])
             bt.setObjectName('app_actions')
             bt.setEnabled(bool(settings))
             toolbar.layout().addWidget(bt)

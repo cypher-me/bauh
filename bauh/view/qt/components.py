@@ -7,7 +7,7 @@ from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QIcon, QIntValidator, QCursor, QFocusEvent
 from PyQt5.QtWidgets import QRadioButton, QGroupBox, QCheckBox, QComboBox, QGridLayout, QWidget, \
     QLabel, QSizePolicy, QLineEdit, QToolButton, QHBoxLayout, QFormLayout, QFileDialog, QTabWidget, QVBoxLayout, \
-    QSlider, QScrollArea, QFrame, QAction, QSpinBox, QPlainTextEdit, QWidgetAction, QPushButton, QApplication
+    QSlider, QScrollArea, QFrame, QAction, QSpinBox, QPlainTextEdit, QWidgetAction, QPushButton, QApplication, QMenu
 
 from bauh.api.abstract.view import SingleSelectComponent, InputOption, MultipleSelectComponent, SelectViewType, \
     TextInputComponent, FormComponent, FileChooserComponent, ViewComponent, TabGroupComponent, PanelComponent, \
@@ -1099,6 +1099,7 @@ class QCustomMenuAction(QWidgetAction):
         super(QCustomMenuAction, self).__init__(parent)
         self.button = QPushButton()
         self.set_label(label)
+        self._action = None
         self.set_action(action)
         self.set_button_name(button_name)
         self.set_icon(icon)
@@ -1108,7 +1109,15 @@ class QCustomMenuAction(QWidgetAction):
         self.button.setText(label)
 
     def set_action(self, action):
-        self.button.clicked.connect(action)
+        self._action = action
+        self.button.clicked.connect(self._handle_action)
+
+    def _handle_action(self):
+        if self._action:
+            self._action()
+
+            if self.parent() and isinstance(self.parent(), QMenu):
+                self.parent().close()
 
     def set_button_name(self, name: str):
         if name:
