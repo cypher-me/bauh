@@ -1015,6 +1015,8 @@ class QCustomLineEdit(QLineEdit):
         if self.focus_out_callback:
             self.focus_out_callback()
 
+        self.clearFocus()
+
 
 class QSearchBar(QWidget):
 
