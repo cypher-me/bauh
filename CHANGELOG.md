@@ -17,6 +17,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Paramets
     - new parameter **--offline**: it assumes the internet connection is off. Useful if the connection is bad/unstable and you just want to check your installed packages.
 ### Fixes
+- Arch:
+    - AUR: not able to find some repository dependencies when their names are not an exact match (e.g: sc-controller [0.4.7-1] relies on "pylibacl". This dependency now is called "python-pylibacl")
 - UI
     - wrong tooltips
 
