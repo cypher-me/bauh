@@ -20,6 +20,15 @@ QCheckBox::indicator:checked:disabled {
   image: url("@style_dir/img/checkbox_checked_disabled.svg");
 }
 
+QToolButton {
+    border: none;
+}
+
+QToolButton:hover {
+    background-color: @toolbutton.hover.background.color;
+    border-radius: 3px;
+}
+
 
 QTableWidget, QPlainTextEdit, QTableWidget QWidget[container = "true"], QTableWidget QLabel, QTableWidget QToolBar, QTableWidget QWidget[spacer = "true"] {
     background-color: @inner_widget.background.color;
@@ -230,8 +239,12 @@ PackagesTable QLabel[publisher_known = "false"]{
 }
 
 PackagesTable QToolButton#bt_install {
-    background: @inner_widget.background.color;
+    background-color: @inner_widget.background.color;
     color: @table.bt_install.font.color;
+}
+
+PackagesTable QToolButton#bt_install:hover {
+    background-color: @toolbutton.hover.background.color;
 }
 
 PackagesTable QToolButton#bt_install:disabled {
