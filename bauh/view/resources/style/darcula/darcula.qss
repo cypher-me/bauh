@@ -20,6 +20,15 @@ QCheckBox::indicator:checked:disabled {
   image: url("@style_dir/img/checkbox_checked_disabled.svg");
 }
 
+QPushButton {
+    border: 0.5px solid @pushbutton.border.color;
+    border-radius: 5px;
+}
+
+QPushButton:disabled {
+    color: @pushbutton.border.color;
+}
+
 QToolButton {
     border: none;
 }
@@ -93,6 +102,9 @@ QSearchBar QPushButton#search_button {
     border-right-color: @inner_widget.background.color;
     border-top-color: @inner_widget.background.color;
     border-bottom-color: @inner_widget.background.color;
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 QSearchBar QPushButton#search_button[focused = "true"] {
@@ -117,8 +129,9 @@ QSearchBar#name_filter QPushButton#search_button {
 
 
 QPushButton#ok {
-    background-color: @outer_widget.background.color;
+    background-color: @button_ok.background.color;
     color: @button_ok.font.color;
+    border-color: @button_ok.background.color;
     font-weight: bold;
 }
 
@@ -138,7 +151,6 @@ QPushButton#bt_upgrade {
     qproperty-icon: url("@style_dir/img/update.svg");
     border: 0.5px solid @upgrade.color;
     background: @outer_widget.background.color;
-    border-radius: 2px;
     color: @upgrade.color;
 }
 
