@@ -657,12 +657,6 @@ class IconButton(QToolButton):
         if tooltip:
             self.setToolTip(tooltip)
 
-        # layout = QHBoxLayout()
-        # layout.setContentsMargins(0, 0, 0, 0)
-        # layout.setAlignment(align)
-        # layout.addWidget(self.bt)
-        #self.setLayout(layout)
-
     def setEnabled(self, enabled):
         super(IconButton, self).setEnabled(enabled)
 

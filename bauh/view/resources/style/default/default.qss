@@ -243,12 +243,20 @@ PackagesTable IconButton#app_run {
     qproperty-icon: url("@style_dir/img/app_play.svg");
 }
 
+ManageWindow PackagesTable IconButton#app_run[_enabled = "false"] {
+    qproperty-icon: url("@style_dir/img/app_play_disabled.svg");
+}
+
 PackagesTable IconButton#app_actions {
     qproperty-icon: url("@style_dir/img/app_actions.svg");
 }
 
 PackagesTable IconButton#app_screenshots {
     qproperty-icon: url("@style_dir/img/camera.svg");
+}
+
+ManageWindow PackagesTable IconButton#app_screenshots[_enabled = "false"] {
+    qproperty-icon: url("@style_dir/img/camera_disabled.svg");
 }
 
 PackagesTable IconButton#app_info {

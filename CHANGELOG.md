@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     - tooltip for the label displaying the number of applications on the table / available [#138](https://github.com/vinifmor/bauh/issues/138)
     - screenshots dialog resizing behavior
     - "name filter" now requires ENTER or click to be triggered
+    - some app actions icons are now displayed with a different picture when disabled to prevent confusion (e.g: launch, screenshots) [#138](https://github.com/vinifmor/bauh/issues/138)
 - Settings
     - "Applications displayed" property (Interface) tooltip now informs that 0 (zero) can be used for no limit [#138](https://github.com/vinifmor/bauh/issues/138)
 

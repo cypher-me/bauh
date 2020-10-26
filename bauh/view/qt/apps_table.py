@@ -515,7 +515,11 @@ class PackagesTable(QTableWidget):
 
             bt = IconButton(i18n=self.i18n, action=run, tooltip=self.i18n['action.run.tooltip'])
             bt.setObjectName('app_run')
-            bt.setEnabled(pkg.model.can_be_run())
+
+            if not pkg.model.can_be_run():
+                bt.setEnabled(False)
+                bt.setProperty('_enabled', 'false')
+
             toolbar.layout().addWidget(bt)
 
         settings = self.has_any_settings(pkg)
@@ -536,7 +540,11 @@ class PackagesTable(QTableWidget):
             bt = IconButton(i18n=self.i18n, action=show_screenshots,
                             tooltip=self.i18n['action.screenshots.tooltip'])
             bt.setObjectName('app_screenshots')
-            bt.setEnabled(bool(pkg.model.has_screenshots()))
+
+            if not pkg.model.has_screenshots():
+                bt.setEnabled(False)
+                bt.setProperty('_enabled', 'false')
+
             toolbar.layout().addWidget(bt)
 
         def show_info():
