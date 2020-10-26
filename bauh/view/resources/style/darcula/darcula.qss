@@ -21,12 +21,12 @@ QCheckBox::indicator:checked:disabled {
 }
 
 QPushButton {
-    border: 0.5px solid @pushbutton.border.color;
+    border: 0.5px solid @widget.border.color;
     border-radius: 5px;
 }
 
 QPushButton:disabled {
-    color: @pushbutton.border.color;
+    color: @widget.border.color;
 }
 
 QToolButton {
@@ -87,9 +87,9 @@ QProgressBar::chunk {
 }
 
 QSearchBar QLabel#lb_left_corner {
-     border-left-color: @inner_widget.background.color;
-     border-top-color: @inner_widget.background.color;
-     border-bottom-color: @inner_widget.background.color;
+     border-left-color: @widget.border.color;
+     border-top-color: @widget.border.color;
+     border-bottom-color: @widget.border.color;
 }
 
 QSearchBar QLabel#lb_left_corner[focused = "true"] {
@@ -99,9 +99,9 @@ QSearchBar QLabel#lb_left_corner[focused = "true"] {
 }
 
 QSearchBar QPushButton#search_button {
-    border-right-color: @inner_widget.background.color;
-    border-top-color: @inner_widget.background.color;
-    border-bottom-color: @inner_widget.background.color;
+    border-right-color: @widget.border.color;
+    border-top-color: @widget.border.color;
+    border-bottom-color: @widget.border.color;
     border-left: none;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -111,11 +111,12 @@ QSearchBar QPushButton#search_button[focused = "true"] {
     border-right-color: @focus.border.color;
     border-top-color: @focus.border.color;
     border-bottom-color: @focus.border.color;
+    qproperty-icon: url("@style_dir/img/search_focused.svg");
 }
 
 QSearchBar QLineEdit#inp_search {
-     border-bottom-color: @inner_widget.background.color;
-     border-top-color: @inner_widget.background.color;
+     border-bottom-color: @widget.border.color;
+     border-top-color: @widget.border.color;
 }
 
 QSearchBar QLineEdit#inp_search:focus {
@@ -127,6 +128,9 @@ QSearchBar#name_filter QPushButton#search_button {
     qproperty-icon: url("@style_dir/img/filter.svg");
 }
 
+QSearchBar#name_filter QPushButton#search_button[focused = "true"] {
+    qproperty-icon: url("@style_dir/img/filter_focused.svg");
+}
 
 QPushButton#ok {
     background-color: @button_ok.background.color;
