@@ -44,15 +44,36 @@ QTableWidget {
     border: 1px solid @table.border.color;
 }
 
+QComboBox, ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types {
+    border: 1px solid @combobox.border.color;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+QComboxBox:!editable, QComboBox::drop-down:editable  {
+    border-left: 0;
+}
+
+QComboBox::down-arrow {
+    image: url("@style_dir/img/combo_arrow_down.svg");
+    height: 8px;
+    width: 8px;
+}
+
 QTableWidget, QPlainTextEdit, QTableWidget QWidget[container = "true"], QTableWidget QLabel, QTableWidget QToolBar, QTableWidget QWidget[spacer = "true"] {
     background-color: @inner_widget.background.color;
     selection-background-color: @inner_widget.background.color;
 }
 
+
 QComboBox, QComboBox QAbstractItemView, QMenu QAbstractItemView {
     selection-background-color: @menu.item.selected.background.color;
     selection-color: @menu.item.selected.font.color;
     color: @font.color;
+}
+
+QMenu QPushButton {
+    border-radius: 0px;
 }
 
 QMenu QPushButton:hover {
