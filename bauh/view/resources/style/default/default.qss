@@ -173,6 +173,10 @@ QCheckBox#check_updates { }
 
 QCheckBox#check_apps { }
 
+ManageWindow QComboBox#combo_categories {
+    min-width: 100px;
+}
+
 ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types {
     height: 20px;
     border-color: @border.color;

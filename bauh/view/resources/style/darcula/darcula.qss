@@ -56,8 +56,9 @@ QComboxBox:!editable, QComboBox::drop-down:editable  {
 
 QComboBox::down-arrow {
     image: url("@style_dir/img/combo_arrow_down.svg");
-    height: 8px;
-    width: 8px;
+    height: 10px;
+    width: 10px;
+    padding-right: 10px;
 }
 
 QTableWidget, QPlainTextEdit, QTableWidget QWidget[container = "true"], QTableWidget QLabel, QTableWidget QToolBar, QTableWidget QWidget[spacer = "true"] {

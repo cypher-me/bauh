@@ -3,7 +3,7 @@ import traceback
 from pathlib import Path
 from typing import Tuple, Dict, Optional, Set
 
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import Qt, QTimer, QEvent, QObject
 from PyQt5.QtGui import QIcon, QIntValidator, QCursor, QFocusEvent
 from PyQt5.QtWidgets import QRadioButton, QGroupBox, QCheckBox, QComboBox, QGridLayout, QWidget, \
     QLabel, QSizePolicy, QLineEdit, QToolButton, QHBoxLayout, QFormLayout, QFileDialog, QTabWidget, QVBoxLayout, \
