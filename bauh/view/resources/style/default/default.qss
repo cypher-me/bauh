@@ -138,6 +138,8 @@ QSearchBar QLabel#lb_left_corner {
 }
 
 QSearchBar QPushButton#search_button {
+    qproperty-icon: url("@style_dir/img/search.svg");
+    qproperty-iconSize: 10px 10px;
     padding-right: 10px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -145,8 +147,9 @@ QSearchBar QPushButton#search_button {
     border-top: 1px solid @border.color;
     border-bottom: 1px solid @border.color;
     height: 30px;
-    qproperty-icon: url("@style_dir/img/search.svg");
-    qproperty-iconSize: 10px 10px;
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 QSearchBar QLineEdit#inp_search {
@@ -156,6 +159,10 @@ QSearchBar QLineEdit#inp_search {
      width: 300px;
      border-bottom: 1px solid @border.color;
      border-top: 1px solid @border.color;
+     border-left: none;
+     border-right: none;
+     border-radius: 0;
+     padding: 0;
 }
 
 QSearchBar#name_filter QLabel#lb_left_corner, QSearchBar#name_filter QLineEdit#inp_search, QSearchBar#name_filter QPushButton#search_button  {
@@ -528,7 +535,9 @@ InfoDialog QPushButton#back { }
 
 InfoDialog QPushButton#close { }
 
-InfoDialog QPushButton#show { }
+InfoDialog QPushButton#show {
+    height: 14px;
+}
 
 ScreenshotsDialog {}
 
