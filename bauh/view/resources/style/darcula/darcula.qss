@@ -21,12 +21,14 @@ QCheckBox::indicator:checked:disabled {
 }
 
 QPushButton {
-    border: 0.5px solid @widget.border.color;
+    border: 1px solid @pushbutton.border.color;
     border-radius: 5px;
+    background-color: @pushbutton.background.color;
 }
 
 QPushButton:disabled {
-    color: @widget.border.color;
+    background-color: @pushbutton.disabled.background.color;
+    color: @pushbutton.disabled.font.color;
 }
 
 QToolButton {
@@ -38,6 +40,9 @@ QToolButton:hover {
     border-radius: 3px;
 }
 
+QTableWidget {
+    border: 1px solid @table.border.color;
+}
 
 QTableWidget, QPlainTextEdit, QTableWidget QWidget[container = "true"], QTableWidget QLabel, QTableWidget QToolBar, QTableWidget QWidget[spacer = "true"] {
     background-color: @inner_widget.background.color;
@@ -86,10 +91,14 @@ QProgressBar::chunk {
     background-color: @progressbar.fill.color;
 }
 
+QSearchBar * {
+    background-color: @outer_widget.background.color;
+}
+
 QSearchBar QLabel#lb_left_corner {
-     border-left-color: @widget.border.color;
-     border-top-color: @widget.border.color;
-     border-bottom-color: @widget.border.color;
+     border-left-color: @lineedit.border.color;
+     border-top-color: @lineedit.border.color;
+     border-bottom-color: @lineedit.border.color;
 }
 
 QSearchBar QLabel#lb_left_corner[focused = "true"] {
@@ -99,9 +108,9 @@ QSearchBar QLabel#lb_left_corner[focused = "true"] {
 }
 
 QSearchBar QPushButton#search_button {
-    border-right-color: @widget.border.color;
-    border-top-color: @widget.border.color;
-    border-bottom-color: @widget.border.color;
+    border-right-color: @lineedit.border.color;
+    border-top-color: @lineedit.border.color;
+    border-bottom-color: @lineedit.border.color;
     border-left: none;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -115,8 +124,8 @@ QSearchBar QPushButton#search_button[focused = "true"] {
 }
 
 QSearchBar QLineEdit#inp_search {
-     border-bottom-color: @widget.border.color;
-     border-top-color: @widget.border.color;
+     border-bottom-color: @lineedit.border.color;
+     border-top-color: @lineedit.border.color;
 }
 
 QSearchBar QLineEdit#inp_search:focus {
