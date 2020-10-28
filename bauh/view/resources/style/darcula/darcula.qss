@@ -44,13 +44,20 @@ QTableWidget {
     border: 1px solid @table.border.color;
 }
 
-QLineEdit, QPlainTextEdit {
+QLineEdit {
     selection-color: @menu.item.selected.font.color;
     selection-background-color: @menu.item.selected.background.color;
     background-color: @lineedit.background.color;
     border: 1px solid @lineedit.border.color;
     border-radius: 5px;
     padding: 3px;
+}
+
+QPlainTextEdit {
+    selection-color: @menu.item.selected.font.color;
+    selection-background-color: @menu.item.selected.background.color;
+    color: @font.color;
+    background-color: @inner_widget.background.color;
 }
 
 QScrollBar {
