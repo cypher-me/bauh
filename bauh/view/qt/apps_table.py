@@ -88,6 +88,8 @@ class PackagesTable(QTableWidget):
         self.setHorizontalHeaderLabels(['' for _ in range(self.columnCount())])
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
+        self.horizontalScrollBar().setCursor(QCursor(Qt.PointingHandCursor))
+        self.verticalScrollBar().setCursor(QCursor(Qt.PointingHandCursor))
 
         self.network_man = QNetworkAccessManager()
         self.network_man.finished.connect(self._load_icon_and_cache)

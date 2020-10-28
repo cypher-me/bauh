@@ -171,6 +171,8 @@ class PreparePanel(QWidget, TaskManager):
         self.table.horizontalHeader().setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
         self.table.setColumnCount(4)
         self.table.setHorizontalHeaderLabels(['' for _ in range(4)])
+        self.table.horizontalScrollBar().setCursor(QCursor(Qt.PointingHandCursor))
+        self.table.verticalScrollBar().setCursor(QCursor(Qt.PointingHandCursor))
         self.layout().addWidget(self.table)
 
         self.textarea_details = QPlainTextEdit(self)

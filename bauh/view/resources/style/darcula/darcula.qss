@@ -53,6 +53,22 @@ QLineEdit, QPlainTextEdit {
     padding: 3px;
 }
 
+QScrollBar {
+    background-color: @inner_widget.background.color;
+}
+
+QScrollBar::vertical {
+    max-width: 10px;
+}
+
+QScrollBar::handle {
+    background-color: @scrollbar.handle.background.color;
+}
+
+QScrollBar::add-line, QScrollBar::sub-line, QScrollBar::add-page, QScrollBar::sub-page {
+    height: 0px;
+}
+
 
 QComboBox, ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types, QSpinBox {
     border: 1px solid @combobox.border.color;
