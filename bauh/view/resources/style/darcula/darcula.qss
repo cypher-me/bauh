@@ -40,10 +40,6 @@ QToolButton:hover {
     border-radius: 3px;
 }
 
-QTableWidget {
-    border: 1px solid @table.border.color;
-}
-
 QLineEdit {
     selection-color: @menu.item.selected.font.color;
     selection-background-color: @menu.item.selected.background.color;
@@ -75,7 +71,6 @@ QScrollBar::handle {
 QScrollBar::add-line, QScrollBar::sub-line, QScrollBar::add-page, QScrollBar::sub-page {
     height: 0px;
 }
-
 
 QComboBox, ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types, QSpinBox {
     border: 1px solid @combobox.border.color;
@@ -111,11 +106,20 @@ QSpinBox::up-arrow:disabled, QSpinBox::up-arrow:off, QSpinBox::down-arrow:disabl
    image: none;
 }
 
-QTableWidget, QTableWidget QWidget[container = "true"], QTableWidget QLabel, QTableWidget QToolBar, QTableWidget QWidget[spacer = "true"] {
+QTableWidget {
+    border: 1px solid @table.border.color;
     background-color: @inner_widget.background.color;
-    selection-background-color: @inner_widget.background.color;
+    selection-background-color: @table.selection.background.color;
 }
 
+QTableWidget * {
+    background-color: none;
+    color: @font.color;
+}
+
+QTableWidget QToolButton:hover {
+    background-color: @table.button.hover.background.color;
+}
 
 QComboBox, QComboBox QAbstractItemView, QMenu QAbstractItemView {
     selection-background-color: @menu.item.selected.background.color;
@@ -130,14 +134,6 @@ QMenu QPushButton {
 QMenu QPushButton:hover {
     background-color: @menu.item.selected.background.color;
     color: @menu.item.selected.font.color;
-}
-
-PackagesTable QPushButton, QTableWidget QToolButton {
-    background-color: @inner_widget.background.color;
-}
-
-PackagesTable QPushButton:hover, QTableWidget QToolButton:hover {
-    background: @outer_widget.background.color;
 }
 
 QLabel[error = "true"] {
@@ -333,12 +329,12 @@ PackagesTable QLabel[publisher_known = "false"]{
 }
 
 PackagesTable QToolButton#bt_install {
-    background-color: @inner_widget.background.color;
+    background-color: transparent;
     color: @table.bt_install.font.color;
 }
 
-PackagesTable QToolButton#bt_install:hover {
-    background-color: @toolbutton.hover.background.color;
+PackagesTable QToolButton#bt_install:hover, PackagesTable QToolButton#bt_uninstall:hover {
+    background-color: @table.button.hover.background.color;
 }
 
 PackagesTable QToolButton#bt_install:disabled {
@@ -346,6 +342,7 @@ PackagesTable QToolButton#bt_install:disabled {
 }
 
 PackagesTable QToolButton#bt_uninstall {
+    background-color: transparent;
     color: @table.bt_uninstall.font.color;
 }
 
