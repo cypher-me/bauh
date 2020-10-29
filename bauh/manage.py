@@ -51,7 +51,7 @@ def new_manage_panel(app_args: Namespace, app_config: dict, logger: logging.Logg
 
     manager = GenericSoftwareManager(managers, context=context, config=app_config)
 
-    app = new_qt_application(app_config, quit_on_last_closed=True)
+    app = new_qt_application(app_config=app_config, logger=logger, quit_on_last_closed=True)
 
     if app_args.settings:  # only settings window
         manager.cache_available_managers()

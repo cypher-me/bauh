@@ -18,9 +18,12 @@ RE_VAR_PATTERN = re.compile(r'^@[\w.\-_]+')
 
 class StylesheetMetadata:
 
+    ATTR_MAP = {'abstract': 'abstract',
+                'allow_hardcoded_stylesheets': 'hardcoded_stylesheets'}
+
     def __init__(self, file_path: str, default: bool, default_name: Optional[str] = None,
                  default_description: Optional[str] = None, version: Optional[str] = None,
-                 root_sheet: Optional[str] = None):
+                 root_sheet: Optional[str] = None, abstract: bool = False):
         self.names = {}
         self.default_name = default_name
         self.descriptions = {}
@@ -32,6 +35,7 @@ class StylesheetMetadata:
         self.file_dir = '/'.join(file_path.split('/')[0:-1])
         self.default = default
         self.key = self.file_path.split('/')[-1].split('.')[0] if self.default else self.file_path
+        self.abstract = abstract
 
     def __eq__(self, other) -> bool:
         if isinstance(other, StylesheetMetadata):
@@ -91,13 +95,16 @@ def read_stylesheet_metada(key: str, file_path: str) -> StylesheetMetadata:
                         meta_obj.default_name = val
                     elif field == 'description':
                         meta_obj.default_description = val
-                    elif field == 'allow_hardcoded_stylesheets':
+                    elif field in {'abstract', 'allow_hardcoded_stylesheets'}:
                         boolean = val.lower()
 
+                        meta_field = StylesheetMetadata.ATTR_MAP[field]
+
                         if boolean == 'true':
-                            meta_obj.hardcoded_stylesheets = True
+                            setattr(meta_obj, meta_field, True)
                         elif boolean == 'false':
-                            meta_obj.hardcoded_stylesheets = False
+                            setattr(meta_obj, meta_field, False)
+
                     else:
                         i18n_field = RE_META_I18N_FIELDS.findall(field)
 
@@ -130,17 +137,23 @@ def read_all_stylesheets_metadata() -> Set[StylesheetMetadata]:
     return stylesheets
 
 
-def process_stylesheet(key: str, file_path: str, available_sheets: Optional[Dict[str, str]]) -> Optional[Tuple[str, StylesheetMetadata]]:
-    with open(file_path) as f:
-        stylesheet_str = f.read()
-
-    if stylesheet_str:
-        metadata = read_stylesheet_metada(key=key, file_path=file_path)
-
+def process_stylesheet(file_path: str, stylesheet_str: str, metadata: StylesheetMetadata,
+                       available_sheets: Optional[Dict[str, str]]) -> Optional[Tuple[str, StylesheetMetadata]]:
+    if stylesheet_str and metadata:
         root_sheet = None
         if metadata.root_sheet and metadata.root_sheet in available_sheets:
-            root_sheet = process_stylesheet(key=metadata.root_sheet, file_path=available_sheets[metadata.root_sheet],
-                                            available_sheets=available_sheets)
+            root_file = available_sheets[metadata.root_sheet]
+
+            if os.path.isfile(root_file):
+                with open(root_file) as f:
+                    root_stylesheet_str = f.read()
+
+                if root_stylesheet_str:
+                    root_metadata = read_stylesheet_metada(key=metadata.root_sheet, file_path=root_file)
+                    root_sheet = process_stylesheet(file_path=root_file,
+                                                    stylesheet_str=root_stylesheet_str,
+                                                    metadata=root_metadata,
+                                                    available_sheets=available_sheets)
 
         var_map = _read_var_file(file_path)
         var_map['resources'] = resource.get_path('')

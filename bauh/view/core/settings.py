@@ -232,7 +232,7 @@ class GenericSettingsManager:
 
         stylesheet_opts = [InputOption(label=s.get_i18n_name(self.i18n),
                                        tooltip=s.get_i18n_description(self.i18n),
-                                       value=s.key) for s in read_all_stylesheets_metadata()]
+                                       value=s.key) for s in read_all_stylesheets_metadata() if not s.abstract]
         stylesheet_opts.sort(key=attrgetter('label'))
 
         stylesheet, default_stylesheet = core_config['ui']['stylesheet'], None

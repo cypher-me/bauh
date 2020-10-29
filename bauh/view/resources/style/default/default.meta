@@ -1,8 +1,9 @@
 name=Default
 name[pt]=Padrão
 name[es]=Predeterminada
-description=Default stylesheet
-description[pt]=Folha de estilo padrão
-description[es]=Hoja de estilo predeterminada
+description=Base theme without icons and colors
+description[pt]=Tema base sem ícones e cores
+description[es]=Tema base sin iconos y colores
 version=1.0
 allow_hardcoded_stylesheets=true
+abstract=true

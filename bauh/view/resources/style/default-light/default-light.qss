@@ -1,0 +1,216 @@
+QProgressBar::chunk {
+    background-color: @progressbar.fill.color;
+}
+
+QCheckBox::indicator:unchecked {
+  image: url("@style_dir/img/checkbox_unchecked.svg");
+}
+
+QCheckBox::indicator:checked {
+  image: url("@style_dir/img/checkbox_checked.svg");
+}
+
+QMenu QPushButton:hover {
+    background-color: @menu.item.selected.background.color;
+}
+
+QMenu#app_actions QPushButton#app_history {
+    qproperty-icon: url("@style_dir/img/history.svg");
+}
+
+QMenu#app_actions QPushButton#app_downgrade {
+    qproperty-icon: url("@style_dir/img/downgrade.svg");
+}
+
+QMenu#app_actions QPushButton#ignore_updates {
+    qproperty-icon: url("@style_dir/img/ignore_update.svg");
+}
+
+QMenu#app_actions QPushButton#revert_ignore_updates {
+    qproperty-icon: url("@style_dir/img/revert_update_ignored.svg");
+}
+
+QLabel[error = "true"] {
+    color: @error.color;
+}
+
+QLabel[help_icon = "true"] {
+    qproperty-pixmap: url("@style_dir/img/about.svg");
+}
+
+QLabel[tip_icon = "true"] {
+    qproperty-pixmap: url("@style_dir/img/about.svg");
+}
+
+QPlainTextEdit[console = 'true'] {
+    background: @console.background.color;
+    color: @console.font.color;
+}
+
+QInputDialog#dialog_password > QLineEdit {
+    border-color: @color.blue_light;
+}
+
+QPushButton#ok {
+    background: @button_ok.background.color;
+    color: @button_ok.font.color;
+    font-weight: bold;
+}
+
+QPushButton#ok:disabled {
+    background-color: @disabled.color;
+}
+
+MultipleSelectQt {
+    border-color: @border.color;
+}
+
+QSearchBar QLabel#lb_left_corner {
+     border-left-color: @border.color;
+     border-top-color: @border.color;
+     border-bottom-color: @border.color;
+}
+
+QSearchBar QPushButton#search_button {
+    qproperty-icon: url("@style_dir/img/search.svg");
+    border-right-color: @border.color;
+    border-top-color: @border.color;
+    border-bottom-color: @border.color;
+}
+
+QSearchBar QLineEdit#inp_search {
+     border-bottom-color: @border.color;
+     border-top-color: @border.color;
+}
+
+QSearchBar#name_filter QPushButton#search_button {
+    qproperty-icon: url("@style_dir/img/filter.svg");
+}
+
+FormQt IconButton#clean_field {
+    qproperty-icon: url("@style_dir/img/clean.svg");
+}
+
+PreparePanel QTableWidget#tasks {
+    background-color: @task.background.color;
+}
+
+PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress[status = "done"] {
+    color: @task.done.color;
+}
+
+UpgradeToggleButton {
+    qproperty-icon: url("@style_dir/img/app_update.svg");
+    background: @upgrade.color;
+}
+
+UpgradeToggleButton:checked {
+    background: grey;
+}
+
+UpgradeToggleButton[enabled = "false"] {
+    qproperty-icon: url("@style_dir/img/exclamation.svg");
+    background: #dda739;
+}
+
+ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types {
+    border-color: @border.color;
+}
+
+ManageWindow QSearchBar#name_filter {
+    color: grey;
+}
+
+ManageWindow QPushButton#bt_refresh {
+    qproperty-icon: url("@style_dir/img/refresh.svg");
+}
+
+ManageWindow QPushButton#bt_installed {
+    qproperty-icon: url("@style_dir/img/disk.svg");
+}
+
+ManageWindow QPushButton#bt_suggestions {
+    qproperty-icon: url("@style_dir/img/suggestions.svg");
+}
+
+ManageWindow QPushButton#bt_upgrade {
+    background: @upgrade.color;
+    color: @button_upgrade.font.color;
+    qproperty-icon: url("@style_dir/img/app_update.svg");
+}
+
+ManageWindow IconButton#custom_actions {
+    qproperty-icon: url("@style_dir/img/custom_actions.svg");
+}
+
+ManageWindow IconButton#settings {
+    qproperty-icon: url("@style_dir/img/settings.svg");
+}
+
+ManageWindow IconButton#about {
+    qproperty-icon: url("@style_dir/img/info.svg");
+}
+
+PackagesTable QLabel#icon_publisher_verified {
+    qproperty-pixmap: url("@style_dir/img/verified.svg");
+}
+
+PackagesTable QLabel[publisher_known = "false"]{
+    color: @table.app_publisher.unknown.font.color;
+}
+
+PackagesTable IconButton#app_run {
+    qproperty-icon: url("@style_dir/img/app_play.svg");
+}
+
+PackagesTable IconButton#app_run[_enabled = "false"] {
+    qproperty-icon: url("@style_dir/img/app_play_disabled.svg");
+}
+
+PackagesTable IconButton#app_actions {
+    qproperty-icon: url("@style_dir/img/app_actions.svg");
+}
+
+PackagesTable IconButton#app_screenshots {
+    qproperty-icon: url("@style_dir/img/camera.svg");
+}
+
+PackagesTable IconButton#app_screenshots[_enabled = "false"] {
+    qproperty-icon: url("@style_dir/img/camera_disabled.svg");
+}
+
+PackagesTable IconButton#app_info {
+    qproperty-icon: url("@style_dir/img/app_info.svg");
+}
+
+PackagesTable QToolButton#bt_install {
+    background: @table.bt_install.background.color;
+    color: @table.bt_install.font.color;
+}
+
+PackagesTable QToolButton#bt_uninstall {
+    color: @table.bt_uninstall.background.color;
+}
+
+PackagesTable QLabel#app_version[update = "true"] {
+    color: @table.app_version.update.color;
+    font-weight: @table.app_version.update.weight;
+}
+
+PackagesTable QLabel#label_version_ignored {
+    color: @color_brown;
+}
+
+AboutDialog QLabel#logo {
+    qproperty-pixmap: url("@resources/img/logo.svg");
+}
+
+HistoryDialog QTableWidget QLabel[outdated = "true"] {
+    color: white;
+    background: @history.version.outdated;
+}
+
+HistoryDialog QTableWidget QLabel[outdated = "false"] {
+    color: white;
+    background: @history.version.updated;
+}
