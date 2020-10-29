@@ -3,7 +3,7 @@ from enum import Enum
 from typing import List, Set, Optional
 
 
-class MessageType:
+class MessageType(Enum):
     INFO = 0
     WARNING = 1
     ERROR = 2
