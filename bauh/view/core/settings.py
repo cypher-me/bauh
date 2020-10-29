@@ -223,6 +223,7 @@ class GenericSettingsManager:
             default_style = default_style[0]
 
         select_style = SingleSelectComponent(label=self.i18n['style'].capitalize(),
+                                             tooltip=self.i18n['core.config.ui.style.tooltip'],
                                              options=style_opts,
                                              default_option=default_style,
                                              type_=SelectViewType.COMBO,

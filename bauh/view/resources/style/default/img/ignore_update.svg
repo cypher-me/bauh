@@ -11,15 +11,15 @@
    id="Capa_1"
    x="0px"
    y="0px"
-   viewBox="0 0 23.515307 24"
+   viewBox="0 0 512.00001 512"
    xml:space="preserve"
    sodipodi:docname="ignore_update.svg"
-   width="23.515306"
-   height="24"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"><metadata
+   width="512"
+   height="512"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"><metadata
    id="metadata977"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
    id="defs975" /><sodipodi:namedview
    inkscape:document-rotation="0"
    pagecolor="#ffffff"
@@ -39,9 +39,9 @@
    fit-margin-left="0"
    fit-margin-right="0"
    fit-margin-bottom="0"
-   inkscape:zoom="9.4874926"
-   inkscape:cx="25.836555"
-   inkscape:cy="15.198259"
+   inkscape:zoom="0.8385838"
+   inkscape:cx="209.52912"
+   inkscape:cy="212.43237"
    inkscape:window-x="0"
    inkscape:window-y="0"
    inkscape:window-maximized="1"
@@ -108,9 +108,9 @@
    transform="translate(-99.310818,-31.505501)">
 </g>
 <g
-   id="g982"><g
+   id="g969"><g
      id="g6"
-     transform="matrix(0.90262437,0,0,0.97767784,0.02353571,-0.4674393)"
+     transform="matrix(19.029474,0,0,20.61178,8.6168435,-6.8433384)"
      style="fill:#91a069;fill-opacity:1;stroke:#91a069;stroke-width:0.0521502;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"><path
        d="m 25,17 h -2 c -0.6,0 -1,0.4 -1,1 v 2.5 C 22,20.8 21.8,21 21.5,21 H 4.5 C 4.2,21 4,20.8 4,20.5 V 18 C 4,17.4 3.6,17 3,17 H 1 c -0.6,0 -1,0.4 -1,1 v 6 c 0,0.6 0.4,1 1,1 h 24 c 0.6,0 1,-0.4 1,-1 v -6 c 0,-0.6 -0.4,-1 -1,-1 z"
        id="path2"
@@ -120,7 +120,7 @@
        id="path4"
        inkscape:connector-curvature="0"
        style="fill:#91a069;fill-opacity:1;stroke:#91a069;stroke-width:0.0521502;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" /></g><g
-     transform="matrix(-0.05511385,0,0,0.05511385,23.515284,-1.6640481e-7)"
+     transform="matrix(-1.1619313,0,0,1.1619313,503.8789,3.0113929)"
      style="fill:#ff0000"
      id="g940">
 	<g

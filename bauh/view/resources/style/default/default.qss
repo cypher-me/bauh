@@ -1,5 +1,70 @@
+/** Breath-like changes */
+
+QPushButton {
+    padding: 5px;
+}
+
+QSearchBar QPushButton {
+    padding: inherit;
+}
+
+QToolButton {
+    padding: 5px;
+}
+
+QTableWidget QToolButton {
+    padding: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+QTableWidget QToolButton#bt_task {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+QTableWidget QToolButton[text_only = "true"] {
+    min-width: 80px;
+}
+
+ConfirmationDialog QPushButton, QWidget[container = "true"] QPushButton, InfoDialog QPushButton {
+    min-width: 80px;
+}
+
+QCheckBox:focus {
+  border: none;
+}
+
+QCheckBox::indicator {
+  height: 25px;
+  width: 25px;
+}
+
+ManageWindow QCheckBox#check_details::indicator {
+    height: 20px;
+    width: 20px;
+}
+
+QCheckBox::indicator:unchecked {
+  image: url("@style_dir/img/checkbox_unchecked.svg");
+}
+
+QCheckBox::indicator:checked {
+  image: url("@style_dir/img/checkbox_checked.svg");
+}
+
+ConfirmationDialog UpgradeToggleButton {
+    height: 10px;
+}
+
+/** --- */
+
 QLabel[error = "true"] {
-    color: @color_error;
+    color: @error.color;
+}
+
+QCustomToolbar QWidget[spacer = "true"] {
+    min-width: 5px;
 }
 
 QLabel[help_icon = "true"] {
@@ -21,8 +86,8 @@ QLabel[tip_icon = "true"] {
 }
 
 QPlainTextEdit[console = 'true'] {
-    background: black;
-    color: white;
+    background: @console.background.color;
+    color: @console.font.color;
 }
 
 PreparePanel QLabel#prepare_status {
@@ -31,7 +96,7 @@ PreparePanel QLabel#prepare_status {
 }
 
 PreparePanel QTableWidget#tasks {
-    background-color: transparent;
+    background-color: @task.background.color;
 }
 
 PreparePanel QPlainTextEdit#task_details { }
@@ -46,12 +111,12 @@ PreparePanel QLabel#task_status[status = "running"], QLabel#task_progress[status
     font-weight: bold;
 }
 
-PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress_finished[status = "done"] {
-    color: @color_green;
+PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress[status = "done"] {
+    color: @task.done.color;
     text-decoration: line-through;
 }
 
-QProgressBar::chunk { background-color: @color_green; }
+QProgressBar::chunk { background-color: @progressbar.fill.color; }
 
 QProgressBar#prepare_progress { }
 
@@ -66,22 +131,25 @@ QLabel#label_status {
 QSearchBar QLabel#lb_left_corner {
      border-top-left-radius: 5px;
      border-bottom-left-radius: 5px;
-     border-left: 1px solid @color_search_border;
-     border-top: 1px solid @color_search_border;
-     border-bottom: 1px solid @color_search_border;
+     border-left: 1px solid @border.color;
+     border-top: 1px solid @border.color;
+     border-bottom: 1px solid @border.color;
      border-right: 0px;
 }
 
 QSearchBar QPushButton#search_button {
+    qproperty-icon: url("@style_dir/img/search.svg");
+    qproperty-iconSize: 10px 10px;
     padding-right: 10px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
-    border-right: 1px solid @color_search_border;
-    border-top: 1px solid @color_search_border;
-    border-bottom: 1px solid @color_search_border;
+    border-right: 1px solid @border.color;
+    border-top: 1px solid @border.color;
+    border-bottom: 1px solid @border.color;
     height: 30px;
-    qproperty-icon: url("@style_dir/img/search.svg");
-    qproperty-iconSize: 10px 10px;
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 QSearchBar QLineEdit#inp_search {
@@ -89,8 +157,12 @@ QSearchBar QLineEdit#inp_search {
      height: 30px;
      font-size: 12px;
      width: 300px;
-     border-bottom: 1px solid @color_search_border;
-     border-top: 1px solid @color_search_border;
+     border-bottom: 1px solid @border.color;
+     border-top: 1px solid @border.color;
+     border-left: none;
+     border-right: none;
+     border-radius: 0;
+     padding: 0;
 }
 
 QSearchBar#name_filter QLabel#lb_left_corner, QSearchBar#name_filter QLineEdit#inp_search, QSearchBar#name_filter QPushButton#search_button  {
@@ -108,9 +180,13 @@ QCheckBox#check_updates { }
 
 QCheckBox#check_apps { }
 
+ManageWindow QComboBox#combo_categories {
+    min-width: 100px;
+}
+
 ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types {
     height: 20px;
-    border-color: @color_search_border;
+    border-color: @border.color;
 }
 
 QComboBox#combo_types > QLineEdit, QComboBox#combo_categories > QLineEdit {
@@ -140,8 +216,8 @@ QPushButton#bt_suggestions {
 }
 
 QPushButton#bt_upgrade {
-    background: @color_green;
-    color: white;
+    background: @upgrade.color;
+    color: @button_upgrade.font.color;
     qproperty-icon: url("@style_dir/img/app_update.svg");
 }
 
@@ -167,38 +243,46 @@ PackagesTable QLabel#icon_publisher_verified {
 }
 
 PackagesTable QLabel[publisher_known = "false"]{
-    color: @color_publisher_unknown;
+    color: @table.app_publisher.unknown.font.color;
 }
 
 PackagesTable QLabel[icon = "true"]  {
     qproperty-alignment: AlignCenter;
 }
 
-PackagesTable IconButton#app_run > QToolButton {
+PackagesTable IconButton#app_run {
     qproperty-icon: url("@style_dir/img/app_play.svg");
 }
 
-PackagesTable IconButton#app_actions > QToolButton {
+ManageWindow PackagesTable IconButton#app_run[_enabled = "false"] {
+    qproperty-icon: url("@style_dir/img/app_play_disabled.svg");
+}
+
+PackagesTable IconButton#app_actions {
     qproperty-icon: url("@style_dir/img/app_actions.svg");
 }
 
-PackagesTable IconButton#app_screenshots > QToolButton {
+PackagesTable IconButton#app_screenshots {
     qproperty-icon: url("@style_dir/img/camera.svg");
 }
 
-PackagesTable IconButton#app_info > QToolButton {
+ManageWindow PackagesTable IconButton#app_screenshots[_enabled = "false"] {
+    qproperty-icon: url("@style_dir/img/camera_disabled.svg");
+}
+
+PackagesTable IconButton#app_info {
     qproperty-icon: url("@style_dir/img/app_info.svg");
 }
 
 PackagesTable QToolButton#bt_install {
-    background: @color_green;
-    color: white;
+    background: @table.bt_install.background.color;
+    color: @table.bt_install.font.color;
     font-size: 10px;
     font-weight: bold;
 }
 
 PackagesTable QToolButton#bt_uninstall {
-    color: @color_brown;
+    color: @table.bt_uninstall.background.color;
     font-size: 10px;
     font-weight: bold;
 }
@@ -213,7 +297,7 @@ QMenu QPushButton {
 }
 
 QMenu QPushButton:hover {
-    background-color: #37abc8ff;
+    background-color: @menu.item.selected.background.color;
 }
 
 QMenu#app_actions QPushButton#app_history {
@@ -246,15 +330,15 @@ ManageWindow QLabel#label_substatus { }
 
 ManageWindow QWidget#container_bottom { }
 
-ManageWindow IconButton#custom_actions > QToolButton {
+ManageWindow IconButton#custom_actions {
     qproperty-icon: url("@style_dir/img/custom_actions.svg");
 }
 
-ManageWindow IconButton#settings > QToolButton {
+ManageWindow IconButton#settings {
     qproperty-icon: url("@style_dir/img/settings.svg");
 }
 
-ManageWindow IconButton#about > QToolButton {
+ManageWindow IconButton#about {
     qproperty-icon: url("@style_dir/img/info.svg");
 }
 
@@ -275,28 +359,28 @@ FormQt::title {
     padding: 0px 5px 0px 5px;
 }
 
-FormQt IconButton#clean_field > QToolButton {
+FormQt IconButton#clean_field {
     qproperty-icon: url("@style_dir/img/clean.svg");
 }
 
 
-UpgradeToggleButton > QToolButton {
+UpgradeToggleButton {
     qproperty-icon: url("@style_dir/img/app_update.svg");
-    background: @color_green;
+    background: @upgrade.color;
 }
 
-UpgradeToggleButton > QToolButton:checked {
+UpgradeToggleButton:checked {
     background: grey;
 }
 
-QToolButton#bt_check_upgrade_disabled:disabled {
+UpgradeToggleButton[enabled = "false"] {
     qproperty-icon: url("@style_dir/img/exclamation.svg");
     background: #dda739;
 }
 
-QLabel#label_version {
-    color: @color_green;
-    font-weight: bold;
+PackagesTable QLabel#app_version[update = "true"] {
+    color: @table.app_version.update.color;
+    font-weight: @table.app_version.update.weight;
 }
 
 QLabel#label_version_ignored {
@@ -305,13 +389,13 @@ QLabel#label_version_ignored {
 }
 
 QPushButton#ok {
-    background: @color_green;
-    color: white;
+    background: @button_ok.background.color;
+    color: @button_ok.font.color;
     font-weight: bold;
 }
 
 QPushButton#ok:disabled {
-    background-color: grey;
+    background-color: @disabled.color;
 }
 
 AboutDialog { }
@@ -365,7 +449,7 @@ AboutDialog > QLabel#app_trouble_answer, AboutDialog > QLabel#app_rate_answer {
 QInputDialog#dialog_password > QLineEdit {
     border-radius: 5px;
     font-size: 16px;
-    border: 1px solid lightblue;
+    border: 1px solid @color.blue_light;
 }
 
 RadioSelectQt {
@@ -387,7 +471,7 @@ ComboSelectQt QLabel, RangeInputQt QLabel, TextInputQt QLabel {
 MultipleSelectQt {
     font-weight: bold;
     font-size: 12px;
-    border: 1px solid silver;
+    border: 1px solid @border.color;
     border-radius: 6px;
     margin-top: 6px;
 }
@@ -397,7 +481,6 @@ MultipleSelectQt::title {
     left: 7px;
     padding: 0px 5px 0px 5px;
 }
-
 
 RootDialog QLineEdit#password {
     qproperty-alignment: AlignCenter;
@@ -410,6 +493,22 @@ RootDialog QLabel#message {
 
 RootDialog QLabel[error = "true"] {
     qproperty-alignment: AlignCenter;
+}
+
+HistoryDialog QTableWidget QLabel {
+    qproperty-alignment: AlignCenter;
+}
+
+HistoryDialog QTableWidget QLabel[outdated = "true"] {
+    font-weight: bold;
+    color: white;
+    background: @history.version.outdated;
+}
+
+HistoryDialog QTableWidget QLabel[outdated = "false"] {
+    font-weight: bold;
+    color: white;
+    background: @history.version.updated;
 }
 
 InfoDialog { }
@@ -436,7 +535,9 @@ InfoDialog QPushButton#back { }
 
 InfoDialog QPushButton#close { }
 
-InfoDialog QPushButton#show { }
+InfoDialog QPushButton#show {
+    height: 14px;
+}
 
 ScreenshotsDialog {}
 

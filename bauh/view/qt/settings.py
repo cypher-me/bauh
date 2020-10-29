@@ -37,6 +37,7 @@ class SettingsWindow(QWidget):
 
         lower_container = QWidget()
         lower_container.setObjectName('lower_container')
+        lower_container.setProperty('container', 'true')
         lower_container.setLayout(QHBoxLayout())
         lower_container.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 

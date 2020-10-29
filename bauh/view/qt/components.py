@@ -4,10 +4,10 @@ from pathlib import Path
 from typing import Tuple, Dict, Optional, Set
 
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QIcon, QIntValidator, QCursor
+from PyQt5.QtGui import QIcon, QIntValidator, QCursor, QFocusEvent
 from PyQt5.QtWidgets import QRadioButton, QGroupBox, QCheckBox, QComboBox, QGridLayout, QWidget, \
     QLabel, QSizePolicy, QLineEdit, QToolButton, QHBoxLayout, QFormLayout, QFileDialog, QTabWidget, QVBoxLayout, \
-    QSlider, QScrollArea, QFrame, QAction, QSpinBox, QPlainTextEdit, QWidgetAction, QPushButton, QApplication
+    QSlider, QScrollArea, QFrame, QAction, QSpinBox, QPlainTextEdit, QWidgetAction, QPushButton, QApplication, QMenu
 
 from bauh.api.abstract.view import SingleSelectComponent, InputOption, MultipleSelectComponent, SelectViewType, \
     TextInputComponent, FormComponent, FileChooserComponent, ViewComponent, TabGroupComponent, PanelComponent, \
@@ -337,6 +337,8 @@ class FormComboBoxQt(QComboBox):
     def __init__(self, model: SingleSelectComponent):
         super(FormComboBoxQt, self).__init__()
         self.model = model
+        self.setCursor(QCursor(Qt.PointingHandCursor))
+        self.view().setCursor(QCursor(Qt.PointingHandCursor))
 
         if model.max_width > 0:
             self.setMaximumWidth(model.max_width)
@@ -644,34 +646,26 @@ class InputFilter(QLineEdit):
         self.last_text = p_str
 
 
-class IconButton(QWidget):
+class IconButton(QToolButton):
 
     def __init__(self, action, i18n: I18n, align: int = Qt.AlignCenter, tooltip: str = None, expanding: bool = False):
         super(IconButton, self).__init__()
-        self.bt = QToolButton()
-        self.bt.setCursor(QCursor(Qt.PointingHandCursor))
-        self.bt.clicked.connect(action)
+        self.setCursor(QCursor(Qt.PointingHandCursor))
+        self.clicked.connect(action)
         self.i18n = i18n
         self.default_tootip = tooltip
-        self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
-        self.bt.setSizePolicy(QSizePolicy.Expanding if expanding else QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.setSizePolicy(QSizePolicy.Expanding if expanding else QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         if tooltip:
-            self.bt.setToolTip(tooltip)
-
-        layout = QHBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setAlignment(align)
-        layout.addWidget(self.bt)
-        self.setLayout(layout)
+            self.setToolTip(tooltip)
 
     def setEnabled(self, enabled):
         super(IconButton, self).setEnabled(enabled)
 
         if not enabled:
-            self.bt.setToolTip(self.i18n['icon_button.tooltip.disabled'])
+            self.setToolTip(self.i18n['icon_button.tooltip.disabled'])
         else:
-            self.bt.setToolTip(self.default_tootip)
+            self.setToolTip(self.default_tootip)
 
 
 class PanelQt(QWidget):
@@ -921,7 +915,6 @@ class TabGroupQt(QTabWidget):
             self.addTab(scroll, icon, c.label)
 
 
-
 def new_single_select(model: SingleSelectComponent) -> QWidget:
     if model.type == SelectViewType.RADIO:
         return RadioSelectQt(model)
@@ -933,6 +926,7 @@ def new_single_select(model: SingleSelectComponent) -> QWidget:
 
 def new_spacer(min_width: int = None) -> QWidget:
     spacer = QWidget()
+    spacer.setProperty('spacer', 'true')
 
     if min_width:
         spacer.setMinimumWidth(min_width)
@@ -1000,6 +994,26 @@ class RangeInputQt(QGroupBox):
         self.model.value = self.spinner.value()
 
 
+class QCustomLineEdit(QLineEdit):
+
+    def __init__(self, focus_in_callback, focus_out_callback, **kwargs):
+        super(QCustomLineEdit, self).__init__(**kwargs)
+        self.focus_in_callback = focus_in_callback
+        self.focus_out_callback = focus_out_callback
+
+    def focusInEvent(self, ev: QFocusEvent):
+        super(QCustomLineEdit, self).focusInEvent(ev)
+        if self.focus_in_callback:
+            self.focus_in_callback()
+
+    def focusOutEvent(self, ev: QFocusEvent):
+        super(QCustomLineEdit, self).focusOutEvent(ev)
+        if self.focus_out_callback:
+            self.focus_out_callback()
+
+        self.clearFocus()
+
+
 class QSearchBar(QWidget):
 
     def __init__(self, search_callback, parent: Optional[QWidget] = None):
@@ -1009,19 +1023,20 @@ class QSearchBar(QWidget):
         self.layout().setSpacing(0)
         self.callback = search_callback
 
-        self.inp_search = QLineEdit()
+        self.inp_search = QCustomLineEdit(focus_in_callback=self._set_focus_in,
+                                          focus_out_callback=self._set_focus_out)
         self.inp_search.setObjectName('inp_search')
         self.inp_search.setFrame(False)
         self.inp_search.returnPressed.connect(search_callback)
         search_background_color = self.inp_search.palette().color(self.inp_search.backgroundRole()).name()
 
-        search_left_corner = QLabel()
-        search_left_corner.setObjectName('lb_left_corner')
+        self.search_left_corner = QLabel()
+        self.search_left_corner.setObjectName('lb_left_corner')
 
         if QApplication.instance().property(PROPERTY_HARDCODED_STYLESHEET):
-            search_left_corner.setStyleSheet('QLabel#lb_left_corner { background: %s; }' % search_background_color)
+            self.search_left_corner.setStyleSheet('QLabel#lb_left_corner { background: %s; }' % search_background_color)
 
-        self.layout().addWidget(search_left_corner)
+        self.layout().addWidget(self.search_left_corner)
 
         self.layout().addWidget(self.inp_search)
 
@@ -1056,6 +1071,22 @@ class QSearchBar(QWidget):
     def set_placeholder(self, placeholder: str):
         self.inp_search.setPlaceholderText(placeholder)
 
+    def _set_focus_in(self):
+        self.search_button.setProperty('focused', 'true')
+        self.search_left_corner.setProperty('focused', 'true')
+
+        for c in (self.search_button, self.search_left_corner):
+            c.style().unpolish(c)
+            c.style().polish(c)
+
+    def _set_focus_out(self):
+        self.search_button.setProperty('focused', 'false')
+        self.search_left_corner.setProperty('focused', 'false')
+
+        for c in (self.search_button, self.search_left_corner):
+            c.style().unpolish(c)
+            c.style().polish(c)
+
 
 class QCustomMenuAction(QWidgetAction):
 
@@ -1064,6 +1095,7 @@ class QCustomMenuAction(QWidgetAction):
         super(QCustomMenuAction, self).__init__(parent)
         self.button = QPushButton()
         self.set_label(label)
+        self._action = None
         self.set_action(action)
         self.set_button_name(button_name)
         self.set_icon(icon)
@@ -1073,7 +1105,15 @@ class QCustomMenuAction(QWidgetAction):
         self.button.setText(label)
 
     def set_action(self, action):
-        self.button.clicked.connect(action)
+        self._action = action
+        self.button.clicked.connect(self._handle_action)
+
+    def _handle_action(self):
+        if self._action:
+            self._action()
+
+            if self.parent() and isinstance(self.parent(), QMenu):
+                self.parent().close()
 
     def set_button_name(self, name: str):
         if name:
@@ -1082,3 +1122,25 @@ class QCustomMenuAction(QWidgetAction):
     def set_icon(self, icon: QIcon):
         if icon:
             self.button.setIcon(icon)
+
+
+class QCustomToolbar(QWidget):
+
+    def __init__(self, spacing: int = 2, parent: Optional[QWidget] = None, alignment: int = Qt.AlignRight):
+        super(QCustomToolbar, self).__init__(parent=parent)
+        self.setProperty('container', 'true')
+        self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
+        self.setLayout(QHBoxLayout())
+        self.layout().setContentsMargins(0, 0, 0, 0)
+        self.layout().setSpacing(spacing)
+        self.layout().setAlignment(alignment)
+
+    def add_widget(self, widget: QWidget):
+        if widget:
+            self.layout().addWidget(widget)
+
+    def add_stretch(self, value: int = 0):
+        self.layout().addStretch(value)
+
+    def add_space(self, min_width: int = 0):
+        self.layout().addWidget(new_spacer(min_width))

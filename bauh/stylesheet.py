@@ -13,6 +13,7 @@ from bauh.view.util.translation import I18n
 RE_WIDTH_PERCENT = re.compile(r'[\d\\.]+%w')
 RE_HEIGHT_PERCENT = re.compile(r'[\d\\.]+%h')
 RE_META_I18N_FIELDS = re.compile(r'((name|description)(\[\w+])?)')
+RE_VAR_PATTERN = re.compile(r'^@[\w.\-_]+')
 
 
 class StylesheetMetadata:
@@ -204,5 +205,40 @@ def _read_var_file(stylesheet_file: str) -> dict:
                             if var and value:
                                 var_map[var] = value
 
+    if var_map:
+        process_var_of_vars(var_map)  # mapping keys that point to others
+
     return var_map
 
+
+def process_var_of_vars(var_map: dict):
+    while True:
+        pending_vars, invalid = {}, set()
+
+        for k, v in var_map.items():
+            var_match = RE_VAR_PATTERN.match(v)
+
+            if var_match:
+                var_name = var_match.group()[1:]
+                if var_name not in var_map or var_name == k:
+                    invalid.add(k)
+                else:
+                    pending_vars[k] = var_name
+
+        for key in invalid:
+            del var_map[key]
+
+        if not pending_vars:
+            break
+
+        resolved = 0
+
+        for key, val in pending_vars.items():
+            real_val = var_map[val]
+
+            if not RE_VAR_PATTERN.match(real_val):
+                var_map[key] = real_val
+                resolved += 1
+
+        if resolved == len(pending_vars):
+            break
