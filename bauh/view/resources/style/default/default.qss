@@ -35,12 +35,12 @@ QCheckBox:focus {
   border: none;
 }
 
-QCheckBox::indicator {
+ManageWindow QCheckBox::indicator {
   height: 25px;
   width: 25px;
 }
 
-ManageWindow QCheckBox#check_details::indicator {
+QCheckBox::indicator, ManageWindow QCheckBox#check_details::indicator {
     height: 20px;
     width: 20px;
 }
@@ -492,10 +492,6 @@ RootDialog QLabel#message {
 }
 
 RootDialog QLabel[error = "true"] {
-    qproperty-alignment: AlignCenter;
-}
-
-HistoryDialog QTableWidget QLabel {
     qproperty-alignment: AlignCenter;
 }
 

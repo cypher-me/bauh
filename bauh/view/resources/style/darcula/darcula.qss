@@ -117,6 +117,11 @@ QTableWidget * {
     color: @font.color;
 }
 
+QTableWidget QHeaderView {
+    background-color: @outer_widget.background.color;
+    font-weight: bold;
+}
+
 QTableWidget QToolButton:hover {
     background-color: @table.button.hover.background.color;
 }
@@ -289,7 +294,7 @@ ManageWindow PackagesTable IconButton#app_run[_enabled = "false"] {
 }
 
 ManageWindow PackagesTable IconButton#app_actions {
-    qproperty-icon: url("@style_dir/img/app_actions.svg");
+    qproperty-icon: url("@style_dir/img/custom_actions.svg");
 }
 
 ManageWindow IconButton#settings {
