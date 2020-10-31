@@ -914,6 +914,8 @@ class TabGroupQt(QTabWidget):
             scroll.setWidget(to_widget(c.content, i18n))
             self.addTab(scroll, icon, c.label)
 
+        self.tabBar().setCursor(QCursor(Qt.PointingHandCursor))
+
 
 def new_single_select(model: SingleSelectComponent) -> QWidget:
     if model.type == SelectViewType.RADIO:
