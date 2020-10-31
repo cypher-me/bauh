@@ -10,6 +10,10 @@ QCheckBox::indicator:checked {
   image: url("@style_dir/img/checkbox_checked.svg");
 }
 
+QCheckBox::indicator:checked:disabled {
+  image: url("@style_dir/img/checkbox_checked_disabled.svg");
+}
+
 QMenu QPushButton:hover {
     background-color: @menu.item.selected.background.color;
 }
@@ -113,7 +117,7 @@ UpgradeToggleButton[enabled = "false"] {
     background: #dda739;
 }
 
-ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types {
+QComboBox {
     border-color: @border.color;
 }
 
@@ -140,11 +144,12 @@ ManageWindow QPushButton#bt_upgrade {
 }
 
 ManageWindow IconButton#custom_actions {
-    qproperty-icon: url("@style_dir/img/custom_actions.svg");
+    qproperty-icon: url("@style_dir/img/menu.svg");
 }
 
 ManageWindow IconButton#settings {
     qproperty-icon: url("@style_dir/img/settings.svg");
+    qproperty-iconSize: 16px 16px;
 }
 
 ManageWindow IconButton#about {
@@ -161,6 +166,7 @@ PackagesTable QLabel[publisher_known = "false"]{
 
 PackagesTable IconButton#app_run {
     qproperty-icon: url("@style_dir/img/app_play.svg");
+    qproperty-iconSize: 12px 12px;
 }
 
 PackagesTable IconButton#app_run[_enabled = "false"] {
@@ -168,7 +174,8 @@ PackagesTable IconButton#app_run[_enabled = "false"] {
 }
 
 PackagesTable IconButton#app_actions {
-    qproperty-icon: url("@style_dir/img/app_actions.svg");
+    qproperty-icon: url("@style_dir/img/menu.svg");
+    qproperty-iconSize: 14px 14px;
 }
 
 PackagesTable IconButton#app_screenshots {
@@ -180,7 +187,8 @@ PackagesTable IconButton#app_screenshots[_enabled = "false"] {
 }
 
 PackagesTable IconButton#app_info {
-    qproperty-icon: url("@style_dir/img/app_info.svg");
+    qproperty-icon: url("@style_dir/img/info.svg");
+    qproperty-iconSize: 14px 14px;
 }
 
 PackagesTable QToolButton#bt_install {

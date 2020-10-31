@@ -6,6 +6,13 @@ QToolButton {
     padding: 5px;
 }
 
+QComboBox {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 3px;
+}
+
 QTableWidget QToolButton {
     padding: 5px;
     margin-top: 3px;
@@ -68,9 +75,12 @@ QSearchBar QPushButton {
 QSearchBar QLabel#lb_left_corner {
      border-top-left-radius: 5px;
      border-bottom-left-radius: 5px;
-     border-left: 1px solid none;
-     border-top: 1px solid none;
-     border-bottom: 1px solid none;
+     border-left-width: 1px;
+     border-left-style: solid;
+     border-top-width: 1px;
+     border-top-style: solid;
+     border-bottom-width: 1px;
+     border-bottom-style: solid;
      border-right: 0px;
 }
 
@@ -79,9 +89,12 @@ QSearchBar QPushButton#search_button {
     padding-right: 10px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
-    border-right: 1px solid none;
-    border-top: 1px solid none;
-    border-bottom: 1px solid none;
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
     height: 30px;
     border-left: none;
     border-top-left-radius: 0;
@@ -93,8 +106,10 @@ QSearchBar QLineEdit#inp_search {
      height: 30px;
      font-size: 12px;
      width: 300px;
-     border-bottom: 1px solid none;
-     border-top: 1px solid none;
+     border-top-width: 1px;
+     border-top-style: solid;
+     border-bottom-width: 1px;
+     border-bottom-style: solid;
      border-left: none;
      border-right: none;
      border-radius: 0;
@@ -149,6 +164,16 @@ ManageWindow QLabel#label_status {
     font-weight: bold
 }
 
+QCheckBox::indicator {
+    width: 18px;
+    height: 18px;
+}
+
+ManageWindow QWidget#table_filters QCheckBox::indicator {
+    width: 22px;
+    height: 22px;
+}
+
 ConfirmationDialog QPushButton, QWidget[container = "true"] QPushButton, InfoDialog QPushButton {
     min-width: 80px;
 }
@@ -176,12 +201,9 @@ PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress[status = 
     text-decoration: line-through;
 }
 
-ManageWindow QComboBox#combo_categories {
-    min-width: 100px;
-}
-
 ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types {
     height: 20px;
+    width: 110px;
 }
 
 ManageWindow QComboBox#combo_types > QLineEdit, ManageWindow QComboBox#combo_categories > QLineEdit {
