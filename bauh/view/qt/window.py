@@ -208,6 +208,7 @@ class ManageWindow(QWidget):
         if config['suggestions']['enabled']:
             bt_sugs = QPushButton()
             bt_sugs.setObjectName('bt_suggestions')
+            bt_sugs.setProperty('root', 'true')
             bt_sugs.setCursor(QCursor(Qt.PointingHandCursor))
             bt_sugs.setToolTip(self.i18n['manage_window.bt.suggestions.tooltip'])
             bt_sugs.setText(self.i18n['manage_window.bt.suggestions.text'].capitalize())
@@ -219,6 +220,7 @@ class ManageWindow(QWidget):
 
         bt_inst = QPushButton()
         bt_inst.setObjectName('bt_installed')
+        bt_inst.setProperty('root', 'true')
         bt_inst.setCursor(QCursor(Qt.PointingHandCursor))
         bt_inst.setToolTip(self.i18n['manage_window.bt.installed.tooltip'])
         bt_inst.setText(self.i18n['manage_window.bt.installed.text'].capitalize())
@@ -230,6 +232,7 @@ class ManageWindow(QWidget):
 
         bt_ref = QPushButton()
         bt_ref.setObjectName('bt_refresh')
+        bt_ref.setProperty('root', 'true')
         bt_ref.setCursor(QCursor(Qt.PointingHandCursor))
         bt_ref.setToolTip(i18n['manage_window.bt.refresh.tooltip'])
         bt_ref.setText(self.i18n['manage_window.bt.refresh.text'])
@@ -240,6 +243,7 @@ class ManageWindow(QWidget):
         self.comp_manager.register_component(BT_REFRESH, bt_ref)
 
         self.bt_upgrade = QPushButton()
+        self.bt_upgrade.setProperty('root', 'true')
         self.bt_upgrade.setObjectName('bt_upgrade')
         self.bt_upgrade.setCursor(QCursor(Qt.PointingHandCursor))
         self.bt_upgrade.setToolTip(i18n['manage_window.bt.upgrade.tooltip'])

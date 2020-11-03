@@ -23,6 +23,11 @@ QSpinBox::up-arrow:disabled, QSpinBox::up-arrow:off, QSpinBox::down-arrow:disabl
    image: none;
 }
 
+QCheckBox::indicator {
+    width: 18px;
+    height: 18px;
+}
+
 QTableWidget QToolButton {
     padding: 5px;
     margin-top: 3px;
@@ -167,16 +172,16 @@ ManageWindow QSearchBar#name_filter QLabel#lb_left_corner, ManageWindow QSearchB
 }
 
 ManageWindow QSearchBar#name_filter QPushButton#search_button {
-    qproperty-iconSize: 12px 12px;
+    qproperty-iconSize: 9px 9px;
+}
+
+ManageWindow QWidget#table_filters QPushButton[root = "true"] {
+    min-width: 100px;
+    max-width: 100px;
 }
 
 ManageWindow QLabel#label_status {
     font-weight: bold
-}
-
-QCheckBox::indicator {
-    width: 18px;
-    height: 18px;
 }
 
 ManageWindow QWidget#table_filters QCheckBox::indicator {
@@ -213,7 +218,7 @@ PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress[status = 
 
 ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types {
     height: 20px;
-    width: 110px;
+    min-width: 150px;
 }
 
 ManageWindow QComboBox#combo_types > QLineEdit, ManageWindow QComboBox#combo_categories > QLineEdit {
@@ -221,8 +226,8 @@ ManageWindow QComboBox#combo_types > QLineEdit, ManageWindow QComboBox#combo_cat
 }
 
 ManageWindow QSearchBar#name_filter {
-    min-width: 150;
-    max-width: 150;
+    min-width: 200;
+    max-width: 200;
 }
 
 ManageWindow QPushButton#bt_installed, ManageWindow QPushButton#bt_refresh, ManageWindow QPushButton#bt_suggestions, ManageWindow QPushButton#bt_upgrade {
@@ -251,7 +256,7 @@ PackagesTable QToolButton#bt_uninstall {
     font-weight: bold;
 }
 
-PackagesTable QLabel#label_version_ignored {
+PackagesTable QLabel#app_version[ignored = "true"] {
     font-weight: bold;
 }
 

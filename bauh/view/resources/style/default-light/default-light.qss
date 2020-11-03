@@ -108,7 +108,7 @@ PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress[status = 
 }
 
 UpgradeToggleButton {
-    qproperty-icon: url("@style_dir/img/app_update.svg");
+    qproperty-icon: url("@style_dir/img/update.svg");
     background: @upgrade.color;
 }
 
@@ -123,6 +123,16 @@ UpgradeToggleButton[enabled = "false"] {
 
 QComboBox, QLineEdit, QSpinBox {
     border-color: @border.color;
+}
+
+QComboBox, QComboBox QAbstractItemView, QMenu QAbstractItemView {
+    selection-background-color: @menu.item.selected.background.color;
+    selection-color: @menu.item.selected.font.color;
+}
+
+QMenu QPushButton:hover {
+    background-color: @menu.item.selected.background.color;
+    color: @menu.item.selected.font.color;
 }
 
 QComboBox::down-arrow, QSpinBox::down-arrow {
@@ -152,7 +162,7 @@ ManageWindow QPushButton#bt_suggestions {
 }
 
 ManageWindow QPushButton#bt_upgrade {
-    qproperty-icon: url("@style_dir/img/app_update.svg");
+    qproperty-icon: url("@style_dir/img/update.svg");
     background: @upgrade.color;
     color: @button_upgrade.font.color;
 }
@@ -220,8 +230,8 @@ PackagesTable QLabel#app_version[update = "true"] {
     font-weight: @table.app_version.update.weight;
 }
 
-PackagesTable QLabel#label_version_ignored {
-    color: @color_brown;
+PackagesTable QLabel#app_version[ignored = "true"] {
+    color: @table.app_version.update_ignored.color;
 }
 
 AboutDialog QLabel#logo {
