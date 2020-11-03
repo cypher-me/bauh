@@ -1,16 +1,26 @@
-QPushButton {
+QPushButton, QToolButton {
     padding: 5px;
 }
 
-QToolButton {
-    padding: 5px;
-}
-
-QComboBox {
+QComboBox, QLineEdit, QSpinBox {
     border-width: 1px;
     border-style: solid;
     border-radius: 5px;
     padding: 3px;
+}
+
+QComboxBox:!editable, QComboBox::drop-down  {
+    border-left: 0;
+}
+
+QComboBox::down-arrow {
+    height: 8px;
+    width: 8px;
+    padding-right: 10px;
+}
+
+QSpinBox::up-arrow:disabled, QSpinBox::up-arrow:off, QSpinBox::down-arrow:disabled, QSpinBox::down-arrow:off {
+   image: none;
 }
 
 QTableWidget QToolButton {

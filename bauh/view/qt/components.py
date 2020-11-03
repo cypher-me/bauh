@@ -817,6 +817,7 @@ class FormQt(QGroupBox):
 
     def _new_range_input(self, model: RangeInputComponent) -> QSpinBox:
         spinner = QSpinBox()
+        spinner.setCursor(QCursor(Qt.PointingHandCursor))
         spinner.setMinimum(model.min)
         spinner.setMaximum(model.max)
         spinner.setSingleStep(model.step)
@@ -980,6 +981,7 @@ class RangeInputQt(QGroupBox):
             self.setMaximumWidth(self.model.max_width)
 
         self.spinner = QSpinBox()
+        self.spinner.setCursor(QCursor(Qt.PointingHandCursor))
         self.spinner.setMinimum(model.min)
         self.spinner.setMaximum(model.max)
         self.spinner.setSingleStep(model.step)

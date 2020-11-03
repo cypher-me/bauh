@@ -57,6 +57,7 @@ QInputDialog#dialog_password > QLineEdit {
 
 QPushButton#ok {
     background: @button_ok.background.color;
+    border-color: @button_ok.border.color;
     color: @button_ok.font.color;
     font-weight: bold;
 }
@@ -87,12 +88,15 @@ QSearchBar QLineEdit#inp_search {
      border-top-color: @border.color;
 }
 
-QSearchBar#name_filter QPushButton#search_button {
+QSearchBar#name_filter QPushButton#search_buttn {
     qproperty-icon: url("@style_dir/img/filter.svg");
 }
 
 FormQt IconButton#clean_field {
     qproperty-icon: url("@style_dir/img/clean.svg");
+    background-color: @color.red;
+    max-width: 14px;
+    max-height: 14px;
 }
 
 PreparePanel QTableWidget#tasks {
@@ -117,8 +121,16 @@ UpgradeToggleButton[enabled = "false"] {
     background: #dda739;
 }
 
-QComboBox {
+QComboBox, QLineEdit, QSpinBox {
     border-color: @border.color;
+}
+
+QComboBox::down-arrow, QSpinBox::down-arrow {
+    image: url("@style_dir/img/arrow_down.svg");
+}
+
+QSpinBox::up-arrow {
+    image: url("@style_dir/img/arrow_up.svg");
 }
 
 ManageWindow QSearchBar#name_filter {
@@ -127,6 +139,7 @@ ManageWindow QSearchBar#name_filter {
 
 ManageWindow QPushButton#bt_refresh {
     qproperty-icon: url("@style_dir/img/refresh.svg");
+    qproperty-iconSize: 16px 16px;
 }
 
 ManageWindow QPushButton#bt_installed {
@@ -135,12 +148,13 @@ ManageWindow QPushButton#bt_installed {
 
 ManageWindow QPushButton#bt_suggestions {
     qproperty-icon: url("@style_dir/img/suggestions.svg");
+    qproperty-iconSize: 15px 15px;
 }
 
 ManageWindow QPushButton#bt_upgrade {
+    qproperty-icon: url("@style_dir/img/app_update.svg");
     background: @upgrade.color;
     color: @button_upgrade.font.color;
-    qproperty-icon: url("@style_dir/img/app_update.svg");
 }
 
 ManageWindow IconButton#custom_actions {
@@ -154,6 +168,7 @@ ManageWindow IconButton#settings {
 
 ManageWindow IconButton#about {
     qproperty-icon: url("@style_dir/img/info.svg");
+    qproperty-iconSize: 14px 14px;
 }
 
 PackagesTable QLabel#icon_publisher_verified {
@@ -188,7 +203,7 @@ PackagesTable IconButton#app_screenshots[_enabled = "false"] {
 
 PackagesTable IconButton#app_info {
     qproperty-icon: url("@style_dir/img/info.svg");
-    qproperty-iconSize: 14px 14px;
+    qproperty-iconSize: 12px 12px;
 }
 
 PackagesTable QToolButton#bt_install {

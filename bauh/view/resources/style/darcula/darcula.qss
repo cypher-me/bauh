@@ -270,7 +270,7 @@ PackagesTable UpgradeToggleButton[enabled = "false"] {
 }
 
 ManageWindow PackagesTable IconButton#app_info {
-    qproperty-icon: url("@style_dir/img/app_info.svg");
+    qproperty-icon: url("@style_dir/img/info.svg");
 }
 
 QPushButton#bt_refresh {
@@ -311,6 +311,10 @@ ManageWindow PackagesTable IconButton#app_screenshots[_enabled = "false"] {
 
 ManageWindow IconButton#custom_actions {
     qproperty-icon: url("@style_dir/img/custom_actions.svg");
+}
+
+ManageWindow IconButton#about {
+    qproperty-icon: url("@style_dir/img/info.svg");
 }
 
 QMenu#app_actions QPushButton#app_history {
