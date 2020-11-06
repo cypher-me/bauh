@@ -208,10 +208,6 @@ PreparePanel QPushButton#bt_hide_details {
     background: none;
 }
 
-PreparePanel QLabel#task_status[status = "running"], QLabel#task_progress[status = "running"] {
-    font-weight: bold;
-}
-
 PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress[status = "done"] {
     text-decoration: line-through;
 }
@@ -236,6 +232,13 @@ ManageWindow QSearchBar#name_filter {
 
 ManageWindow QPushButton#bt_installed, ManageWindow QPushButton#bt_refresh, ManageWindow QPushButton#bt_suggestions, ManageWindow QPushButton#bt_upgrade {
     font-weight: 500;
+}
+
+PackagesTable QToolButton, PackagesTable UpgradeToggleButton {
+    min-width: 16px;
+    max-width: 16px;
+    min-height: 14px;
+    max-height: 14px;
 }
 
 PackagesTable QLabel#icon_publisher_verified {

@@ -39,11 +39,11 @@ QLabel[error = "true"] {
 }
 
 QLabel[help_icon = "true"] {
-    qproperty-pixmap: url("@style_dir/img/about.svg");
+    qproperty-pixmap: url("@style_dir/img/help.svg");
 }
 
 QLabel[tip_icon = "true"] {
-    qproperty-pixmap: url("@style_dir/img/about.svg");
+    qproperty-pixmap: url("@style_dir/img/help.svg");
 }
 
 QPlainTextEdit[console = 'true'] {
@@ -109,6 +109,7 @@ PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress[status = 
 
 UpgradeToggleButton {
     qproperty-icon: url("@style_dir/img/update.svg");
+    qproperty-iconSize: 14px 14px;
     background: @upgrade.color;
 }
 
@@ -177,7 +178,7 @@ ManageWindow IconButton#settings {
 }
 
 ManageWindow IconButton#about {
-    qproperty-icon: url("@style_dir/img/info.svg");
+    qproperty-icon: url("@style_dir/img/about.svg");
     qproperty-iconSize: 14px 14px;
 }
 
