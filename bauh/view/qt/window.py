@@ -165,7 +165,6 @@ class ManageWindow(QWidget):
         self.combo_filter_type.setCursor(QCursor(Qt.PointingHandCursor))
         self.combo_filter_type.setView(QListView())
         self.combo_filter_type.view().setCursor(QCursor(Qt.PointingHandCursor))
-        self.combo_filter_type.setIconSize(QSize(14, 14))
         self.combo_filter_type.setSizeAdjustPolicy(QComboBox.AdjustToContents)
         self.combo_filter_type.setEditable(True)
         self.combo_filter_type.lineEdit().setReadOnly(True)

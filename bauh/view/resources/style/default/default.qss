@@ -218,7 +218,11 @@ PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress[status = 
 
 ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types {
     height: 20px;
-    min-width: 150px;
+    min-width: 130px;
+}
+
+ManageWindow QComboBox#combo_types {
+    qproperty-iconSize: 14px 14px;
 }
 
 ManageWindow QComboBox#combo_types > QLineEdit, ManageWindow QComboBox#combo_categories > QLineEdit {
@@ -226,8 +230,8 @@ ManageWindow QComboBox#combo_types > QLineEdit, ManageWindow QComboBox#combo_cat
 }
 
 ManageWindow QSearchBar#name_filter {
-    min-width: 200;
-    max-width: 200;
+    min-width: 170;
+    max-width: 170;
 }
 
 ManageWindow QPushButton#bt_installed, ManageWindow QPushButton#bt_refresh, ManageWindow QPushButton#bt_suggestions, ManageWindow QPushButton#bt_upgrade {
