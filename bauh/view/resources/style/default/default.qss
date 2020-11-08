@@ -168,7 +168,9 @@ QInputDialog#dialog_password > QLineEdit {
 }
 
 ManageWindow QSearchBar#name_filter QLabel#lb_left_corner, ManageWindow QSearchBar#name_filter QLineEdit#inp_search, ManageWindow  QSearchBar#name_filter QPushButton#search_button  {
-    height: 26px;
+    min-height: 27px;
+    max-height: 27px;
+    height: 27px;
 }
 
 ManageWindow QSearchBar#name_filter QPushButton#search_button {
@@ -178,6 +180,8 @@ ManageWindow QSearchBar#name_filter QPushButton#search_button {
 ManageWindow QWidget#table_filters QPushButton[root = "true"] {
     min-width: 100px;
     max-width: 100px;
+    min-height: 18px;
+    max-height: 18px;
 }
 
 ManageWindow QLabel#label_status {
