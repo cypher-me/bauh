@@ -223,6 +223,13 @@ PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress[status = 
     text-decoration: line-through;
 }
 
+PreparePanel QTableWidget QToolButton {
+    min-width: 14px;
+    max-width: 14px;
+    min-height: 14px;
+    max-height: 14px;
+}
+
 ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types {
     height: 20px;
     min-width: 130px;
