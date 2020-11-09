@@ -83,6 +83,13 @@ FormQt::title {
     padding: 0px 5px 0px 5px;
 }
 
+FormQt IconButton#clean_field {
+    min-width: 14px;
+    max-width: 14px;
+    min-height: 14px;
+    max-height: 14px;
+}
+
 QSearchBar QPushButton {
     padding: inherit;
 }
@@ -342,7 +349,8 @@ InfoDialog QLineEdit#field_value {
 }
 
 InfoDialog QPushButton#show {
-    height: 14px;
+    min-height: 16px;
+    max-height: 16px;
 }
 
 ScreenshotsDialog QLabel#image {

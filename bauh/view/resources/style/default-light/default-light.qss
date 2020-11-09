@@ -99,9 +99,6 @@ QSearchBar#name_filter QPushButton#search_buttn {
 
 FormQt IconButton#clean_field {
     qproperty-icon: url("@style_dir/img/clean.svg");
-    background-color: @color.red;
-    max-width: 14px;
-    max-height: 14px;
 }
 
 PreparePanel QTableWidget#tasks {
@@ -167,9 +164,7 @@ ManageWindow QPushButton#bt_suggestions {
 }
 
 ManageWindow QPushButton#bt_upgrade {
-    qproperty-icon: url("@style_dir/img/update.svg");
-    background: @upgrade.color;
-    color: @button_upgrade.font.color;
+    qproperty-icon: url("@style_dir/img/upgrade.svg");
 }
 
 ManageWindow IconButton#custom_actions {
