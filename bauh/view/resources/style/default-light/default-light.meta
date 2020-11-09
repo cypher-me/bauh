@@ -1,6 +1,6 @@
-name=Default (Light)
-name[pt]=Padrão (Claro)
-name[es]=Predeterminada (Claro)
+name=Default (Light environment)
+name[pt]=Padrão (Ambiente claro)
+name[es]=Predeterminada (Ambiente claro)
 description=Default theme with icons for a light desktop theme
 description[pt]=Tema padrão com ícones para ambiente desktop claro
 description[es]=Tema predeterminado con iconos para ambiente desktop claro
