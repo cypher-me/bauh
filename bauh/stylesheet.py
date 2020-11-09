@@ -110,9 +110,9 @@ def read_stylesheet_metada(key: str, file_path: str) -> StylesheetMetadata:
 
                         if i18n_field:
                             if i18n_field[0][1] == 'name':
-                                meta_obj.names[i18n_field[0][2]] = val
+                                meta_obj.names[i18n_field[0][2][1:-1]] = val
                             else:
-                                meta_obj.descriptions[i18n_field[0][2]] = val
+                                meta_obj.descriptions[i18n_field[0][2][1:-1]] = val
 
     return meta_obj
 

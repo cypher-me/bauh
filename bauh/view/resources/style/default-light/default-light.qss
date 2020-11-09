@@ -88,13 +88,21 @@ QSearchBar QPushButton#search_button {
     border-bottom-color: @border.color;
 }
 
+QSearchBar QPushButton#search_button[focused = "true"] {
+    qproperty-icon: url("@style_dir/img/search_focused.svg");
+}
+
 QSearchBar QLineEdit#inp_search {
      border-bottom-color: @border.color;
      border-top-color: @border.color;
 }
 
-QSearchBar#name_filter QPushButton#search_buttn {
+QSearchBar#name_filter QPushButton#search_button {
     qproperty-icon: url("@style_dir/img/filter.svg");
+}
+
+QSearchBar#name_filter QPushButton#search_button[focused = "true"] {
+    qproperty-icon: url("@style_dir/img/filter_focused.svg");
 }
 
 FormQt IconButton#clean_field {
@@ -106,7 +114,8 @@ PreparePanel QTableWidget#tasks {
 }
 
 PreparePanel QLabel#task_status[status = "running"], QLabel#task_progress[status = "running"] {
-    color: @task.done.color;
+    color: @task.running.color;
+    font-weight: bold;
 }
 
 PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress[status = "done"] {

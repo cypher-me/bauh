@@ -180,7 +180,7 @@ class GenericSettingsManager:
         return TabComponent(self.i18n['core.config.tab.tray'].capitalize(), PanelComponent(sub_comps), None, 'core.tray')
 
     def _gen_ui_settings(self, core_config: dict, screen_width: int, screen_height: int) -> TabComponent:
-        default_width = floor(0.11 * screen_width)
+        default_width = floor(0.15 * screen_width)
 
         select_hdpi = self._gen_bool_component(label=self.i18n['core.config.ui.hdpi'],
                                                tooltip=self.i18n['core.config.ui.hdpi.tip'],
@@ -284,7 +284,7 @@ class GenericSettingsManager:
         return TabComponent(self.i18n['core.config.tab.ui'].capitalize(), PanelComponent(sub_comps), None, 'core.ui')
 
     def _gen_general_settings(self, core_config: dict, screen_width: int, screen_height: int) -> TabComponent:
-        default_width = floor(0.11 * screen_width)
+        default_width = floor(0.15 * screen_width)
 
         locale_opts = [InputOption(label=self.i18n['locale.{}'.format(k)].capitalize(), value=k) for k in translation.get_available_keys()]
 
