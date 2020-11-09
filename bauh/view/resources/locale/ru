@@ -303,7 +303,6 @@ manage_window.bt.installed.text=Установленные
 manage_window.bt.installed.tooltip=Нажмите здесь, чтобы показать установленные приложения
 manage_window.bt.refresh.text=Обновить список
 manage_window.bt.refresh.tooltip=Перезагрузите данные об установленных приложениях
-manage_window.bt.suggestions.text=Рекомендации
 manage_window.bt.suggestions.tooltip=Нажмите здесь, чтобы показать некоторые рекомендаваные приложения
 manage_window.bt.upgrade.text=Обновление
 manage_window.bt.upgrade.tooltip=Обновить все выбранные приложения

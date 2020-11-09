@@ -303,7 +303,6 @@ manage_window.bt.installed.text=installiert
 manage_window.bt.installed.tooltip=Installierte Anwendungen anzeigen
 manage_window.bt.refresh.text=Aktualisieren
 manage_window.bt.refresh.tooltip=Informationen über installierte Anwendungen aktualisieren
-manage_window.bt.suggestions.text=Vorschläge
 manage_window.bt.suggestions.tooltip=Vorschläge für Apps anzeigen
 manage_window.bt.upgrade.text=Upgraden
 manage_window.bt.upgrade.tooltip=Alle ausgewählten Anwendungen upgraden

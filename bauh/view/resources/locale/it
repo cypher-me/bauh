@@ -305,7 +305,6 @@ manage_window.bt.installed.text=installato
 manage_window.bt.installed.tooltip=Clicca qui per mostrare le applicazioni installate
 manage_window.bt.refresh.text=Refresh
 manage_window.bt.refresh.tooltip=Ricarica i dati sulle applicazioni installate
-manage_window.bt.suggestions.text=Suggerimenti
 manage_window.bt.suggestions.tooltip=Clicca qui per mostrare alcuni suggerimenti sulle applicazioni
 manage_window.bt.upgrade.text=Aggiorna
 manage_window.bt.upgrade.tooltip=Aggiorna tutte le applicazioni controllate

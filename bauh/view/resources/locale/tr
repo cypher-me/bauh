@@ -303,7 +303,6 @@ manage_window.bt.installed.text=yüklü
 manage_window.bt.installed.tooltip=Yüklü uygulamaları görmek için burayı tıkla
 manage_window.bt.refresh.text=Yenile
 manage_window.bt.refresh.tooltip=Yüklü uygulamalar hakkındaki verileri yeniden yükle
-manage_window.bt.suggestions.text=Önerilenler
 manage_window.bt.suggestions.tooltip=Bazı uygulama önerileri için burayı tıkla
 manage_window.bt.upgrade.text=Yükselt
 manage_window.bt.upgrade.tooltip=İşaretli tüm uygulamaları yükseltin
