@@ -74,6 +74,9 @@ def new_qt_application(app_config: dict, logger: Logger, quit_on_last_closed: bo
                     else:
                         logger.warning("stylesheet file '{}' could not be interpreted and processed".format(stylesheet_file))
 
+    if not app_config['ui']['system_stylesheets']:
+        app.setPalette(app.style().standardPalette())
+
     return app
 
 

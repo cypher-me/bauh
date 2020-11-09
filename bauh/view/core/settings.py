@@ -7,7 +7,7 @@ from typing import List, Tuple
 
 from PyQt5.QtWidgets import QApplication, QStyleFactory
 
-from bauh import ROOT_DIR
+from bauh import ROOT_DIR, __app_name__
 from bauh.api.abstract.controller import SoftwareManager
 from bauh.api.abstract.download import FileDownloader
 from bauh.api.abstract.view import ViewComponent, TabComponent, InputOption, TextComponent, MultipleSelectComponent, \
@@ -258,6 +258,12 @@ class GenericSettingsManager:
                                                   max_width=default_width,
                                                   id_="stylesheet")
 
+        select_system_stylesheets = self._gen_bool_component(label=self.i18n['core.config.ui.system_stylesheets'],
+                                                             tooltip=self.i18n['core.config.ui.system_stylesheets.tip'].format(app=__app_name__),
+                                                             value=bool(core_config['ui']['system_stylesheets']),
+                                                             max_width=default_width,
+                                                             id_='system_stylesheets')
+
         input_maxd = TextInputComponent(label=self.i18n['core.config.ui.max_displayed'],
                                         tooltip=self.i18n['core.config.ui.max_displayed.tip'],
                                         only_int=True,
@@ -272,7 +278,8 @@ class GenericSettingsManager:
                                                  value=core_config['download']['icons'])
 
         sub_comps = [FormComponent([select_hdpi, select_ascale, select_scale,
-                                    select_dicons, select_style, select_stylesheet, input_maxd], spaces=False)]
+                                    select_dicons, select_style, select_stylesheet, select_system_stylesheets,
+                                    input_maxd], spaces=False)]
 
         return TabComponent(self.i18n['core.config.tab.ui'].capitalize(), PanelComponent(sub_comps), None, 'core.ui')
 
@@ -446,6 +453,7 @@ class GenericSettingsManager:
             core_config['ui']['style'] = style
 
         core_config['ui']['stylesheet'] = ui_form.get_component('stylesheet').get_selected()
+        core_config['ui']['system_stylesheets'] = ui_form.get_component('system_stylesheets').get_selected()
 
         # gems
         checked_gems = gems_panel.components[1].get_component('gems').get_selected_values()
