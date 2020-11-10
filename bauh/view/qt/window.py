@@ -130,16 +130,6 @@ class ManageWindow(QWidget):
         self.search_bar.set_button_tooltip(i18n['window_manage.search_bar.button_tooltip'])
         self.comp_manager.register_component(SEARCH_BAR, self.search_bar, self.toolbar_status.addWidget(self.search_bar))
 
-        if config['suggestions']['enabled']:
-            bt_sugs = QPushButton()
-            bt_sugs.setObjectName('bt_suggestions')
-            bt_sugs.setProperty('root', 'true')
-            bt_sugs.setCursor(QCursor(Qt.PointingHandCursor))
-            bt_sugs.setToolTip(self.i18n['manage_window.bt.suggestions.tooltip'])
-            bt_sugs.clicked.connect(lambda: self._begin_load_suggestions(filter_installed=True))
-            bt_sugs.sizePolicy().setRetainSizeWhenHidden(True)
-            self.comp_manager.register_component(BT_SUGGESTIONS, bt_sugs, self.toolbar_status.addWidget(bt_sugs))
-
         self.toolbar_status.addWidget(new_spacer())
         self.layout.addWidget(self.toolbar_status)
 
@@ -370,6 +360,14 @@ class ManageWindow(QWidget):
         self.container_bottom.layout().addWidget(self.progress_bar)
 
         self.container_bottom.layout().addWidget(new_spacer())
+
+        if config['suggestions']['enabled']:
+            bt_sugs = IconButton(action=lambda: self._begin_load_suggestions(filter_installed=True),
+                                 i18n=i18n,
+                                 tooltip=self.i18n['manage_window.bt.suggestions.tooltip'])
+            bt_sugs.setObjectName('bt_suggestions')
+            self.container_bottom.layout().addWidget(bt_sugs)
+            self.comp_manager.register_component(BT_SUGGESTIONS, bt_sugs)
 
         self.custom_actions = manager.get_custom_actions()
         bt_custom_actions = IconButton(action=self.show_custom_actions,

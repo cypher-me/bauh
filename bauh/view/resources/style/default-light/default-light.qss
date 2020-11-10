@@ -166,13 +166,12 @@ ManageWindow QPushButton#bt_installed {
     qproperty-icon: url("@style_dir/img/disk.svg");
 }
 
-ManageWindow QPushButton#bt_suggestions {
-    qproperty-icon: url("@style_dir/img/suggestions.svg");
-    qproperty-iconSize: 16px 16px;
-}
-
 ManageWindow QPushButton#bt_upgrade {
     qproperty-icon: url("@style_dir/img/upgrade.svg");
+}
+
+ManageWindow IconButton#bt_suggestions {
+    qproperty-icon: url("@style_dir/img/suggestions.svg");
 }
 
 ManageWindow IconButton#custom_actions {

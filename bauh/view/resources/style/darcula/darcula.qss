@@ -287,20 +287,16 @@ QPushButton#bt_installed {
     qproperty-icon: url("@style_dir/img/disk.svg");
 }
 
-QPushButton#bt_suggestions {
-    qproperty-icon: url("@style_dir/img/suggestions.svg");
-    min-width: 20px;
-    max-width: 20px;
-    min-height: 20px;
-    max-height: 20px;
-}
-
 ManageWindow PackagesTable IconButton#app_run {
     qproperty-icon: url("@style_dir/img/app_play.svg");
 }
 
 ManageWindow PackagesTable IconButton#app_run[_enabled = "false"] {
     qproperty-icon: url("@style_dir/img/app_play_disabled.svg");
+}
+
+ManageWindow IconButton#bt_suggestions {
+    qproperty-icon: url("@style_dir/img/suggestions.svg");
 }
 
 ManageWindow PackagesTable IconButton#app_actions {
