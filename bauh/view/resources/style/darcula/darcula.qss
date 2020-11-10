@@ -181,6 +181,7 @@ QSearchBar QLabel#lb_left_corner[focused = "true"] {
 }
 
 QSearchBar QPushButton#search_button {
+    qproperty-icon: url("@style_dir/img/search.svg");
     border-right-color: @lineedit.border.color;
     border-top-color: @lineedit.border.color;
     border-bottom-color: @lineedit.border.color;
@@ -274,7 +275,8 @@ PackagesTable UpgradeToggleButton[enabled = "false"] {
 }
 
 ManageWindow PackagesTable IconButton#app_info {
-    qproperty-icon: url("@style_dir/img/info.svg");
+    qproperty-icon: url("@style_dir/img/about.svg");
+    qproperty-iconSize: 13px 13px;
 }
 
 QPushButton#bt_refresh {
@@ -286,7 +288,11 @@ QPushButton#bt_installed {
 }
 
 QPushButton#bt_suggestions {
-    qproperty-icon: url("@style_dir/img/suggestions.svg")
+    qproperty-icon: url("@style_dir/img/suggestions.svg");
+    min-width: 20px;
+    max-width: 20px;
+    min-height: 20px;
+    max-height: 20px;
 }
 
 ManageWindow PackagesTable IconButton#app_run {
@@ -298,7 +304,7 @@ ManageWindow PackagesTable IconButton#app_run[_enabled = "false"] {
 }
 
 ManageWindow PackagesTable IconButton#app_actions {
-    qproperty-icon: url("@style_dir/img/custom_actions.svg");
+    qproperty-icon: url("@style_dir/img/menu.svg");
 }
 
 ManageWindow IconButton#settings {
@@ -314,11 +320,13 @@ ManageWindow PackagesTable IconButton#app_screenshots[_enabled = "false"] {
 }
 
 ManageWindow IconButton#custom_actions {
-    qproperty-icon: url("@style_dir/img/custom_actions.svg");
+    qproperty-icon: url("@style_dir/img/menu.svg");
+    qproperty-iconSize: 16px 16px;
 }
 
 ManageWindow IconButton#about {
-    qproperty-icon: url("@style_dir/img/info.svg");
+    qproperty-icon: url("@style_dir/img/about.svg");
+    qproperty-iconSize: 16px 16px;
 }
 
 QMenu#app_actions QPushButton#app_history {
@@ -364,11 +372,11 @@ PackagesTable QToolButton#bt_uninstall:disabled {
 }
 
 QLabel[help_icon = "true"] {
-    qproperty-pixmap: url("@style_dir/img/about.svg");
+    qproperty-pixmap: url("@style_dir/img/help.svg");
 }
 
 QLabel[tip_icon = "true"] {
-    qproperty-pixmap: url("@style_dir/img/about.svg");
+    qproperty-pixmap: url("@style_dir/img/help.svg");
 }
 
 FormQt IconButton#clean_field {
