@@ -960,12 +960,12 @@ def map_required_by(names: Iterable[str] = None, remote: bool = False) -> Dict[s
         return {}
 
 
-def map_conflicts_with(names: Iterable[str], remote: bool) -> Dict[str, Set[str]]:
+def map_conflicts_with(names: Iterable[str], remote: bool) -> Dict[str, Dict[str, Set[str]]]:
     output = run_cmd('pacman -{}i {}'.format('S' if remote else 'Q', ' '.join(names)))
 
     if output:
         res = {}
-        latest_name, conflicts = None, None
+        latest_name, conflicts, replaces, field = None, None, None, None
 
         for l in output.split('\n'):
             if l:
@@ -975,20 +975,32 @@ def map_conflicts_with(names: Iterable[str], remote: bool) -> Dict[str, Set[str]
                     field = line[0:field_sep_idx].strip()
 
                     if field == 'Name':
+                        field = 'n'
                         val = line[field_sep_idx + 1:].strip()
                         latest_name = val
                     elif field == 'Conflicts With':
+                        field = 'c'
                         val = line[field_sep_idx + 1:].strip()
                         conflicts = set()
                         if val != 'None':
                             conflicts.update((d for d in val.split(' ') if d))
+                    elif field == 'Replaces':
+                        field = 'r'
+                        val = line[field_sep_idx + 1:].strip()
+                        replaces = set()
+                        if val != 'None':
+                            replaces.update((d for d in val.split(' ') if d))
 
-                    elif latest_name and conflicts is not None:
-                        res[latest_name] = conflicts
-                        latest_name, conflicts = None, None
+                    elif latest_name and conflicts is not None and replaces is not None:
+                        field = None
+                        res[latest_name] = {'c': conflicts, 'r': replaces}
+                        latest_name, conflicts, replaces = None, None, None
 
-                elif latest_name and conflicts is not None:
-                    conflicts.update(conflicts.update((d for d in l.strip().split(' ') if d)))
+                elif latest_name and field:
+                    if field == 'c':
+                        conflicts.update((d for d in l.strip().split(' ') if d))
+                    elif field == 'r':
+                        replaces.update((d for d in l.strip().split(' ') if d))
 
         return res
 

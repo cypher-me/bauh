@@ -1172,31 +1172,14 @@ class ArchManager(SoftwareManager):
 
         return True
 
-    def _uninstall(self, context: TransactionContext, names: Set[str], remove_unneeded: bool = False, disk_loader: Optional[DiskCacheLoader] = None, new_providers: Optional[Set[str]] = None):
+    def _uninstall(self, context: TransactionContext, names: Set[str], remove_unneeded: bool = False, disk_loader: Optional[DiskCacheLoader] = None, skip_requirements: bool = False):
         self._update_progress(context, 10)
 
         net_available = internet.is_available() if disk_loader else True
 
-        ignore_hard_requirements = False
-
-        if new_providers:  # checking if new providers replace the packages to be uninstalled
-            to_uninstall_provided = pacman.map_provided(pkgs=names)
-
-            if to_uninstall_provided:
-                all_to_uninstall_provided = set()
-
-                for providers in to_uninstall_provided.values():
-                    all_to_uninstall_provided.update(providers)
-
-                for provider in new_providers:
-                    if not provider in all_to_uninstall_provided:
-                        break
-
-                ignore_hard_requirements = True  # it means the new providers are able to replace the packages to be uninstalled
-
         hard_requirements = set()
 
-        if not ignore_hard_requirements:
+        if not skip_requirements:
             for n in names:
                 try:
                     pkg_reqs = pacman.list_hard_requirements(n, self.logger)
@@ -1222,7 +1205,7 @@ class ArchManager(SoftwareManager):
                                                         watcher=context.watcher):
                 return False
 
-        if remove_unneeded:
+        if not skip_requirements and remove_unneeded:
             unnecessary_packages = pacman.list_post_uninstall_unneeded_packages(to_uninstall)
             self.logger.info("Checking unnecessary optdeps")
 
@@ -1245,7 +1228,7 @@ class ArchManager(SoftwareManager):
         else:
             instances = None
 
-        uninstalled = self._uninstall_pkgs(to_uninstall, context.root_password, context.handler, ignore_dependencies=ignore_hard_requirements and not remove_unneeded)
+        uninstalled = self._uninstall_pkgs(to_uninstall, context.root_password, context.handler, ignore_dependencies=skip_requirements)
 
         if uninstalled:
             if disk_loader:  # loading package instances in case the uninstall succeeds
@@ -1544,7 +1527,7 @@ class ArchManager(SoftwareManager):
         else:
             return self._get_history_repo_pkg(pkg)
 
-    def _request_conflict_resolution(self, pkg: str, conflicting_pkg: str, context: TransactionContext) -> bool:
+    def _request_conflict_resolution(self, pkg: str, conflicting_pkg: str, context: TransactionContext, skip_requirements: bool = False) -> bool:
         conflict_msg = '{} {} {}'.format(bold(pkg), self.i18n['and'], bold(conflicting_pkg))
         if not context.watcher.request_confirmation(title=self.i18n['arch.install.conflict.popup.title'],
                                                     body=self.i18n['arch.install.conflict.popup.body'].format(conflict_msg)):
@@ -1557,14 +1540,8 @@ class ArchManager(SoftwareManager):
             if context.removed is None:
                 context.removed = {}
 
-            new_provided_map = pacman.map_provided(remote=True, pkgs={pkg})
-
-            new_providers = None
-            if new_provided_map:
-                new_providers = new_provided_map.get(pkg)
-
             res = self._uninstall(context=context, names={conflicting_pkg}, disk_loader=context.disk_loader,
-                                  remove_unneeded=False, new_providers=new_providers)
+                                  remove_unneeded=False, skip_requirements=skip_requirements)
             context.restabilish_progress()
             return res
 
@@ -1602,16 +1579,17 @@ class ArchManager(SoftwareManager):
 
             all_provided = context.get_provided_map()
 
-            for dep, conflicts in pacman.map_conflicts_with(repo_dep_names, remote=True).items():
-                if conflicts:
-                    for c in conflicts:
+            for dep, data in pacman.map_conflicts_with(repo_dep_names, remote=True).items():
+                if data and data['c']:
+                    for c in data['c']:
                         source_conflict = all_provided.get(c)
 
                         if source_conflict:
                             conflict_pkg = [*source_conflict][0]
 
                             if dep != conflict_pkg:
-                                if not self._request_conflict_resolution(dep, conflict_pkg , context):
+                                if not self._request_conflict_resolution(dep, conflict_pkg, context,
+                                                                         skip_requirements=data['r'] and conflict_pkg in data['r']):
                                     return {dep}
 
             downloaded = 0
@@ -1622,7 +1600,7 @@ class ArchManager(SoftwareManager):
                 except ArchDownloadException:
                     return False
 
-            status_handler = TransactionStatusHandler(watcher=context.watcher, i18n=self.i18n, names=repo_dep_names,
+            status_handler = TransactionStatusHandler(watcher=context.watcher, i18n=self.i18n, names={*repo_dep_names},
                                                       logger=self.logger, percentage=len(repo_deps) > 1, downloading=downloaded)
             status_handler.start()
             installed, _ = context.handler.handle_simple(pacman.install_as_process(pkgpaths=repo_dep_names,
