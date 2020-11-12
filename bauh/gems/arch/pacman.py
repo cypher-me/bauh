@@ -1005,6 +1005,39 @@ def map_conflicts_with(names: Iterable[str], remote: bool) -> Dict[str, Dict[str
         return res
 
 
+def map_replaces(names: Iterable[str], remote: bool = False) -> Dict[str, Set[str]]:
+    output = run_cmd('pacman -{}i {}'.format('S' if remote else 'Q', ' '.join(names)))
+
+    if output:
+        res = {}
+        latest_name, replaces  = None, None
+
+        for l in output.split('\n'):
+            if l:
+                if l[0] != ' ':
+                    line = l.strip()
+                    field_sep_idx = line.index(':')
+                    field = line[0:field_sep_idx].strip()
+
+                    if field == 'Name':
+                        val = line[field_sep_idx + 1:].strip()
+                        latest_name = val
+                    elif field == 'Replaces':
+                        val = line[field_sep_idx + 1:].strip()
+                        replaces = set()
+                        if val != 'None':
+                            replaces.update((d for d in val.split(' ') if d))
+
+                    elif latest_name and replaces is not None:
+                        res[latest_name] = replaces
+                        latest_name, replaces = None, None, None
+
+                elif latest_name and replaces is not None:
+                    replaces.update((d for d in l.strip().split(' ') if d))
+
+        return res
+
+
 def _list_unnecessary_deps(pkgs: Iterable[str], already_checked: Set[str], all_provided: Dict[str, Set[str]], recursive: bool = False) -> Set[str]:
     output = run_cmd('pacman -Qi {}'.format(' '.join(pkgs)))
 

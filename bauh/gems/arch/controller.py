@@ -2114,8 +2114,25 @@ class ArchManager(SoftwareManager):
                     if context.removed is None:
                         context.removed = {}
 
+                    to_install_replacements = pacman.map_replaces(names_to_install)
+
+                    skip_requirement_checking = False
+                    if to_install_replacements:  # checking if the packages to be installed replace the installed packages
+                        all_replacements = set()
+
+                        for replacements in to_install_replacements:
+                            all_replacements.update(replacements)
+
+                        if all_replacements:
+                            for pkg in to_uninstall:
+                                if pkg not in all_replacements:
+                                    break
+
+                            skip_requirement_checking = True
+
                     context.disable_progress_if_changing()
-                    if not self._uninstall(names=to_uninstall, context=context, remove_unneeded=False, disk_loader=context.disk_loader):
+                    if not self._uninstall(names=to_uninstall, context=context, remove_unneeded=False,
+                                           disk_loader=context.disk_loader, skip_requirements=skip_requirement_checking):
                         context.watcher.show_message(title=self.i18n['error'],
                                                      body=self.i18n['arch.uninstalling.conflict.fail'].format(', '.join((bold(p) for p in to_uninstall))),
                                                      type_=MessageType.ERROR)
