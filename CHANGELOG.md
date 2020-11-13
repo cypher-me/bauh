@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.9.9]
+### Features:
+- Settings
+    - new property "theme": defines a set of customizations applied over the selected **Style** (default: Fusion). At the moment 2 are available:
+        - Default - Light: icons and colors for light desktop environments
+        - Darcula: dark theme based on JetBrain's Darcula theme
 ### Improvements
 - UI
     - root dialog design and behavior

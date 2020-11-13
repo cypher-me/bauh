@@ -305,6 +305,7 @@ ui:
   hdpi: true  # enables HDPI rendering improvements. Use 'false' to disable them if you think the interface looks strange
   auto_scale: false # activates Qt auto screen scale factor (QT_AUTO_SCREEN_SCALE_FACTOR). It fixes scaling issues for some desktop environments (like Gnome)
   scale_factor: 1.0  # defines the interface display scaling factor (Qt). Raise the value to raise the interface size. The settings window display this value as a percentage (e.g: 1.0 -> 100%).
+  theme: defines a set of customizations applied over the current **Style**. Default: default-light
   system_stylesheets: allows the system's colors/stylesheets to be merged with bauh's. Default: true.
 updates:
   check_interval: 30  # the updates checking interval in SECONDS

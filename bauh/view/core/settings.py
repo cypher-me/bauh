@@ -14,7 +14,7 @@ from bauh.api.abstract.view import ViewComponent, TabComponent, InputOption, Tex
     PanelComponent, FormComponent, TabGroupComponent, SingleSelectComponent, SelectViewType, TextInputComponent, \
     FileChooserComponent, RangeInputComponent
 from bauh.commons.view_utils import new_select
-from bauh.stylesheet import read_all_stylesheets_metadata
+from bauh.stylesheet import read_all_themes_metadata
 from bauh.view.core import config, timeshift
 from bauh.view.core.config import read_config
 from bauh.view.core.downloader import AdaptableFileDownloader
@@ -230,33 +230,33 @@ class GenericSettingsManager:
                                              max_width=default_width,
                                              id_="style")
 
-        stylesheet_opts = [InputOption(label=s.get_i18n_name(self.i18n),
-                                       tooltip=s.get_i18n_description(self.i18n),
-                                       value=s.key) for s in read_all_stylesheets_metadata() if not s.abstract]
-        stylesheet_opts.sort(key=attrgetter('label'))
+        theme_opts = [InputOption(label=s.get_i18n_name(self.i18n),
+                                  tooltip=s.get_i18n_description(self.i18n),
+                                  value=s.key) for s in read_all_themes_metadata() if not s.abstract]
+        theme_opts.sort(key=attrgetter('label'))
 
-        stylesheet, default_stylesheet = core_config['ui']['stylesheet'], None
+        theme, default_theme = core_config['ui']['stylesheet'], None
 
-        if stylesheet is not None:
-            default_stylesheet = [s for s in stylesheet_opts if s.value == stylesheet]
+        if theme is not None:
+            default_theme = [s for s in theme_opts if s.value == theme]
 
-            if default_stylesheet:
-                default_stylesheet = default_stylesheet[0]
+            if default_theme:
+                default_theme = default_theme[0]
 
-        if not default_stylesheet:
-            default_stylesheet = InputOption(label=self.i18n['core.config.ui.stylesheet.invalid'],
-                                             tooltip=stylesheet,
-                                             value=None,
-                                             invalid=True)
-            stylesheet_opts.insert(0, default_stylesheet)
+        if not default_theme:
+            default_theme = InputOption(label=self.i18n['core.config.ui.stylesheet.invalid'],
+                                        tooltip=theme,
+                                        value=None,
+                                        invalid=True)
+            theme_opts.insert(0, default_theme)
 
-        select_stylesheet = SingleSelectComponent(label=self.i18n['core.config.ui.stylesheet'],
-                                                  tooltip=self.i18n['core.config.ui.stylesheet.tip'].format(style=self.i18n['style']),
-                                                  options=stylesheet_opts,
-                                                  default_option=default_stylesheet,
+        select_stylesheet = SingleSelectComponent(label=self.i18n['core.config.ui.theme'],
+                                                  tooltip=self.i18n['core.config.ui.theme.tip'].format(style=self.i18n['style']),
+                                                  options=theme_opts,
+                                                  default_option=default_theme,
                                                   type_=SelectViewType.COMBO,
                                                   max_width=default_width,
-                                                  id_="stylesheet")
+                                                  id_="theme")
 
         select_system_stylesheets = self._gen_bool_component(label=self.i18n['core.config.ui.system_stylesheets'],
                                                              tooltip=self.i18n['core.config.ui.system_stylesheets.tip'].format(app=__app_name__),
@@ -452,7 +452,7 @@ class GenericSettingsManager:
         if style != cur_style:
             core_config['ui']['style'] = style
 
-        core_config['ui']['stylesheet'] = ui_form.get_component('stylesheet').get_selected()
+        core_config['ui']['theme'] = ui_form.get_component('theme').get_selected()
         core_config['ui']['system_stylesheets'] = ui_form.get_component('system_stylesheets').get_selected()
 
         # gems

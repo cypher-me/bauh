@@ -16,7 +16,7 @@ RE_META_I18N_FIELDS = re.compile(r'((name|description)(\[\w+])?)')
 RE_VAR_PATTERN = re.compile(r'^@[\w.\-_]+')
 
 
-class StylesheetMetadata:
+class ThemeMetadata:
 
     ATTR_MAP = {'abstract': 'abstract',
                 'allow_hardcoded_stylesheets': 'hardcoded_stylesheets'}
@@ -38,7 +38,7 @@ class StylesheetMetadata:
         self.abstract = abstract
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, StylesheetMetadata):
+        if isinstance(other, ThemeMetadata):
             return self.file_path == other.file_path
 
         return False
@@ -71,9 +71,9 @@ class StylesheetMetadata:
         return self.default_description
 
 
-def read_stylesheet_metada(key: str, file_path: str) -> StylesheetMetadata:
+def read_theme_metada(key: str, file_path: str) -> ThemeMetadata:
     meta_file = '{}/{}.meta'.format('/'.join(file_path.split('/')[0:-1]), key)
-    meta_obj = StylesheetMetadata(file_path=file_path, default_name=key, default=not key.startswith('/'))
+    meta_obj = ThemeMetadata(file_path=file_path, default_name=key, default=not key.startswith('/'))
 
     if os.path.exists(meta_file):
         meta_dict = {}
@@ -98,7 +98,7 @@ def read_stylesheet_metada(key: str, file_path: str) -> StylesheetMetadata:
                     elif field in {'abstract', 'allow_hardcoded_stylesheets'}:
                         boolean = val.lower()
 
-                        meta_field = StylesheetMetadata.ATTR_MAP[field]
+                        meta_field = ThemeMetadata.ATTR_MAP[field]
 
                         if boolean == 'true':
                             setattr(meta_obj, meta_field, True)
@@ -117,43 +117,43 @@ def read_stylesheet_metada(key: str, file_path: str) -> StylesheetMetadata:
     return meta_obj
 
 
-def read_default_stylesheets() -> Dict[str, str]:
+def read_default_themes() -> Dict[str, str]:
     return {f.split('/')[-1].split('.')[0].lower(): f for f in glob.glob(resource.get_path('style/**/*.qss'))}
 
 
-def read_user_stylesheets() -> Dict[str, str]:
+def read_user_themes() -> Dict[str, str]:
     return {f: f for f in glob.glob('{}/**/*.qss'.format(STYLES_PATH))}
 
 
-def read_all_stylesheets_metadata() -> Set[StylesheetMetadata]:
-    stylesheets = set()
+def read_all_themes_metadata() -> Set[ThemeMetadata]:
+    themes = set()
 
-    for key, file_path in read_default_stylesheets().items():
-        stylesheets.add(read_stylesheet_metada(key=key, file_path=file_path))
+    for key, file_path in read_default_themes().items():
+        themes.add(read_theme_metada(key=key, file_path=file_path))
 
-    for key, file_path in read_user_stylesheets():
-        stylesheets.add(read_stylesheet_metada(key=key, file_path=file_path))
+    for key, file_path in read_user_themes():
+        themes.add(read_theme_metada(key=key, file_path=file_path))
 
-    return stylesheets
+    return themes
 
 
-def process_stylesheet(file_path: str, stylesheet_str: str, metadata: StylesheetMetadata,
-                       available_sheets: Optional[Dict[str, str]]) -> Optional[Tuple[str, StylesheetMetadata]]:
-    if stylesheet_str and metadata:
-        root_sheet = None
-        if metadata.root_sheet and metadata.root_sheet in available_sheets:
-            root_file = available_sheets[metadata.root_sheet]
+def process_theme(file_path: str, theme_str: str, metadata: ThemeMetadata,
+                  available_themes: Optional[Dict[str, str]]) -> Optional[Tuple[str, ThemeMetadata]]:
+    if theme_str and metadata:
+        root_theme = None
+        if metadata.root_sheet and metadata.root_sheet in available_themes:
+            root_file = available_themes[metadata.root_sheet]
 
             if os.path.isfile(root_file):
                 with open(root_file) as f:
-                    root_stylesheet_str = f.read()
+                    root_theme_str = f.read()
 
-                if root_stylesheet_str:
-                    root_metadata = read_stylesheet_metada(key=metadata.root_sheet, file_path=root_file)
-                    root_sheet = process_stylesheet(file_path=root_file,
-                                                    stylesheet_str=root_stylesheet_str,
-                                                    metadata=root_metadata,
-                                                    available_sheets=available_sheets)
+                if root_theme_str:
+                    root_metadata = read_theme_metada(key=metadata.root_sheet, file_path=root_file)
+                    root_theme = process_theme(file_path=root_file,
+                                               theme_str=root_theme_str,
+                                               metadata=root_metadata,
+                                               available_themes=available_themes)
 
         var_map = _read_var_file(file_path)
         var_map['resources'] = resource.get_path('')
@@ -161,34 +161,34 @@ def process_stylesheet(file_path: str, stylesheet_str: str, metadata: Stylesheet
 
         if var_map:
             for var, value in var_map.items():
-                stylesheet_str = stylesheet_str.replace('@' + var, value)
+                theme_str = theme_str.replace('@' + var, value)
 
         screen_size = QApplication.primaryScreen().size()
-        stylesheet_str = process_width_percent_measures(stylesheet_str, screen_size.width())
-        stylesheet_str = process_height_percent_measures(stylesheet_str, screen_size.height())
+        theme_str = process_width_percent_measures(theme_str, screen_size.width())
+        theme_str = process_height_percent_measures(theme_str, screen_size.height())
 
-        return stylesheet_str if not root_sheet else '{}\n{}'.format(root_sheet[0], stylesheet_str), metadata
+        return theme_str if not root_theme else '{}\n{}'.format(root_theme[0], theme_str), metadata
 
 
-def process_width_percent_measures(stylesheet, screen_width: int) -> str:
-    width_measures = RE_WIDTH_PERCENT.findall(stylesheet)
+def process_width_percent_measures(theme: str, screen_width: int) -> str:
+    width_measures = RE_WIDTH_PERCENT.findall(theme)
 
-    final_sheet = stylesheet
+    final_theme = theme
     if width_measures:
         for m in width_measures:
             try:
                 percent = float(m.split('%')[0])
-                final_sheet = final_sheet.replace(m, '{}px'.format(round(screen_width * percent)))
+                final_theme = final_theme.replace(m, '{}px'.format(round(screen_width * percent)))
             except ValueError:
                 traceback.print_exc()
 
-    return final_sheet
+    return final_theme
 
 
-def process_height_percent_measures(stylesheet, screen_height: int) -> str:
-    width_measures = RE_HEIGHT_PERCENT.findall(stylesheet)
+def process_height_percent_measures(theme: str, screen_height: int) -> str:
+    width_measures = RE_HEIGHT_PERCENT.findall(theme)
 
-    final_sheet = stylesheet
+    final_sheet = theme
     if width_measures:
         for m in width_measures:
             try:
@@ -200,8 +200,8 @@ def process_height_percent_measures(stylesheet, screen_height: int) -> str:
     return final_sheet
 
 
-def _read_var_file(stylesheet_file: str) -> dict:
-    vars_file = stylesheet_file.replace('.qss', '.vars')
+def _read_var_file(theme_file: str) -> dict:
+    vars_file = theme_file.replace('.qss', '.vars')
     var_map = {}
 
     if os.path.isfile(vars_file):
