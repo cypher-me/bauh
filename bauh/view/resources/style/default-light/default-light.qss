@@ -163,7 +163,7 @@ ManageWindow QPushButton#bt_refresh {
 }
 
 ManageWindow QPushButton#bt_installed {
-    qproperty-icon: url("@style_dir/img/disk.svg");
+    qproperty-icon: url("@style_dir/img/installed.svg");
 }
 
 ManageWindow QPushButton#bt_upgrade {
