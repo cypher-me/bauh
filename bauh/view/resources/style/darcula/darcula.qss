@@ -56,19 +56,19 @@ QPlainTextEdit {
     background-color: @inner_widget.background.color;
 }
 
-QScrollBar {
+QTableWidget QScrollBar {
     background-color: @inner_widget.background.color;
 }
 
-QScrollBar::vertical {
+QTableWidget  QScrollBar::vertical {
     max-width: 10px;
 }
 
-QScrollBar::handle {
+QTableWidget  QScrollBar::handle {
     background-color: @scrollbar.handle.background.color;
 }
 
-QScrollBar::add-line, QScrollBar::sub-line, QScrollBar::add-page, QScrollBar::sub-page {
+QTableWidget  QScrollBar::add-line, QScrollBar::sub-line, QScrollBar::add-page, QScrollBar::sub-page {
     height: 0px;
 }
 
