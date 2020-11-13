@@ -245,12 +245,16 @@ AboutDialog QLabel#logo {
     qproperty-pixmap: url("@resources/img/logo.svg");
 }
 
+HistoryDialog QTableWidget QLabel[even = "false"] {
+    background-color: @outer_widget.background.color;
+}
+
 HistoryDialog QTableWidget QLabel[outdated = "true"] {
-    color: white;
+    color: @history.version.focus.color;
     background: @history.version.outdated;
 }
 
 HistoryDialog QTableWidget QLabel[outdated = "false"] {
-    color: white;
+    color: @history.version.focus.color;
     background: @history.version.updated;
 }

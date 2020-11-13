@@ -389,10 +389,12 @@ HistoryDialog QTableWidget QLabel[even = "false"] {
 
 HistoryDialog QTableWidget QLabel[outdated = "true"] {
     background-color: @history.version.outdated;
+    color: @history.version.focus.color;
 }
 
 HistoryDialog QTableWidget QLabel[outdated = "false"] {
     background-color: @history.version.updated;
+    color: @history.version.focus.color;
 }
 
 InfoDialog QPushButton#show {
