@@ -7,9 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [0.9.9]
 ### Features:
 - Settings
-    - new property "theme": defines a set of customizations applied over the selected **Style** (default: Fusion). At the moment 2 are available:
+    - new property "theme": defines a set of customizations applied over the selected **Style**. In other words, a stylesheet file. At the moment 2 are available:
         - Default - Light: icons and colors for light desktop environments
         - Darcula: dark theme based on JetBrain's Darcula theme
+        
 ### Improvements
 - UI
     - root dialog design and behavior
@@ -18,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     - "name filter" now requires ENTER or click to be triggered
     - some app actions icons are now displayed with a different picture when disabled to prevent confusion (e.g: launch, screenshots) [#138](https://github.com/vinifmor/bauh/issues/138)
 - Settings
-    - new property **system_stylesheets** (UI -> System colors): it allows the system's colors/stylesheets to be merged with bauh's (default: true)
+    - new property **system_theme** (UI -> System theme): it allows the system's theme/stylesheet to be merged with bauh's (default: true)
     - **Applications displayed** property (Interface) tooltip now informs that 0 (zero) can be used for no limit [#138](https://github.com/vinifmor/bauh/issues/138)
 
 - Parameters

@@ -3,7 +3,7 @@ import os
 import traceback
 from math import floor
 from operator import attrgetter
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 from PyQt5.QtWidgets import QApplication, QStyleFactory
 
@@ -235,7 +235,7 @@ class GenericSettingsManager:
                                   value=s.key) for s in read_all_themes_metadata() if not s.abstract]
         theme_opts.sort(key=attrgetter('label'))
 
-        theme, default_theme = core_config['ui']['stylesheet'], None
+        theme, default_theme = core_config['ui']['theme'], None
 
         if theme is not None:
             default_theme = [s for s in theme_opts if s.value == theme]
@@ -244,25 +244,25 @@ class GenericSettingsManager:
                 default_theme = default_theme[0]
 
         if not default_theme:
-            default_theme = InputOption(label=self.i18n['core.config.ui.stylesheet.invalid'],
+            default_theme = InputOption(label=self.i18n['core.config.ui.theme.invalid'],
                                         tooltip=theme,
                                         value=None,
                                         invalid=True)
             theme_opts.insert(0, default_theme)
 
-        select_stylesheet = SingleSelectComponent(label=self.i18n['core.config.ui.theme'],
-                                                  tooltip=self.i18n['core.config.ui.theme.tip'].format(style=self.i18n['style']),
-                                                  options=theme_opts,
-                                                  default_option=default_theme,
-                                                  type_=SelectViewType.COMBO,
-                                                  max_width=default_width,
-                                                  id_="theme")
+        select_theme = SingleSelectComponent(label=self.i18n['core.config.ui.theme'],
+                                             tooltip=self.i18n['core.config.ui.theme.tip'].format(style=self.i18n['style']),
+                                             options=theme_opts,
+                                             default_option=default_theme,
+                                             type_=SelectViewType.COMBO,
+                                             max_width=default_width,
+                                             id_="theme")
 
-        select_system_stylesheets = self._gen_bool_component(label=self.i18n['core.config.ui.system_stylesheets'],
-                                                             tooltip=self.i18n['core.config.ui.system_stylesheets.tip'].format(app=__app_name__),
-                                                             value=bool(core_config['ui']['system_stylesheets']),
-                                                             max_width=default_width,
-                                                             id_='system_stylesheets')
+        select_system_theme = self._gen_bool_component(label=self.i18n['core.config.ui.system_theme'],
+                                                       tooltip=self.i18n['core.config.ui.system_theme.tip'].format(app=__app_name__),
+                                                       value=bool(core_config['ui']['system_theme']),
+                                                       max_width=default_width,
+                                                       id_='system_theme')
 
         input_maxd = TextInputComponent(label=self.i18n['core.config.ui.max_displayed'],
                                         tooltip=self.i18n['core.config.ui.max_displayed.tip'],
@@ -278,7 +278,7 @@ class GenericSettingsManager:
                                                  value=core_config['download']['icons'])
 
         sub_comps = [FormComponent([select_hdpi, select_ascale, select_scale,
-                                    select_dicons, select_style, select_stylesheet, select_system_stylesheets,
+                                    select_dicons, select_style, select_theme, select_system_theme,
                                     input_maxd], spaces=False)]
 
         return TabComponent(self.i18n['core.config.tab.ui'].capitalize(), PanelComponent(sub_comps), None, 'core.ui')
@@ -363,7 +363,7 @@ class GenericSettingsManager:
                        backup: PanelComponent,
                        ui: PanelComponent,
                        tray: PanelComponent,
-                       gems_panel: PanelComponent) -> Tuple[bool, List[str]]:
+                       gems_panel: PanelComponent) -> Tuple[bool, Optional[List[str]]]:
         core_config = config.read_config()
 
         # general
@@ -453,7 +453,7 @@ class GenericSettingsManager:
             core_config['ui']['style'] = style
 
         core_config['ui']['theme'] = ui_form.get_component('theme').get_selected()
-        core_config['ui']['system_stylesheets'] = ui_form.get_component('system_stylesheets').get_selected()
+        core_config['ui']['system_theme'] = ui_form.get_component('system_theme').get_selected()
 
         # gems
         checked_gems = gems_panel.components[1].get_component('gems').get_selected_values()

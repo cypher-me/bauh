@@ -42,7 +42,7 @@ def read_config(update_file: bool = False) -> dict:
             "auto_scale": False,
             "scale_factor": 1.0,
             'theme': 'default-light',
-            'system_stylesheets': True
+            'system_theme': True
 
         },
         'download': {
