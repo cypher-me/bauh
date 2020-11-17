@@ -1367,6 +1367,9 @@ class ManageWindow(QWidget):
                     self.pkgs_installed.insert(idx, PackageView(model, self.i18n))
 
             self.update_custom_actions()
+            self.table_apps.change_headers_policy(policy=QHeaderView.Stretch, maximized=self._maximized)
+            self.table_apps.change_headers_policy(policy=QHeaderView.ResizeToContents, maximized=self._maximized)
+            self._resize(accept_lower_width=False)
         else:
             self._show_console_errors()
             if self._can_notify_user():
