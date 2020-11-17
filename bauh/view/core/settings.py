@@ -278,8 +278,8 @@ class GenericSettingsManager:
                                                  value=core_config['download']['icons'])
 
         sub_comps = [FormComponent([select_hdpi, select_ascale, select_scale,
-                                    select_dicons, select_style, select_theme, select_system_theme,
-                                    input_maxd], spaces=False)]
+                                    select_dicons, select_theme, select_system_theme,
+                                    select_style, input_maxd], spaces=False)]
 
         return TabComponent(self.i18n['core.config.tab.ui'].capitalize(), PanelComponent(sub_comps), None, 'core.ui')
 

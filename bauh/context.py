@@ -3,6 +3,7 @@ import sys
 from logging import Logger
 from typing import Tuple
 
+from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QApplication
 
 from bauh import __app_name__, __version__
@@ -28,7 +29,35 @@ def new_qt_application(app_config: dict, logger: Logger, quit_on_last_closed: bo
             app.setStyle('Fusion')
 
     theme_key = app_config['ui']['theme'].strip() if app_config['ui']['theme'] else None
+    set_theme(theme_key=theme_key, app=app, logger=logger)
 
+    if not app_config['ui']['system_theme']:
+        app.setPalette(app.style().standardPalette())
+
+    return app
+
+
+def _gen_i18n_data(app_config: dict, locale_dir: str) -> Tuple[str, dict, str, dict]:
+    i18n_key, current_i18n = translation.get_locale_keys(app_config['locale'], locale_dir=locale_dir)
+    default_i18n = translation.get_locale_keys(DEFAULT_I18N_KEY, locale_dir=locale_dir)[1] if i18n_key != DEFAULT_I18N_KEY else {}
+    return i18n_key, current_i18n, DEFAULT_I18N_KEY, default_i18n
+
+
+def generate_i18n(app_config: dict, locale_dir: str) -> I18n:
+    return I18n(*_gen_i18n_data(app_config, locale_dir))
+
+
+def update_i18n(app_config, locale_dir: str, i18n: I18n) -> I18n:
+    cur_key, cur_dict, def_key, def_dict = _gen_i18n_data(app_config, locale_dir)
+
+    if i18n.current_key == cur_key:
+        i18n.current.update(cur_dict)
+
+    i18n.default.update(def_dict)
+    return i18n
+
+
+def set_theme(theme_key: str, app: QCoreApplication, logger: Logger):
     if not theme_key:
         logger.warning("config: no theme defined")
     else:
@@ -73,28 +102,3 @@ def new_qt_application(app_config: dict, logger: Logger, quit_on_last_closed: bo
                         logger.info("theme file '{}' loaded".format(theme_file))
                     else:
                         logger.warning("theme file '{}' could not be interpreted and processed".format(theme_file))
-
-    if not app_config['ui']['system_theme']:
-        app.setPalette(app.style().standardPalette())
-
-    return app
-
-
-def _gen_i18n_data(app_config: dict, locale_dir: str) -> Tuple[str, dict, str, dict]:
-    i18n_key, current_i18n = translation.get_locale_keys(app_config['locale'], locale_dir=locale_dir)
-    default_i18n = translation.get_locale_keys(DEFAULT_I18N_KEY, locale_dir=locale_dir)[1] if i18n_key != DEFAULT_I18N_KEY else {}
-    return i18n_key, current_i18n, DEFAULT_I18N_KEY, default_i18n
-
-
-def generate_i18n(app_config: dict, locale_dir: str) -> I18n:
-    return I18n(*_gen_i18n_data(app_config, locale_dir))
-
-
-def update_i18n(app_config, locale_dir: str, i18n: I18n) -> I18n:
-    cur_key, cur_dict, def_key, def_dict = _gen_i18n_data(app_config, locale_dir)
-
-    if i18n.current_key == cur_key:
-        i18n.current.update(cur_dict)
-
-    i18n.default.update(def_dict)
-    return i18n
