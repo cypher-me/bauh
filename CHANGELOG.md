@@ -39,6 +39,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### UI
 - clean icon color changed (broom)
 
+### i18n
+- French translations by [KINFOO](https://github.com/KINFOO): [#143](https://github.com/vinifmor/bauh/pull/143)
+
 ## [0.9.8] 2020-10-02
 ### Fixes
 - Arch
