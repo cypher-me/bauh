@@ -3,6 +3,10 @@ QLineEdit, QComboBox, QSpinBox {
     border-color: @border.color;
 }
 
+QLineEdit:disabled, QComboBox:disabled, QSpingBox:disabled {
+    background-color: @field.disabled.background.color;
+}
+
 QMenu QPushButton, QComboBox QAbstractItemView, QMenu QAbstractItemView {
     background-color: @field.background.color;
 }
@@ -91,12 +95,20 @@ QSearchBar QLabel#lb_left_corner {
      background-color: @field.background.color;
 }
 
+QSearchBar QLabel#lb_left_corner:disabled {
+    background-color: @field.disabled.background.color;
+}
+
 QSearchBar QPushButton#search_button {
     qproperty-icon: url("@style_dir/img/search.svg");
     border-right-color: @border.color;
     border-top-color: @border.color;
     border-bottom-color: @border.color;
     background-color: @field.background.color;
+}
+
+QSearchBar QPushButton#search_button:disabled {
+    background-color: @field.disabled.background.color;
 }
 
 QSearchBar QPushButton#search_button[focused = "true"] {
@@ -107,6 +119,10 @@ QSearchBar QLineEdit#inp_search {
      border-bottom-color: @border.color;
      border-top-color: @border.color;
      background-color: @field.background.color;
+}
+
+QSearchBar QLineEdit#inp_search:disabled {
+    background-color: @field.disabled.background.color;
 }
 
 QSearchBar#name_filter QPushButton#search_button {
@@ -136,11 +152,11 @@ PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress[status = 
 UpgradeToggleButton {
     qproperty-icon: url("@style_dir/img/update.svg");
     qproperty-iconSize: 14px 14px;
-    background: @upgrade.color;
+    background-color: @upgrade.color;
 }
 
-UpgradeToggleButton:checked {
-    background: grey;
+UpgradeToggleButton:checked, UpgradeToggleButton:disabled  {
+    background-color: @disabled.color;
 }
 
 UpgradeToggleButton[enabled = "false"] {
@@ -240,13 +256,25 @@ PackagesTable QToolButton#bt_install {
     color: @table.bt_install.font.color;
 }
 
+PackagesTable QToolButton#bt_install:disabled {
+    background: @disabled.color;
+}
+
 PackagesTable QToolButton#bt_uninstall {
     color: @table.bt_uninstall.background.color;
+}
+
+PackagesTable QToolButton#bt_uninstall:disabled {
+    color: @disabled.color;
 }
 
 PackagesTable QLabel#app_version[update = "true"] {
     color: @table.app_version.update.color;
     font-weight: @table.app_version.update.weight;
+}
+
+PackagesTable QLabel#app_version:disabled[update = "true"] {
+    color: @disabled.color;
 }
 
 PackagesTable QLabel#app_version[ignored = "true"] {

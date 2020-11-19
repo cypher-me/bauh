@@ -154,14 +154,21 @@ def process_theme(file_path: str, theme_str: str, metadata: ThemeMetadata,
         var_map['style_dir'] = metadata.file_dir
 
         if var_map:
-            for var, value in var_map.items():
-                theme_str = theme_str.replace('@' + var, value)
+            var_list = [*var_map.keys()]
+            var_list.sort(key=_by_str_len, reverse=True)
+
+            for var in var_list:
+                theme_str = theme_str.replace('@' + var, var_map[var])
 
         screen_size = QApplication.primaryScreen().size()
         theme_str = process_width_percent_measures(theme_str, screen_size.width())
         theme_str = process_height_percent_measures(theme_str, screen_size.height())
 
         return theme_str if not root_theme else '{}\n{}'.format(root_theme[0], theme_str), metadata
+
+
+def _by_str_len(string: str) -> int:
+    return len(string)
 
 
 def process_width_percent_measures(theme: str, screen_width: int) -> str:
