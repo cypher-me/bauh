@@ -248,7 +248,7 @@ ManageWindow QSearchBar#name_filter {
     max-width: 170;
 }
 
-ManageWindow QPushButton#bt_installed, ManageWindow QPushButton#bt_refresh, ManageWindow QPushButton#bt_suggestions, ManageWindow QPushButton#bt_upgrade {
+ManageWindow QPushButton#bt_installed, ManageWindow QPushButton#bt_refresh, ManageWindow QPushButton#suggestions, ManageWindow QPushButton#bt_upgrade {
     font-weight: 500;
 }
 
@@ -366,4 +366,8 @@ ScreenshotsDialog QLabel#image {
 
 SettingsWindow TabGroupQt#settings {
     min-width: 400px;
+}
+
+QMenu QPushButton[current = "true"] {
+    font-weight: bold;
 }

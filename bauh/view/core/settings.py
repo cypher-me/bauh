@@ -2,7 +2,6 @@ import logging
 import os
 import traceback
 from math import floor
-from operator import attrgetter
 from typing import List, Tuple, Optional
 
 from PyQt5.QtWidgets import QApplication, QStyleFactory
@@ -14,7 +13,6 @@ from bauh.api.abstract.view import ViewComponent, TabComponent, InputOption, Tex
     PanelComponent, FormComponent, TabGroupComponent, SingleSelectComponent, SelectViewType, TextInputComponent, \
     FileChooserComponent, RangeInputComponent
 from bauh.commons.view_utils import new_select
-from bauh.stylesheet import read_all_themes_metadata
 from bauh.view.core import config, timeshift
 from bauh.view.core.config import read_config
 from bauh.view.core.downloader import AdaptableFileDownloader
@@ -230,34 +228,6 @@ class GenericSettingsManager:
                                              max_width=default_width,
                                              id_="style")
 
-        theme_opts = [InputOption(label=s.get_i18n_name(self.i18n),
-                                  tooltip=s.get_i18n_description(self.i18n),
-                                  value=s.key) for s in read_all_themes_metadata() if not s.abstract]
-        theme_opts.sort(key=attrgetter('label'))
-
-        theme, default_theme = core_config['ui']['theme'], None
-
-        if theme is not None:
-            default_theme = [s for s in theme_opts if s.value == theme]
-
-            if default_theme:
-                default_theme = default_theme[0]
-
-        if not default_theme:
-            default_theme = InputOption(label=self.i18n['core.config.ui.theme.invalid'],
-                                        tooltip=theme,
-                                        value=None,
-                                        invalid=True)
-            theme_opts.insert(0, default_theme)
-
-        select_theme = SingleSelectComponent(label=self.i18n['core.config.ui.theme'],
-                                             tooltip=self.i18n['core.config.ui.theme.tip'].format(style=self.i18n['style']),
-                                             options=theme_opts,
-                                             default_option=default_theme,
-                                             type_=SelectViewType.COMBO,
-                                             max_width=default_width,
-                                             id_="theme")
-
         select_system_theme = self._gen_bool_component(label=self.i18n['core.config.ui.system_theme'],
                                                        tooltip=self.i18n['core.config.ui.system_theme.tip'].format(app=__app_name__),
                                                        value=bool(core_config['ui']['system_theme']),
@@ -278,7 +248,7 @@ class GenericSettingsManager:
                                                  value=core_config['download']['icons'])
 
         sub_comps = [FormComponent([select_hdpi, select_ascale, select_scale,
-                                    select_dicons, select_theme, select_system_theme,
+                                    select_dicons, select_system_theme,
                                     select_style, input_maxd], spaces=False)]
 
         return TabComponent(self.i18n['core.config.tab.ui'].capitalize(), PanelComponent(sub_comps), None, 'core.ui')
@@ -452,7 +422,6 @@ class GenericSettingsManager:
         if style != cur_style:
             core_config['ui']['style'] = style
 
-        core_config['ui']['theme'] = ui_form.get_component('theme').get_selected()
         core_config['ui']['system_theme'] = ui_form.get_component('system_theme').get_selected()
 
         # gems

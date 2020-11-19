@@ -5,5 +5,4 @@ description=Default theme with icons for a light desktop theme
 description[pt]=Tema padrão com ícones para ambiente desktop claro
 description[es]=Tema predeterminado con iconos para ambiente desktop claro
 version=1.0
-allow_hardcoded_stylesheets=true
 root_sheet=default

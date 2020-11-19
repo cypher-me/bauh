@@ -10,6 +10,7 @@ from typing import List, Type, Set, Tuple, Optional
 import requests
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QWidget
 
 from bauh import LOGS_PATH
 from bauh.api.abstract.cache import MemoryCache
@@ -22,7 +23,7 @@ from bauh.api.exception import NoInternetException
 from bauh.commons import user
 from bauh.commons.html import bold
 from bauh.commons.system import get_human_size_str, ProcessHandler, SimpleProcess
-from bauh.view.core import timeshift
+from bauh.view.core import timeshift, config
 from bauh.view.core.config import read_config
 from bauh.view.qt import commons
 from bauh.view.qt.view_model import PackageView, PackageViewStatus
@@ -1006,3 +1007,20 @@ class IgnorePackageUpdates(AsyncAction):
 
             finally:
                 self.pkg = None
+
+
+class SaveTheme(QThread):
+
+    def __init__(self, theme_key: Optional[str], parent: Optional[QWidget] = None):
+        super(SaveTheme, self).__init__(parent=parent)
+        self.theme_key = theme_key
+
+    def run(self):
+        if self.theme_key:
+            core_config = read_config()
+            core_config['ui']['theme'] = self.theme_key
+
+            try:
+                config.save(core_config)
+            except:
+                traceback.print_exc()

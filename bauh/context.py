@@ -98,7 +98,6 @@ def set_theme(theme_key: str, app: QCoreApplication, logger: Logger):
 
                     if processed:
                         app.setStyleSheet(processed[0])
-                        app.setProperty(PROPERTY_HARDCODED_STYLESHEET, processed[1].hardcoded_stylesheets)
                         logger.info("theme file '{}' loaded".format(theme_file))
                     else:
                         logger.warning("theme file '{}' could not be interpreted and processed".format(theme_file))

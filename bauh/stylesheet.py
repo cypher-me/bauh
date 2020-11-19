@@ -18,9 +18,6 @@ RE_VAR_PATTERN = re.compile(r'^@[\w.\-_]+')
 
 class ThemeMetadata:
 
-    ATTR_MAP = {'abstract': 'abstract',
-                'allow_hardcoded_stylesheets': 'hardcoded_stylesheets'}
-
     def __init__(self, file_path: str, default: bool, default_name: Optional[str] = None,
                  default_description: Optional[str] = None, version: Optional[str] = None,
                  root_sheet: Optional[str] = None, abstract: bool = False):
@@ -30,7 +27,6 @@ class ThemeMetadata:
         self.default_description = default_description
         self.root_sheet = root_sheet
         self.version = version
-        self.hardcoded_stylesheets = False
         self.file_path = file_path
         self.file_dir = '/'.join(file_path.split('/')[0:-1])
         self.default = default
@@ -95,15 +91,13 @@ def read_theme_metada(key: str, file_path: str) -> ThemeMetadata:
                         meta_obj.default_name = val
                     elif field == 'description':
                         meta_obj.default_description = val
-                    elif field in {'abstract', 'allow_hardcoded_stylesheets'}:
+                    elif field == 'abstract':
                         boolean = val.lower()
 
-                        meta_field = ThemeMetadata.ATTR_MAP[field]
-
                         if boolean == 'true':
-                            setattr(meta_obj, meta_field, True)
+                            meta_obj.abstract = True
                         elif boolean == 'false':
-                            setattr(meta_obj, meta_field, False)
+                            meta_obj.abstract = False
 
                     else:
                         i18n_field = RE_META_I18N_FIELDS.findall(field)

@@ -1,3 +1,12 @@
+QLineEdit, QComboBox, QSpinBox {
+    background-color: @field.background.color;
+    border-color: @border.color;
+}
+
+QMenu QPushButton, QComboBox QAbstractItemView, QMenu QAbstractItemView {
+    background-color: @field.background.color;
+}
+
 QWidget, QAbstractItemView {
     selection-background-color: @menu.item.selected.background.color;
     selection-color: @menu.item.selected.font.color;
@@ -79,6 +88,7 @@ QSearchBar QLabel#lb_left_corner {
      border-left-color: @border.color;
      border-top-color: @border.color;
      border-bottom-color: @border.color;
+     background-color: @field.background.color;
 }
 
 QSearchBar QPushButton#search_button {
@@ -86,6 +96,7 @@ QSearchBar QPushButton#search_button {
     border-right-color: @border.color;
     border-top-color: @border.color;
     border-bottom-color: @border.color;
+    background-color: @field.background.color;
 }
 
 QSearchBar QPushButton#search_button[focused = "true"] {
@@ -95,6 +106,7 @@ QSearchBar QPushButton#search_button[focused = "true"] {
 QSearchBar QLineEdit#inp_search {
      border-bottom-color: @border.color;
      border-top-color: @border.color;
+     background-color: @field.background.color;
 }
 
 QSearchBar#name_filter QPushButton#search_button {
@@ -136,10 +148,6 @@ UpgradeToggleButton[enabled = "false"] {
     background: #dda739;
 }
 
-QComboBox, QLineEdit, QSpinBox {
-    border-color: @border.color;
-}
-
 QMenu QPushButton:hover {
     background-color: @menu.item.selected.background.color;
     color: @menu.item.selected.font.color;
@@ -170,8 +178,12 @@ ManageWindow QPushButton#bt_upgrade {
     qproperty-icon: url("@style_dir/img/upgrade.svg");
 }
 
-ManageWindow IconButton#bt_suggestions {
+ManageWindow IconButton#suggestions {
     qproperty-icon: url("@style_dir/img/suggestions.svg");
+}
+
+ManageWindow IconButton#themes {
+    qproperty-icon: url("@style_dir/img/themes.svg");
 }
 
 ManageWindow IconButton#custom_actions {

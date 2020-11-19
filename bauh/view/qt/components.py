@@ -7,12 +7,11 @@ from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QIcon, QIntValidator, QCursor, QFocusEvent
 from PyQt5.QtWidgets import QRadioButton, QGroupBox, QCheckBox, QComboBox, QGridLayout, QWidget, \
     QLabel, QSizePolicy, QLineEdit, QToolButton, QHBoxLayout, QFormLayout, QFileDialog, QTabWidget, QVBoxLayout, \
-    QSlider, QScrollArea, QFrame, QAction, QSpinBox, QPlainTextEdit, QWidgetAction, QPushButton, QApplication, QMenu
+    QSlider, QScrollArea, QFrame, QAction, QSpinBox, QPlainTextEdit, QWidgetAction, QPushButton, QMenu
 
 from bauh.api.abstract.view import SingleSelectComponent, InputOption, MultipleSelectComponent, SelectViewType, \
     TextInputComponent, FormComponent, FileChooserComponent, ViewComponent, TabGroupComponent, PanelComponent, \
     TwoStateButtonComponent, TextComponent, SpacerComponent, RangeInputComponent, ViewObserver, TextInputType
-from bauh.context import PROPERTY_HARDCODED_STYLESHEET
 from bauh.view.util.translation import I18n
 
 
@@ -1037,9 +1036,6 @@ class QSearchBar(QWidget):
         self.search_left_corner = QLabel()
         self.search_left_corner.setObjectName('lb_left_corner')
 
-        if QApplication.instance().property(PROPERTY_HARDCODED_STYLESHEET):
-            self.search_left_corner.setStyleSheet('QLabel#lb_left_corner { background: %s; }' % search_background_color)
-
         self.layout().addWidget(self.search_left_corner)
 
         self.layout().addWidget(self.inp_search)
@@ -1048,9 +1044,6 @@ class QSearchBar(QWidget):
         self.search_button.setObjectName('search_button')
         self.search_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.search_button.clicked.connect(search_callback)
-
-        if QApplication.instance().property(PROPERTY_HARDCODED_STYLESHEET):
-            self.search_button.setStyleSheet("QPushButton#search_button { background: %s; }" % search_background_color)
 
         self.layout().addWidget(self.search_button)
 
@@ -1095,7 +1088,7 @@ class QSearchBar(QWidget):
 class QCustomMenuAction(QWidgetAction):
 
     def __init__(self, parent: QWidget, label: Optional[str] = None, action=None, button_name: Optional[str] = None,
-                 icon: Optional[QIcon] = None):
+                 icon: Optional[QIcon] = None, tooltip: Optional[str] = None):
         super(QCustomMenuAction, self).__init__(parent)
         self.button = QPushButton()
         self.set_label(label)
@@ -1104,6 +1097,9 @@ class QCustomMenuAction(QWidgetAction):
         self.set_button_name(button_name)
         self.set_icon(icon)
         self.setDefaultWidget(self.button)
+
+        if tooltip:
+            self.button.setToolTip(tooltip)
 
     def set_label(self, label: str):
         self.button.setText(label)
@@ -1126,6 +1122,9 @@ class QCustomMenuAction(QWidgetAction):
     def set_icon(self, icon: QIcon):
         if icon:
             self.button.setIcon(icon)
+
+    def get_label(self) -> str:
+        return self.button.text()
 
 
 class QCustomToolbar(QWidget):

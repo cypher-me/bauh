@@ -136,6 +136,10 @@ QMenu QPushButton {
     border-radius: 0px;
 }
 
+QMenu QPushButton[current = "true"] {
+    color: @color.yellow_dark;
+}
+
 QMenu QPushButton:hover {
     background-color: @menu.item.selected.background.color;
     color: @menu.item.selected.font.color;
@@ -295,8 +299,12 @@ ManageWindow PackagesTable IconButton#app_run[_enabled = "false"] {
     qproperty-icon: url("@style_dir/img/app_play_disabled.svg");
 }
 
-ManageWindow IconButton#bt_suggestions {
+ManageWindow IconButton#suggestions {
     qproperty-icon: url("@style_dir/img/suggestions.svg");
+}
+
+ManageWindow IconButton#themes {
+    qproperty-icon: url("@style_dir/img/themes.svg");
 }
 
 ManageWindow PackagesTable IconButton#app_actions {
