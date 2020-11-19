@@ -6,11 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.9.9]
 ### Features:
-- Settings
-    - new property "theme": defines a set of customizations applied over the selected **Style**. In other words, a stylesheet file. At the moment 2 are available:
+- Themes (stylesheets)
+    - new settings property "theme": defines a set of customizations applied over the current Qt **Style**. In other words, a stylesheet file. At the moment 2 are available:
         - Default - Light: icons and colors for light desktop environments
         - Darcula: dark theme based on JetBrain's Darcula theme
-    - "theme" property is changed through a new lower bar button:
+    - the theme can be changed through the new lower bar button:
     <p align="center">
         <img src="https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/bt_themes.png">
     </p>
@@ -39,9 +39,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
         <img src="https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/suggestions.png">
     </p>
     - wrong tooltips
-
-### UI
-- clean icon color changed (broom)
 
 ### i18n
 - French translations by [KINFOO](https://github.com/KINFOO): [#143](https://github.com/vinifmor/bauh/pull/143)
