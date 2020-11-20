@@ -1,0 +1,8 @@
+name=Default: Light
+name[pt]=Padrão: Claro
+name[es]=Predeterminada: Claro
+description=Default theme with icons for a light desktop theme
+description[pt]=Tema padrão com ícones para ambiente desktop claro
+description[es]=Tema predeterminado con iconos para ambiente desktop claro
+version=1.0
+root_sheet=default

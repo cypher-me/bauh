@@ -5,7 +5,7 @@ import traceback
 from pathlib import Path
 from typing import List, Type, Set, Tuple, Optional
 
-from PyQt5.QtCore import QEvent, Qt, QSize, pyqtSignal
+from PyQt5.QtCore import QEvent, Qt, pyqtSignal
 from PyQt5.QtGui import QIcon, QWindowStateChangeEvent, QCursor
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QCheckBox, QHeaderView, QToolBar, \
     QLabel, QPlainTextEdit, QProgressBar, QPushButton, QComboBox, QApplication, QListView, QSizePolicy, \
@@ -20,6 +20,9 @@ from bauh.api.abstract.view import MessageType
 from bauh.api.http import HttpClient
 from bauh.commons import user
 from bauh.commons.html import bold
+from bauh.context import set_theme
+from bauh.stylesheet import read_all_themes_metadata, ThemeMetadata
+from bauh.view.core.config import read_config
 from bauh.view.core.tray_client import notify_tray
 from bauh.view.qt import dialog, commons, qt_utils
 from bauh.view.qt.about import AboutDialog
@@ -38,7 +41,7 @@ from bauh.view.qt.thread import UpgradeSelected, RefreshApps, UninstallPackage, 
     ListWarnings, \
     AsyncAction, LaunchPackage, ApplyFilters, CustomSoftwareAction, ShowScreenshots, CustomAction, \
     NotifyInstalledLoaded, \
-    IgnorePackageUpdates
+    IgnorePackageUpdates, SaveTheme
 from bauh.view.qt.view_model import PackageView, PackageViewStatus
 from bauh.view.util import util, resource
 from bauh.view.util.translation import I18n
@@ -75,6 +78,7 @@ CHECK_DETAILS = 11
 BT_SETTINGS = 12
 BT_CUSTOM_ACTIONS = 13
 BT_ABOUT = 14
+BT_THEMES = 15
 
 # component groups ids
 GROUP_FILTERS = 1
@@ -165,7 +169,6 @@ class ManageWindow(QWidget):
         self.combo_filter_type.setCursor(QCursor(Qt.PointingHandCursor))
         self.combo_filter_type.setView(QListView())
         self.combo_filter_type.view().setCursor(QCursor(Qt.PointingHandCursor))
-        self.combo_filter_type.setIconSize(QSize(14, 14))
         self.combo_filter_type.setSizeAdjustPolicy(QComboBox.AdjustToContents)
         self.combo_filter_type.setEditable(True)
         self.combo_filter_type.lineEdit().setReadOnly(True)
@@ -205,20 +208,9 @@ class ManageWindow(QWidget):
 
         toolbar_bts = []
 
-        if config['suggestions']['enabled']:
-            bt_sugs = QPushButton()
-            bt_sugs.setObjectName('bt_suggestions')
-            bt_sugs.setCursor(QCursor(Qt.PointingHandCursor))
-            bt_sugs.setToolTip(self.i18n['manage_window.bt.suggestions.tooltip'])
-            bt_sugs.setText(self.i18n['manage_window.bt.suggestions.text'].capitalize())
-            bt_sugs.clicked.connect(lambda: self._begin_load_suggestions(filter_installed=True))
-            bt_sugs.sizePolicy().setRetainSizeWhenHidden(True)
-            self.toolbar_filters.layout().addWidget(bt_sugs)
-            toolbar_bts.append(bt_sugs)
-            self.comp_manager.register_component(BT_SUGGESTIONS, bt_sugs)
-
         bt_inst = QPushButton()
         bt_inst.setObjectName('bt_installed')
+        bt_inst.setProperty('root', 'true')
         bt_inst.setCursor(QCursor(Qt.PointingHandCursor))
         bt_inst.setToolTip(self.i18n['manage_window.bt.installed.tooltip'])
         bt_inst.setText(self.i18n['manage_window.bt.installed.text'].capitalize())
@@ -230,6 +222,7 @@ class ManageWindow(QWidget):
 
         bt_ref = QPushButton()
         bt_ref.setObjectName('bt_refresh')
+        bt_ref.setProperty('root', 'true')
         bt_ref.setCursor(QCursor(Qt.PointingHandCursor))
         bt_ref.setToolTip(i18n['manage_window.bt.refresh.tooltip'])
         bt_ref.setText(self.i18n['manage_window.bt.refresh.text'])
@@ -240,6 +233,7 @@ class ManageWindow(QWidget):
         self.comp_manager.register_component(BT_REFRESH, bt_ref)
 
         self.bt_upgrade = QPushButton()
+        self.bt_upgrade.setProperty('root', 'true')
         self.bt_upgrade.setObjectName('bt_upgrade')
         self.bt_upgrade.setCursor(QCursor(Qt.PointingHandCursor))
         self.bt_upgrade.setToolTip(i18n['manage_window.bt.upgrade.tooltip'])
@@ -371,6 +365,21 @@ class ManageWindow(QWidget):
 
         self.container_bottom.layout().addWidget(new_spacer())
 
+        if config['suggestions']['enabled']:
+            bt_sugs = IconButton(action=lambda: self._begin_load_suggestions(filter_installed=True),
+                                 i18n=i18n,
+                                 tooltip=self.i18n['manage_window.bt.suggestions.tooltip'])
+            bt_sugs.setObjectName('suggestions')
+            self.container_bottom.layout().addWidget(bt_sugs)
+            self.comp_manager.register_component(BT_SUGGESTIONS, bt_sugs)
+
+        bt_themes = IconButton(self.show_themes,
+                               i18n=self.i18n,
+                               tooltip=self.i18n['manage_window.bt_themes.tip'])
+        bt_themes.setObjectName('themes')
+        self.container_bottom.layout().addWidget(bt_themes)
+        self.comp_manager.register_component(BT_THEMES, bt_themes)
+
         self.custom_actions = manager.get_custom_actions()
         bt_custom_actions = IconButton(action=self.show_custom_actions,
                                        i18n=self.i18n,
@@ -418,6 +427,8 @@ class ManageWindow(QWidget):
         self.settings_window = None
         self.search_performed = False
 
+        self.thread_save_theme = SaveTheme(theme_key='')
+
         self.thread_load_installed = NotifyInstalledLoaded()
         self.thread_load_installed.signal_loaded.connect(self._finish_loading_installed)
         self.setMinimumHeight(int(screen_size.height() * 0.5))
@@ -433,14 +444,14 @@ class ManageWindow(QWidget):
                                          BT_INSTALLED, BT_SUGGESTIONS)  # buttons
 
         self.comp_manager.register_group(GROUP_VIEW_INSTALLED, False,
-                                         BT_SUGGESTIONS, BT_REFRESH, BT_UPGRADE,  # buttons
+                                         BT_REFRESH, BT_UPGRADE,  # buttons
                                          *filters)
 
         self.comp_manager.register_group(GROUP_UPPER_BAR, False,
                                          CHECK_APPS, CHECK_UPDATES, COMBO_CATEGORIES, COMBO_TYPES, INP_NAME,
                                          BT_INSTALLED, BT_SUGGESTIONS, BT_REFRESH, BT_UPGRADE)
 
-        self.comp_manager.register_group(GROUP_LOWER_BTS, False, BT_ABOUT, BT_SETTINGS, BT_CUSTOM_ACTIONS)
+        self.comp_manager.register_group(GROUP_LOWER_BTS, False, BT_SUGGESTIONS, BT_THEMES, BT_CUSTOM_ACTIONS, BT_SETTINGS, BT_ABOUT)
 
     def update_custom_actions(self):
         self.custom_actions = self.manager.get_custom_actions()
@@ -1369,6 +1380,9 @@ class ManageWindow(QWidget):
                     self.pkgs_installed.insert(idx, PackageView(model, self.i18n))
 
             self.update_custom_actions()
+            self.table_apps.change_headers_policy(policy=QHeaderView.Stretch, maximized=self._maximized)
+            self.table_apps.change_headers_policy(policy=QHeaderView.ResizeToContents, maximized=self._maximized)
+            self._resize(accept_lower_width=False)
         else:
             self._show_console_errors()
             if self._can_notify_user():
@@ -1531,3 +1545,46 @@ class ManageWindow(QWidget):
                                 self.__add_category(cat)
                 else:
                     self._update_categories(pkg_categories)
+
+    def _map_theme_action(self, theme: ThemeMetadata, menu: QMenu) -> QCustomMenuAction:
+        def _change_theme():
+            set_theme(theme_key=theme.key, app=QApplication.instance(), logger=self.context.logger)
+            self.thread_save_theme.theme_key = theme.key
+            self.thread_save_theme.start()
+
+        return QCustomMenuAction(label=theme.get_i18n_name(self.i18n),
+                                 action=_change_theme,
+                                 parent=menu,
+                                 tooltip=theme.get_i18n_description(self.i18n))
+
+    def show_themes(self):
+        menu_row = QMenu()
+        menu_row.setCursor(QCursor(Qt.PointingHandCursor))
+        menu_row.addActions(self._map_theme_actions(menu_row))
+        menu_row.adjustSize()
+        menu_row.popup(QCursor.pos())
+        menu_row.exec_()
+
+    def _map_theme_actions(self, menu: QMenu) -> List[QCustomMenuAction]:
+        core_config = read_config()
+
+        current_theme, default_theme = core_config['ui']['theme'], None
+
+        actions = []
+
+        for t in read_all_themes_metadata():
+            if not t.abstract:
+                action = self._map_theme_action(t, menu)
+                actions.append(action)
+
+                if default_theme is None and current_theme is not None and current_theme == t.key:
+                    default_theme = t
+                    action.button.setProperty('current', 'true')
+
+        if not default_theme:
+            invalid_action = QCustomMenuAction(label=self.i18n['manage_window.bt_themes.option.invalid'], parent=menu)
+            invalid_action.button.setProperty('current', 'true')
+            actions.append(invalid_action)
+
+        actions.sort(key=lambda a: a.get_label())
+        return actions

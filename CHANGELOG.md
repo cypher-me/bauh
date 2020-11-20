@@ -5,15 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.9.9]
+### Features:
+- Themes (stylesheets)
+    - new settings property "theme": defines a set of customizations applied over the current Qt **Style**. In other words, a stylesheet file. At the moment 2 are available:
+        - Default - Light: icons and colors for light desktop environments
+        - Darcula: dark theme based on JetBrain's Darcula theme
+    - the theme can be changed through the new lower bar button:
+    <p align="center">
+        <img src="https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/bt_themes.png">
+    </p>
+        
 ### Improvements
 - UI
     - root dialog design and behavior
-    - tooltip for the label displaying the number of applications on the table / available [#138](https://github.com/vinifmor/bauh/issues/138)
+    - tooltip for the label displaying the number of applications on the table/available [#138](https://github.com/vinifmor/bauh/issues/138)
     - screenshots dialog resizing behavior
     - "name filter" now requires ENTER or click to be triggered
     - some app actions icons are now displayed with a different picture when disabled to prevent confusion (e.g: launch, screenshots) [#138](https://github.com/vinifmor/bauh/issues/138)
 - Settings
-    - "Applications displayed" property (Interface) tooltip now informs that 0 (zero) can be used for no limit [#138](https://github.com/vinifmor/bauh/issues/138)
+    - new property **system_theme** (UI -> System theme): it allows the system's theme/stylesheet to be merged with bauh's (default: true)
+    - **Applications displayed** property (Interface) tooltip now informs that 0 (zero) can be used for no limit [#138](https://github.com/vinifmor/bauh/issues/138)
 
 - Parameters
     - new parameter **--offline**: it assumes the internet connection is off. Useful if the connection is bad/unstable and you just want to check your installed packages.
@@ -23,10 +34,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     - not able to replace an installed package for a new one that replaces it during conflict resolutions (e.g: xapp replaces xapps)
     - AUR: not able to find some repository dependencies when their names are not an exact match (e.g: sc-controller [0.4.7-1] relies on "pylibacl". This dependency now is called "python-pylibacl")
 - UI
+    - suggestions button moved to the lower bar (label removed)
+    <p align="center">
+        <img src="https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/suggestions.png">
+    </p>
     - wrong tooltips
-
-### UI
-- clean icon color changed (broom)
 
 ### i18n
 - French translations by [KINFOO](https://github.com/KINFOO): [#143](https://github.com/vinifmor/bauh/pull/143)

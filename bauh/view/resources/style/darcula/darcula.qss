@@ -56,11 +56,11 @@ QPlainTextEdit {
     background-color: @inner_widget.background.color;
 }
 
-QScrollBar {
+QScrollBar, QTableWidget QScrollBar {
     background-color: @inner_widget.background.color;
 }
 
-QScrollBar::vertical {
+QScrollBar::vertical{
     max-width: 10px;
 }
 
@@ -136,6 +136,10 @@ QMenu QPushButton {
     border-radius: 0px;
 }
 
+QMenu QPushButton[current = "true"] {
+    color: @color.yellow_dark;
+}
+
 QMenu QPushButton:hover {
     background-color: @menu.item.selected.background.color;
     color: @menu.item.selected.font.color;
@@ -181,6 +185,7 @@ QSearchBar QLabel#lb_left_corner[focused = "true"] {
 }
 
 QSearchBar QPushButton#search_button {
+    qproperty-icon: url("@style_dir/img/search.svg");
     border-right-color: @lineedit.border.color;
     border-top-color: @lineedit.border.color;
     border-bottom-color: @lineedit.border.color;
@@ -252,6 +257,18 @@ PackagesTable QLabel#app_version[update = "true"] {
     font-weight: @table.app_version.update.weight;
 }
 
+PackagesTable QLabel#app_version:disabled[update = "true"] {
+    color: @font.color;
+}
+
+PackagesTable QLabel#app_version[ignored = "true"] {
+    color: @table.app_version.update_ignored.color;
+}
+
+PackagesTable QLabel#app_version:disabled[ignored = "true"] {
+    color: @font.color;
+}
+
 PackagesTable UpgradeToggleButton, ConfirmationDialog UpgradeToggleButton {
     qproperty-icon: url("@style_dir/img/update.svg");
     border: 0.5px solid @upgrade.color;
@@ -270,7 +287,8 @@ PackagesTable UpgradeToggleButton[enabled = "false"] {
 }
 
 ManageWindow PackagesTable IconButton#app_info {
-    qproperty-icon: url("@style_dir/img/app_info.svg");
+    qproperty-icon: url("@style_dir/img/about.svg");
+    qproperty-iconSize: 13px 13px;
 }
 
 QPushButton#bt_refresh {
@@ -278,11 +296,7 @@ QPushButton#bt_refresh {
 }
 
 QPushButton#bt_installed {
-    qproperty-icon: url("@style_dir/img/disk.svg");
-}
-
-QPushButton#bt_suggestions {
-    qproperty-icon: url("@style_dir/img/suggestions.svg")
+    qproperty-icon: url("@style_dir/img/installed.svg");
 }
 
 ManageWindow PackagesTable IconButton#app_run {
@@ -293,8 +307,16 @@ ManageWindow PackagesTable IconButton#app_run[_enabled = "false"] {
     qproperty-icon: url("@style_dir/img/app_play_disabled.svg");
 }
 
+ManageWindow IconButton#suggestions {
+    qproperty-icon: url("@style_dir/img/suggestions.svg");
+}
+
+ManageWindow IconButton#themes {
+    qproperty-icon: url("@style_dir/img/themes.svg");
+}
+
 ManageWindow PackagesTable IconButton#app_actions {
-    qproperty-icon: url("@style_dir/img/custom_actions.svg");
+    qproperty-icon: url("@style_dir/img/menu.svg");
 }
 
 ManageWindow IconButton#settings {
@@ -310,7 +332,13 @@ ManageWindow PackagesTable IconButton#app_screenshots[_enabled = "false"] {
 }
 
 ManageWindow IconButton#custom_actions {
-    qproperty-icon: url("@style_dir/img/custom_actions.svg");
+    qproperty-icon: url("@style_dir/img/menu.svg");
+    qproperty-iconSize: 16px 16px;
+}
+
+ManageWindow IconButton#about {
+    qproperty-icon: url("@style_dir/img/about.svg");
+    qproperty-iconSize: 16px 16px;
 }
 
 QMenu#app_actions QPushButton#app_history {
@@ -331,6 +359,10 @@ QMenu#app_actions QPushButton#revert_ignore_updates {
 
 PackagesTable QLabel[publisher_known = "false"]{
     color: @table.app_publisher.unknown.font.color;
+}
+
+PackagesTable QLabel:disabled[publisher_known = "false"]{
+    color: @font.color;
 }
 
 PackagesTable QToolButton#bt_install {
@@ -356,11 +388,11 @@ PackagesTable QToolButton#bt_uninstall:disabled {
 }
 
 QLabel[help_icon = "true"] {
-    qproperty-pixmap: url("@style_dir/img/about.svg");
+    qproperty-pixmap: url("@style_dir/img/help.svg");
 }
 
 QLabel[tip_icon = "true"] {
-    qproperty-pixmap: url("@style_dir/img/about.svg");
+    qproperty-pixmap: url("@style_dir/img/help.svg");
 }
 
 FormQt IconButton#clean_field {
@@ -377,10 +409,12 @@ HistoryDialog QTableWidget QLabel[even = "false"] {
 
 HistoryDialog QTableWidget QLabel[outdated = "true"] {
     background-color: @history.version.outdated;
+    color: @history.version.focus.color;
 }
 
 HistoryDialog QTableWidget QLabel[outdated = "false"] {
     background-color: @history.version.updated;
+    color: @history.version.focus.color;
 }
 
 InfoDialog QPushButton#show {

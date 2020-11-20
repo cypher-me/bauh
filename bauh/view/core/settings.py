@@ -2,19 +2,17 @@ import logging
 import os
 import traceback
 from math import floor
-from operator import attrgetter
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 from PyQt5.QtWidgets import QApplication, QStyleFactory
 
-from bauh import ROOT_DIR
+from bauh import ROOT_DIR, __app_name__
 from bauh.api.abstract.controller import SoftwareManager
 from bauh.api.abstract.download import FileDownloader
 from bauh.api.abstract.view import ViewComponent, TabComponent, InputOption, TextComponent, MultipleSelectComponent, \
     PanelComponent, FormComponent, TabGroupComponent, SingleSelectComponent, SelectViewType, TextInputComponent, \
     FileChooserComponent, RangeInputComponent
 from bauh.commons.view_utils import new_select
-from bauh.stylesheet import read_all_stylesheets_metadata
 from bauh.view.core import config, timeshift
 from bauh.view.core.config import read_config
 from bauh.view.core.downloader import AdaptableFileDownloader
@@ -180,7 +178,7 @@ class GenericSettingsManager:
         return TabComponent(self.i18n['core.config.tab.tray'].capitalize(), PanelComponent(sub_comps), None, 'core.tray')
 
     def _gen_ui_settings(self, core_config: dict, screen_width: int, screen_height: int) -> TabComponent:
-        default_width = floor(0.11 * screen_width)
+        default_width = floor(0.15 * screen_width)
 
         select_hdpi = self._gen_bool_component(label=self.i18n['core.config.ui.hdpi'],
                                                tooltip=self.i18n['core.config.ui.hdpi.tip'],
@@ -230,33 +228,11 @@ class GenericSettingsManager:
                                              max_width=default_width,
                                              id_="style")
 
-        stylesheet_opts = [InputOption(label=s.get_i18n_name(self.i18n),
-                                       tooltip=s.get_i18n_description(self.i18n),
-                                       value=s.key) for s in read_all_stylesheets_metadata()]
-        stylesheet_opts.sort(key=attrgetter('label'))
-
-        stylesheet, default_stylesheet = core_config['ui']['stylesheet'], None
-
-        if stylesheet is not None:
-            default_stylesheet = [s for s in stylesheet_opts if s.value == stylesheet]
-
-            if default_stylesheet:
-                default_stylesheet = default_stylesheet[0]
-
-        if not default_stylesheet:
-            default_stylesheet = InputOption(label=self.i18n['core.config.ui.stylesheet.invalid'],
-                                             tooltip=stylesheet,
-                                             value=None,
-                                             invalid=True)
-            stylesheet_opts.insert(0, default_stylesheet)
-
-        select_stylesheet = SingleSelectComponent(label=self.i18n['core.config.ui.stylesheet'],
-                                                  tooltip=self.i18n['core.config.ui.stylesheet.tip'].format(style=self.i18n['style']),
-                                                  options=stylesheet_opts,
-                                                  default_option=default_stylesheet,
-                                                  type_=SelectViewType.COMBO,
-                                                  max_width=default_width,
-                                                  id_="stylesheet")
+        select_system_theme = self._gen_bool_component(label=self.i18n['core.config.ui.system_theme'],
+                                                       tooltip=self.i18n['core.config.ui.system_theme.tip'].format(app=__app_name__),
+                                                       value=bool(core_config['ui']['system_theme']),
+                                                       max_width=default_width,
+                                                       id_='system_theme')
 
         input_maxd = TextInputComponent(label=self.i18n['core.config.ui.max_displayed'],
                                         tooltip=self.i18n['core.config.ui.max_displayed.tip'],
@@ -272,12 +248,13 @@ class GenericSettingsManager:
                                                  value=core_config['download']['icons'])
 
         sub_comps = [FormComponent([select_hdpi, select_ascale, select_scale,
-                                    select_dicons, select_style, select_stylesheet, input_maxd], spaces=False)]
+                                    select_dicons, select_system_theme,
+                                    select_style, input_maxd], spaces=False)]
 
         return TabComponent(self.i18n['core.config.tab.ui'].capitalize(), PanelComponent(sub_comps), None, 'core.ui')
 
     def _gen_general_settings(self, core_config: dict, screen_width: int, screen_height: int) -> TabComponent:
-        default_width = floor(0.11 * screen_width)
+        default_width = floor(0.15 * screen_width)
 
         locale_opts = [InputOption(label=self.i18n['locale.{}'.format(k)].capitalize(), value=k) for k in translation.get_available_keys()]
 
@@ -356,7 +333,7 @@ class GenericSettingsManager:
                        backup: PanelComponent,
                        ui: PanelComponent,
                        tray: PanelComponent,
-                       gems_panel: PanelComponent) -> Tuple[bool, List[str]]:
+                       gems_panel: PanelComponent) -> Tuple[bool, Optional[List[str]]]:
         core_config = config.read_config()
 
         # general
@@ -445,7 +422,7 @@ class GenericSettingsManager:
         if style != cur_style:
             core_config['ui']['style'] = style
 
-        core_config['ui']['stylesheet'] = ui_form.get_component('stylesheet').get_selected()
+        core_config['ui']['system_theme'] = ui_form.get_component('system_theme').get_selected()
 
         # gems
         checked_gems = gems_panel.components[1].get_component('gems').get_selected_values()
