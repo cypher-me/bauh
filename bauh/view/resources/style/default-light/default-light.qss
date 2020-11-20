@@ -119,6 +119,7 @@ QSearchBar QLineEdit#inp_search {
      border-bottom-color: @border.color;
      border-top-color: @border.color;
      background-color: @field.background.color;
+     color: @color.grey;
 }
 
 QSearchBar QLineEdit#inp_search:disabled {
@@ -161,7 +162,7 @@ UpgradeToggleButton:checked, UpgradeToggleButton:disabled  {
 
 UpgradeToggleButton[enabled = "false"] {
     qproperty-icon: url("@style_dir/img/exclamation.svg");
-    background: #dda739;
+    background: @button_upgrade.disabled.background.color;
 }
 
 QMenu QPushButton:hover {
@@ -175,10 +176,6 @@ QComboBox::down-arrow, QSpinBox::down-arrow {
 
 QSpinBox::up-arrow {
     image: url("@style_dir/img/arrow_up.svg");
-}
-
-ManageWindow QSearchBar#name_filter {
-    color: grey;
 }
 
 ManageWindow QPushButton#bt_refresh {
