@@ -221,6 +221,10 @@ PackagesTable QLabel[publisher_known = "false"]{
     color: @table.app_publisher.unknown.font.color;
 }
 
+PackagesTable QLabel:disabled[publisher_known = "false"]{
+    color: @disabled.color;
+}
+
 PackagesTable IconButton#app_run {
     qproperty-icon: url("@style_dir/img/app_play.svg");
     qproperty-iconSize: 12px 12px;

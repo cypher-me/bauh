@@ -257,8 +257,16 @@ PackagesTable QLabel#app_version[update = "true"] {
     font-weight: @table.app_version.update.weight;
 }
 
+PackagesTable QLabel#app_version:disabled[update = "true"] {
+    color: @font.color;
+}
+
 PackagesTable QLabel#app_version[ignored = "true"] {
     color: @table.app_version.update_ignored.color;
+}
+
+PackagesTable QLabel#app_version:disabled[ignored = "true"] {
+    color: @font.color;
 }
 
 PackagesTable UpgradeToggleButton, ConfirmationDialog UpgradeToggleButton {
@@ -351,6 +359,10 @@ QMenu#app_actions QPushButton#revert_ignore_updates {
 
 PackagesTable QLabel[publisher_known = "false"]{
     color: @table.app_publisher.unknown.font.color;
+}
+
+PackagesTable QLabel:disabled[publisher_known = "false"]{
+    color: @font.color;
 }
 
 PackagesTable QToolButton#bt_install {
