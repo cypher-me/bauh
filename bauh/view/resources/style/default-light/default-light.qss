@@ -1,6 +1,7 @@
 QLineEdit, QComboBox, QSpinBox {
     background-color: @field.background.color;
     border-color: @border.color;
+    color: @font.color;
 }
 
 QLineEdit:disabled, QComboBox:disabled, QSpingBox:disabled {
@@ -9,6 +10,7 @@ QLineEdit:disabled, QComboBox:disabled, QSpingBox:disabled {
 
 QMenu QPushButton, QComboBox QAbstractItemView, QMenu QAbstractItemView {
     background-color: @field.background.color;
+    color: @font.color;
 }
 
 QWidget, QAbstractItemView {
