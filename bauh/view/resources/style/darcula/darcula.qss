@@ -365,6 +365,10 @@ PackagesTable QLabel:disabled[publisher_known = "false"]{
     color: @font.color;
 }
 
+PackagesTable QLabel#icon_publisher_verified {
+    qproperty-pixmap: url("@style_dir/img/verified.svg");
+}
+
 PackagesTable QToolButton#bt_install {
     background-color: transparent;
     color: @table.bt_install.font.color;
