@@ -1,25 +1,5 @@
 QLineEdit, QComboBox, QSpinBox {
-    background-color: @field.background.color;
     border-color: @border.color;
-    color: @font.color;
-}
-
-QLineEdit:disabled, QComboBox:disabled, QSpingBox:disabled {
-    background-color: @field.disabled.background.color;
-}
-
-QMenu QPushButton, QComboBox QAbstractItemView, QMenu QAbstractItemView {
-    background-color: @field.background.color;
-    color: @font.color;
-}
-
-QWidget, QAbstractItemView {
-    selection-background-color: @menu.item.selected.background.color;
-    selection-color: @menu.item.selected.font.color;
-}
-
-QProgressBar::chunk {
-    background-color: @progressbar.fill.color;
 }
 
 QCheckBox::indicator:unchecked {
@@ -32,10 +12,6 @@ QCheckBox::indicator:checked {
 
 QCheckBox::indicator:checked:disabled {
   image: url("@style_dir/img/checkbox_checked_disabled.svg");
-}
-
-QMenu QPushButton:hover {
-    background-color: @menu.item.selected.background.color;
 }
 
 QMenu#app_actions QPushButton#app_history {
@@ -94,7 +70,6 @@ QSearchBar QLabel#lb_left_corner {
      border-left-color: @border.color;
      border-top-color: @border.color;
      border-bottom-color: @border.color;
-     background-color: @field.background.color;
 }
 
 QSearchBar QLabel#lb_left_corner:disabled {
@@ -106,7 +81,6 @@ QSearchBar QPushButton#search_button {
     border-right-color: @border.color;
     border-top-color: @border.color;
     border-bottom-color: @border.color;
-    background-color: @field.background.color;
 }
 
 QSearchBar QPushButton#search_button:disabled {
@@ -120,8 +94,6 @@ QSearchBar QPushButton#search_button[focused = "true"] {
 QSearchBar QLineEdit#inp_search {
      border-bottom-color: @border.color;
      border-top-color: @border.color;
-     background-color: @field.background.color;
-     color: @color.grey;
 }
 
 QSearchBar QLineEdit#inp_search:disabled {
@@ -165,11 +137,6 @@ UpgradeToggleButton:checked, UpgradeToggleButton:disabled  {
 UpgradeToggleButton[enabled = "false"] {
     qproperty-icon: url("@style_dir/img/exclamation.svg");
     background: @button_upgrade.disabled.background.color;
-}
-
-QMenu QPushButton:hover {
-    background-color: @menu.item.selected.background.color;
-    color: @menu.item.selected.font.color;
 }
 
 QComboBox::down-arrow, QSpinBox::down-arrow {
