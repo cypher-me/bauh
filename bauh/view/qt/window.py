@@ -1568,23 +1568,25 @@ class ManageWindow(QWidget):
     def _map_theme_actions(self, menu: QMenu) -> List[QCustomMenuAction]:
         core_config = read_config()
 
-        current_theme, default_theme = core_config['ui']['theme'], None
+        current_theme_key, current_action = core_config['ui']['theme'], None
 
         actions = []
 
         for t in read_all_themes_metadata():
             if not t.abstract:
                 action = self._map_theme_action(t, menu)
-                actions.append(action)
 
-                if default_theme is None and current_theme is not None and current_theme == t.key:
-                    default_theme = t
+                if current_action is None and current_theme_key is not None and current_theme_key == t.key:
                     action.button.setProperty('current', 'true')
+                    current_action = action
+                else:
+                    actions.append(action)
 
-        if not default_theme:
+        if not current_action:
             invalid_action = QCustomMenuAction(label=self.i18n['manage_window.bt_themes.option.invalid'], parent=menu)
             invalid_action.button.setProperty('current', 'true')
-            actions.append(invalid_action)
+            current_action = invalid_action
 
         actions.sort(key=lambda a: a.get_label())
+        actions.insert(0, current_action)
         return actions

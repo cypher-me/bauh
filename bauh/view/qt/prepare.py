@@ -337,7 +337,8 @@ class PreparePanel(QWidget, TaskManager):
         self.table.setCellWidget(task_row, lb_progress_col, lb_progress)
 
         lb_sub = QLabel()
-        lb_status.setCursor(Qt.WaitCursor)
+        lb_sub.setObjectName('task_substatus')
+        lb_sub.setCursor(Qt.WaitCursor)
         lb_sub.setContentsMargins(10, 0, 10, 0)
         lb_sub.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         lb_sub.setMinimumWidth(50)

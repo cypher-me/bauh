@@ -168,12 +168,6 @@ MultipleSelectQt::title {
     padding: 0px 5px 0px 5px;
 }
 
-QInputDialog#dialog_password > QLineEdit {
-    border-radius: 5px;
-    font-size: 16px;
-    border: 1px solid none;
-}
-
 ManageWindow QSearchBar#name_filter QLabel#lb_left_corner, ManageWindow QSearchBar#name_filter QLineEdit#inp_search, ManageWindow  QSearchBar#name_filter QPushButton#search_button  {
     min-height: 27px;
     max-height: 27px;

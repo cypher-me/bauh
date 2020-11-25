@@ -1,4 +1,4 @@
-QWidget {
+QWidget, QWidget QToolTip {
     background-color: @outer_widget.background.color;
     color: @font.color;
     selection-background-color: @tab.font.color;
@@ -18,6 +18,11 @@ QCheckBox::indicator:checked {
 
 QCheckBox::indicator:checked:disabled {
   image: url("@style_dir/img/checkbox_checked_disabled.svg");
+}
+
+QComboBox:focus, QLineEdit:focus, QSpinBox:focus, ManageWindow QComboBox:focus {
+    border-color: @focus.border.color;
+    color: @focus.border.color;
 }
 
 QPushButton {
@@ -72,10 +77,8 @@ QScrollBar::add-line, QScrollBar::sub-line, QScrollBar::add-page, QScrollBar::su
     height: 0px;
 }
 
-QComboBox, ManageWindow QComboBox#combo_categories, ManageWindow QComboBox#combo_types, QSpinBox {
-    border: 1px solid @combobox.border.color;
-    border-radius: 5px;
-    padding: 3px;
+QComboBox, ManageWindow QComboBox, QSpinBox {
+    border-color: @combobox.border.color;
 }
 
 QComboxBox:!editable, QComboBox::drop-down  {
@@ -206,6 +209,7 @@ QSearchBar QLineEdit#inp_search {
 QSearchBar QLineEdit#inp_search:focus {
      border-bottom-color: @focus.border.color;
      border-top-color: @focus.border.color;
+     color: @font.color;
 }
 
 QSearchBar#name_filter QPushButton#search_button {
@@ -403,7 +407,7 @@ FormQt IconButton#clean_field {
     qproperty-icon: url("@style_dir/img/clean.svg");
 }
 
-PreparePanel QLabel#task_status[status = "running"], QLabel#task_progress[status = "running"] {
+PreparePanel QLabel#task_status[status = "running"], QLabel#task_progress[status = "running"], QLabel#task_substatus {
     font-weight: normal;
 }
 

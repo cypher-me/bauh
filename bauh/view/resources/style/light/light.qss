@@ -1,3 +1,8 @@
+QWidget QToolTip {
+    background-color: @tooltip.background.color;
+    color: @tooltip.font.color;
+}
+
 QLineEdit, QComboBox, QSpinBox {
     background-color: @field.background.color;
     border-color: @border.color;
@@ -71,10 +76,6 @@ QPlainTextEdit[console = 'true'] {
     color: @console.font.color;
 }
 
-QInputDialog#dialog_password > QLineEdit {
-    border-color: @color.blue_light;
-}
-
 QPushButton#ok {
     background: @button_ok.background.color;
     border-color: @button_ok.border.color;
@@ -144,7 +145,7 @@ PreparePanel QTableWidget#tasks {
     background-color: @task.background.color;
 }
 
-PreparePanel QLabel#task_status[status = "running"], QLabel#task_progress[status = "running"] {
+PreparePanel QLabel#task_status[status = "running"], QLabel#task_progress[status = "running"], QLabel#task_substatus {
     font-weight: bold;
 }
 
