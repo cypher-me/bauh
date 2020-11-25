@@ -74,6 +74,10 @@ QScrollBar::add-line, QScrollBar::sub-line, QScrollBar::add-page, QScrollBar::su
     height: 0px;
 }
 
+QPushButton:disabled {
+    color: @outer_widget.background.color;
+}
+
 QMenu QPushButton[current = "true"] {
     color: @theme.selected.color;
 }
