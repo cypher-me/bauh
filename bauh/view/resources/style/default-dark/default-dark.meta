@@ -1,8 +1,0 @@
-name=Default: for dark
-name[pt]=Padrão: para escuro
-name[es]=Predeterminado: para oscuro
-description=Default theme with icons for a dark desktop theme
-description[pt]=Tema padrão com ícones para ambiente desktop escuro
-description[es]=Tema predeterminado con iconos para ambiente desktop oscuro
-version=1.0
-root_sheet=default

@@ -41,8 +41,8 @@ def read_config(update_file: bool = False) -> dict:
             'hdpi': True,
             "auto_scale": False,
             "scale_factor": 1.0,
-            'theme': 'default-light',
-            'system_theme': True
+            'theme': 'light',
+            'system_theme': False
 
         },
         'download': {

@@ -1,4 +1,4 @@
-QWidget {
+QWidget, QWidget QToolTip {
     background-color: @outer_widget.background.color;
     color: @font.color;
     selection-background-color: @tab.font.color;
@@ -403,7 +403,7 @@ FormQt IconButton#clean_field {
     qproperty-icon: url("@style_dir/img/clean.svg");
 }
 
-PreparePanel QLabel#task_status[status = "running"], QLabel#task_progress[status = "running"] {
+PreparePanel QLabel#task_status[status = "running"], QLabel#task_progress[status = "running"], QLabel#task_substatus {
     font-weight: normal;
 }
 

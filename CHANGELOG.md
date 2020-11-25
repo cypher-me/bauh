@@ -8,8 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Features:
 - Themes (stylesheets)
     - new settings property "theme": defines a set of customizations applied over the current Qt **Style**. In other words, a stylesheet file. At the moment 2 are available:
-        - Default - Light: icons and colors for light desktop environments
-        - Darcula: dark theme based on JetBrain's Darcula theme
+        - Light: default light theme
+        - Darcula: dark based on JetBrain's Darcula theme
+        - Sublime: dark based on Sublime Text's editor theme
     - the theme can be changed through the new lower bar button:
     <p align="center">
         <img src="https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/bt_themes.png">
@@ -23,7 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     - "name filter" now requires ENTER or click to be triggered
     - some app actions icons are now displayed with a different picture when disabled to prevent confusion (e.g: launch, screenshots) [#138](https://github.com/vinifmor/bauh/issues/138)
 - Settings
-    - new property **system_theme** (UI -> System theme): it allows the system's theme/stylesheet to be merged with bauh's (default: true)
+    - new property **system_theme** (UI -> System theme): merges the system's theme/stylesheet with bauh's (default: false)
     - **Applications displayed** property (Interface) tooltip now informs that 0 (zero) can be used for no limit [#138](https://github.com/vinifmor/bauh/issues/138)
 
 - Parameters
