@@ -22,7 +22,7 @@ QTableWidget QHeaderView {
     font-weight: bold;
 }
 
-QLineEdit, QPlainTextEdit, QSpinBox {
+QLineEdit, QSpinBox {
     selection-color: @menu.item.selected.font.color;
     selection-background-color: @menu.item.selected.background.color;
 }
@@ -47,6 +47,11 @@ QComboBox, QComboBox QAbstractItemView, QMenu QAbstractItemView {
     selection-background-color: @menu.item.selected.background.color;
     selection-color: @menu.item.selected.font.color;
     color: @font.color;
+}
+
+QComboBox:focus, QLineEdit:focus, QSpinBox:focus {
+    border-color: @focus.border.color;
+    color: @focus.font.color;
 }
 
 QProgressBar::chunk {
@@ -106,13 +111,11 @@ QLabel[tip_icon = "true"] {
     qproperty-pixmap: url("@style_dir/img/help.svg");
 }
 
-QPlainTextEdit[console = 'true'] {
-    background: @console.background.color;
-    color: @console.font.color;
-}
-
-QInputDialog#dialog_password > QLineEdit {
-    border-color: @color.blue_light;
+QPlainTextEdit {
+    background: @texteditor.background.color;
+    color: @texteditor.font.color;
+    selection-background-color: @texteditor.selection.background.color;
+    selection-color: @texteditor.selection.font.color;
 }
 
 QPushButton#ok {
@@ -133,8 +136,10 @@ QSearchBar QLabel#lb_left_corner {
      border-bottom-color: @border.color;
 }
 
-QSearchBar QLabel#lb_left_corner:disabled {
-    background-color: @field.disabled.background.color;
+QSearchBar QLabel#lb_left_corner[focused = "true"] {
+     border-left-color: @focus.border.color;
+     border-top-color: @focus.border.color;
+     border-bottom-color: @focus.border.color;
 }
 
 QSearchBar QPushButton#search_button {
@@ -144,12 +149,12 @@ QSearchBar QPushButton#search_button {
     border-bottom-color: @border.color;
 }
 
-QSearchBar QPushButton#search_button:disabled {
-    background-color: @field.disabled.background.color;
-}
 
 QSearchBar QPushButton#search_button[focused = "true"] {
     qproperty-icon: url("@style_dir/img/search_focused.svg");
+    border-right-color: @focus.border.color;
+    border-top-color: @focus.border.color;
+    border-bottom-color: @focus.border.color;
 }
 
 QSearchBar QLineEdit#inp_search {
@@ -157,8 +162,9 @@ QSearchBar QLineEdit#inp_search {
      border-top-color: @border.color;
 }
 
-QSearchBar QLineEdit#inp_search:disabled {
-    background-color: @field.disabled.background.color;
+QSearchBar QLineEdit#inp_search:focus {
+     border-bottom-color: @focus.border.color;
+     border-top-color: @focus.border.color;
 }
 
 QSearchBar#name_filter QPushButton#search_button {
@@ -206,6 +212,10 @@ QComboBox::down-arrow, QSpinBox::down-arrow {
 
 QSpinBox::up-arrow {
     image: url("@style_dir/img/arrow_up.svg");
+}
+
+ManageWindow QLabel#label_status, PreparePanel QLabel#prepare_status {
+    color: @status.font.color;
 }
 
 ManageWindow QPushButton#bt_refresh {
@@ -287,7 +297,7 @@ PackagesTable QToolButton#bt_install {
 }
 
 PackagesTable QToolButton#bt_install:disabled {
-    background: @disabled.color;
+    color: @disabled.color;
 }
 
 PackagesTable QToolButton#bt_uninstall {
@@ -326,12 +336,4 @@ HistoryDialog QTableWidget QLabel[outdated = "true"] {
 HistoryDialog QTableWidget QLabel[outdated = "false"] {
     color: @history.version.focus.color;
     background: @history.version.updated;
-}
-
-RootDialog QLineEdit#password {
-    color: @color.yellow_light;
-}
-
-RootDialog QLineEdit#password:focus {
-    border-color: @color.yellow_light;
 }

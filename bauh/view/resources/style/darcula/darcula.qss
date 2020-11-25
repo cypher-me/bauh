@@ -20,6 +20,10 @@ QCheckBox::indicator:checked:disabled {
   image: url("@style_dir/img/checkbox_checked_disabled.svg");
 }
 
+QComboBox:focus, QLineEdit:focus, QSpinBox:focus {
+    border-color: @focus.border.color;
+}
+
 QPushButton {
     border: 1px solid @pushbutton.border.color;
     border-radius: 5px;

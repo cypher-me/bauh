@@ -76,10 +76,6 @@ QPlainTextEdit[console = 'true'] {
     color: @console.font.color;
 }
 
-QInputDialog#dialog_password > QLineEdit {
-    border-color: @color.blue_light;
-}
-
 QPushButton#ok {
     background: @button_ok.background.color;
     border-color: @button_ok.border.color;
