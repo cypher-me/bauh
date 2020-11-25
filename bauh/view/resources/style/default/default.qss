@@ -284,6 +284,7 @@ AboutDialog QLabel {
 }
 
 AboutDialog QLabel#logo {
+    qproperty-pixmap: url("@resources/img/logo.svg");
     qproperty-scaledContents: true;
     min-height: 0.071041667%h;
     max-height: 0.071041667%h;

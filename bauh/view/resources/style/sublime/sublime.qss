@@ -320,10 +320,6 @@ PackagesTable QLabel#app_version[ignored = "true"] {
     color: @table.app_version.update_ignored.color;
 }
 
-AboutDialog QLabel#logo {
-    qproperty-pixmap: url("@resources/img/logo.svg");
-}
-
 HistoryDialog QTableWidget QLabel[even = "false"] {
     background-color: @outer_widget.background.color;
 }
