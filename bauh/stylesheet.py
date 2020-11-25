@@ -6,7 +6,7 @@ from typing import Optional, Dict, Tuple, Set
 
 from PyQt5.QtWidgets import QApplication
 
-from bauh.api.constants import STYLES_PATH
+from bauh.api.constants import USER_THEMES_PATH
 from bauh.view.util import resource
 from bauh.view.util.translation import I18n
 
@@ -14,6 +14,7 @@ RE_WIDTH_PERCENT = re.compile(r'[\d\\.]+%w')
 RE_HEIGHT_PERCENT = re.compile(r'[\d\\.]+%h')
 RE_META_I18N_FIELDS = re.compile(r'((name|description)(\[\w+])?)')
 RE_VAR_PATTERN = re.compile(r'^@[\w.\-_]+')
+RE_QSS_EXT = re.compile(r'\.qss$')
 
 
 class ThemeMetadata:
@@ -68,7 +69,7 @@ class ThemeMetadata:
 
 
 def read_theme_metada(key: str, file_path: str) -> ThemeMetadata:
-    meta_file = '{}/{}.meta'.format('/'.join(file_path.split('/')[0:-1]), key)
+    meta_file = RE_QSS_EXT.sub('.meta', file_path)
     meta_obj = ThemeMetadata(file_path=file_path, default_name=key, default=not key.startswith('/'))
 
     if os.path.exists(meta_file):
@@ -116,7 +117,7 @@ def read_default_themes() -> Dict[str, str]:
 
 
 def read_user_themes() -> Dict[str, str]:
-    return {f: f for f in glob.glob('{}/**/*.qss'.format(STYLES_PATH))}
+    return {f: f for f in glob.glob('{}/**/*.qss'.format(USER_THEMES_PATH))}
 
 
 def read_all_themes_metadata() -> Set[ThemeMetadata]:
@@ -125,7 +126,7 @@ def read_all_themes_metadata() -> Set[ThemeMetadata]:
     for key, file_path in read_default_themes().items():
         themes.add(read_theme_metada(key=key, file_path=file_path))
 
-    for key, file_path in read_user_themes():
+    for key, file_path in read_user_themes().items():
         themes.add(read_theme_metada(key=key, file_path=file_path))
 
     return themes

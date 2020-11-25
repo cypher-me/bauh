@@ -305,7 +305,7 @@ ui:
   hdpi: true  # enables HDPI rendering improvements. Use 'false' to disable them if you think the interface looks strange
   auto_scale: false # activates Qt auto screen scale factor (QT_AUTO_SCREEN_SCALE_FACTOR). It fixes scaling issues for some desktop environments (like Gnome)
   scale_factor: 1.0  # defines the interface display scaling factor (Qt). Raise the value to raise the interface size. The settings window display this value as a percentage (e.g: 1.0 -> 100%).
-  theme: defines a set of customizations applied over the current **Style**. In other words, a stylesheet file. Default: default-light
+  theme: define the path to the theme/stylesheet file with a .qss extension (e.g: /path/to/my/theme.qss). For themes provided by bauh, only a string key is needed (e.g: light). Default: light
   system_theme: merges the system's theme/stylesheet with bauh's. Default: false.
 updates:
   check_interval: 30  # the updates checking interval in SECONDS
