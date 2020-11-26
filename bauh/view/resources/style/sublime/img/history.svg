@@ -47,26 +47,27 @@
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="Capa_1" />
+     inkscape:current-layer="Capa_1"
+     inkscape:document-rotation="0" />
   <g
      id="g10"
      transform="matrix(0.97954423,0,0,0.97954423,5.2366771,5.2366771)"
-     style="fill:#6e6e6e;fill-opacity:1">
+     style="fill:#f8f8f2;fill-opacity:1">
     <path
        d="m 163.268,407.746 c -2.895,-0.211 -5.809,-0.317 -8.74,-0.317 h -101.801 -15 V 114.245 H 0 v 330.591 h 240.879 l -3.386,-3.345 c -20.156,-19.905 -46.244,-31.707 -74.225,-33.745 z"
        id="path2"
-       style="fill:#6e6e6e;fill-opacity:1" />
+       style="fill:#f8f8f2;fill-opacity:1" />
     <path
        d="M 154.528,67.164 H 67.727 v 310.265 h 86.802 c 31.445,0 61.437,9.769 86.472,27.849 V 104.69 l -3.507,-3.464 C 215.252,79.262 185.788,67.164 154.528,67.164 Z m 34.394,240.079 h -69.117 v -30 h 69.117 z m 0,-67.469 h -69.117 v -30 h 69.117 z m 0,-67.469 h -69.117 v -30 h 69.117 z"
        id="path4"
-       style="fill:#6e6e6e;fill-opacity:1" />
+       style="fill:#f8f8f2;fill-opacity:1" />
     <path
        d="M 444.273,377.429 V 67.164 h -86.802 c -31.26,0 -60.724,12.098 -82.966,34.063 L 271,104.69 v 300.587 c 25.035,-18.08 55.027,-27.849 86.472,-27.849 h 86.801 z M 323.078,142.305 h 69.117 v 30 h -69.117 z m 0,67.469 h 69.117 v 30 h -69.117 z m 0,67.469 h 69.117 v 30 h -69.117 z"
        id="path6"
-       style="fill:#6e6e6e;fill-opacity:1" />
+       style="fill:#f8f8f2;fill-opacity:1" />
     <path
        d="M 474.273,114.245 V 407.429 H 357.472 c -31.26,0 -60.724,12.097 -82.966,34.063 l -3.385,3.344 H 512 V 114.245 Z"
        id="path8"
-       style="fill:#6e6e6e;fill-opacity:1" />
+       style="fill:#f8f8f2;fill-opacity:1" />
   </g>
 </svg>
