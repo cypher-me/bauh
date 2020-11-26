@@ -218,10 +218,6 @@ QSpinBox::up-arrow {
     image: url("@style_dir/img/arrow_up.svg");
 }
 
-ManageWindow QLabel#label_status, PreparePanel QLabel#prepare_status {
-    color: @status.font.color;
-}
-
 ManageWindow QPushButton#bt_refresh {
     qproperty-icon: url("@style_dir/img/refresh.svg");
     qproperty-iconSize: 16px 16px;
