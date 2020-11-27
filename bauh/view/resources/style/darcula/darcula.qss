@@ -20,9 +20,13 @@ QCheckBox::indicator:checked:disabled {
   image: url("@style_dir/img/checkbox_checked_disabled.svg");
 }
 
-QComboBox:focus, QLineEdit:focus, QSpinBox:focus, ManageWindow QComboBox:focus {
+QComboBox:focus, QSpinBox:focus, ManageWindow QComboBox:focus {
     border-color: @focus.border.color;
     color: @focus.border.color;
+}
+
+QLineEdit:focus {
+    border-color: @focus.border.color;
 }
 
 QPushButton {
@@ -209,7 +213,6 @@ QSearchBar QLineEdit#inp_search {
 QSearchBar QLineEdit#inp_search:focus {
      border-bottom-color: @focus.border.color;
      border-top-color: @focus.border.color;
-     color: @font.color;
 }
 
 QSearchBar#name_filter QPushButton#search_button {
