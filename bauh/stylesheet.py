@@ -4,6 +4,7 @@ import re
 import traceback
 from typing import Optional, Dict, Tuple, Set
 
+from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QApplication
 
 from bauh.api.constants import USER_THEMES_PATH
@@ -12,6 +13,7 @@ from bauh.view.util.translation import I18n
 
 RE_WIDTH_PERCENT = re.compile(r'[\d\\.]+%w')
 RE_HEIGHT_PERCENT = re.compile(r'[\d\\.]+%h')
+RE_NUMBER_PERCENT = re.compile(r'^([\d\\.]+)%+([wh])?$', flags=re.IGNORECASE)
 RE_META_I18N_FIELDS = re.compile(r'((name|description)(\[\w+])?)')
 RE_VAR_PATTERN = re.compile(r'^@[\w.\-_]+')
 RE_QSS_EXT = re.compile(r'\.qss$')
@@ -202,11 +204,28 @@ def process_height_percent_measures(theme: str, screen_height: int) -> str:
     return final_sheet
 
 
+def _eval_number_percent(val: str, screen_size: QSize) -> Optional[str]:
+    res = RE_NUMBER_PERCENT.findall(val)
+
+    if res:
+        percent_tuple = res[0]
+
+        try:
+            perc = float(percent_tuple[0])
+        except ValueError:
+            return
+
+        base = screen_size.width() if not percent_tuple[1] or percent_tuple[1] == 'w' else screen_size.height()
+        return '{}px'.format(round(base * perc))
+
+
 def _read_var_file(theme_file: str) -> dict:
     vars_file = theme_file.replace('.qss', '.vars')
     var_map = {}
 
     if os.path.isfile(vars_file):
+        screen_size = QApplication.primaryScreen().size()
+
         with open(vars_file) as f:
             for line in f.readlines():
                 if line:
@@ -218,7 +237,8 @@ def _read_var_file(theme_file: str) -> dict:
                             var, value = var_value[0].strip(), var_value[1].strip()
 
                             if var and value:
-                                var_map[var] = value
+                                pixel_value = _eval_number_percent(value, screen_size)
+                                var_map[var] = pixel_value if pixel_value else value
 
     if var_map:
         process_var_of_vars(var_map)  # mapping keys that point to others
