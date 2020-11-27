@@ -135,7 +135,7 @@ def read_all_themes_metadata() -> Set[ThemeMetadata]:
 
 
 def process_theme(file_path: str, theme_str: str, metadata: ThemeMetadata,
-                  available_themes: Optional[Dict[str, str]]) -> Optional[Tuple[str, ThemeMetadata]]:
+                  available_themes: Optional[Dict[str, str]]) -> Optional[Tuple[str, ThemeMetadata, Optional[dict]]]:
     if theme_str and metadata:
         root_theme = None
         if metadata.root_sheet and metadata.root_sheet in available_themes:
@@ -152,7 +152,12 @@ def process_theme(file_path: str, theme_str: str, metadata: ThemeMetadata,
                                                metadata=root_metadata,
                                                available_themes=available_themes)
 
-        var_map = _read_var_file(file_path)
+        if root_theme and root_theme[2]:
+            var_map = root_theme[2]
+        else:
+            var_map = {}
+
+        var_map.update(_read_var_file(file_path))
         var_map['images'] = resource.get_path('img')
         var_map['style_dir'] = metadata.file_dir
 
@@ -167,7 +172,7 @@ def process_theme(file_path: str, theme_str: str, metadata: ThemeMetadata,
         theme_str = process_width_percent_measures(theme_str, screen_size.width())
         theme_str = process_height_percent_measures(theme_str, screen_size.height())
 
-        return theme_str if not root_theme else '{}\n{}'.format(root_theme[0], theme_str), metadata
+        return theme_str if not root_theme else '{}\n{}'.format(root_theme[0], theme_str), metadata, var_map
 
 
 def _by_str_len(string: str) -> int:

@@ -155,7 +155,7 @@ PreparePanel QLabel#task_status[status = "done"], QLabel#task_progress[status = 
 
 UpgradeToggleButton {
     qproperty-icon: url("@style_dir/img/update.svg");
-    qproperty-iconSize: 14px 14px;
+    qproperty-iconSize: @14px @14px;
     background-color: @upgrade.color;
 }
 
@@ -183,7 +183,7 @@ QSpinBox::up-arrow {
 
 ManageWindow QPushButton#bt_refresh {
     qproperty-icon: url("@style_dir/img/refresh.svg");
-    qproperty-iconSize: 16px 16px;
+    qproperty-iconSize: @16px @16px;
 }
 
 ManageWindow QPushButton#bt_installed {
@@ -208,12 +208,12 @@ ManageWindow IconButton#custom_actions {
 
 ManageWindow IconButton#settings {
     qproperty-icon: url("@style_dir/img/settings.svg");
-    qproperty-iconSize: 16px 16px;
+    qproperty-iconSize: @16px @16px;
 }
 
 ManageWindow IconButton#about {
     qproperty-icon: url("@style_dir/img/about.svg");
-    qproperty-iconSize: 14px 14px;
+    qproperty-iconSize: @14px @14px;
 }
 
 PackagesTable QLabel#icon_publisher_verified {
@@ -230,7 +230,7 @@ PackagesTable QLabel:disabled[publisher_known = "false"]{
 
 PackagesTable IconButton#app_run {
     qproperty-icon: url("@style_dir/img/app_play.svg");
-    qproperty-iconSize: 12px 12px;
+    qproperty-iconSize: @12px @12px;
 }
 
 PackagesTable IconButton#app_run[_enabled = "false"] {
@@ -239,7 +239,7 @@ PackagesTable IconButton#app_run[_enabled = "false"] {
 
 PackagesTable IconButton#app_actions {
     qproperty-icon: url("@style_dir/img/menu.svg");
-    qproperty-iconSize: 14px 14px;
+    qproperty-iconSize: @14px @14px;
 }
 
 PackagesTable IconButton#app_screenshots {
@@ -252,7 +252,7 @@ PackagesTable IconButton#app_screenshots[_enabled = "false"] {
 
 PackagesTable IconButton#app_info {
     qproperty-icon: url("@style_dir/img/about.svg");
-    qproperty-iconSize: 12px 12px;
+    qproperty-iconSize: @12px @12px;
 }
 
 PackagesTable QToolButton#bt_install {
