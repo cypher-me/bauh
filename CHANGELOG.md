@@ -31,6 +31,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     - screenshots dialog resizing behavior
     - "name filter" now requires ENTER or click to be triggered
     - some app actions icons are now displayed with a different picture when disabled to prevent confusion (e.g: launch, screenshots) [#138](https://github.com/vinifmor/bauh/issues/138)
+    - suggestions button moved to the lower bar (label removed)
+    <p align="center">
+        <img src="https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/suggestions.png">
+    </p>
+    
 - Settings
     - new property **system_theme** (UI -> System theme): merges the system's theme/stylesheet with bauh's (default: false)
     - property **style** renamed to **qt_style** and its default value now is **fusion**. If this property is set to **null**, **fusion** will be considered as well. Fusion is the default style that all default themes (stylesheets) are based on, so if you change this property the final style may not look like as expected.
@@ -44,10 +49,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     - not able to replace an installed package for a new one that replaces it during conflict resolutions (e.g: xapp replaces xapps)
     - AUR: not able to find some repository dependencies when their names are not an exact match (e.g: sc-controller [0.4.7-1] relies on "pylibacl". This dependency now is called "python-pylibacl")
 - UI
-    - suggestions button moved to the lower bar (label removed)
-    <p align="center">
-        <img src="https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/suggestions.png">
-    </p>
     - wrong tooltips
 
 ### i18n
