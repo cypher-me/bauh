@@ -8,9 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Features
 - Themes (stylesheets)
     - new settings property "theme": defines a set of customizations applied over the current Qt **Style**. In other words, a stylesheet file. At the moment 2 are available:
-        - Light: default light theme
-        - Darcula: dark based on JetBrain's Darcula theme
-        - Sublime: dark based on Sublime Text's editor theme
+        - [Light](https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/light.png): default light theme
+        - [Darcula](https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/darcula.png): dark based on JetBrain's Darcula theme
+        - [Sublime](https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/sublime.png): dark based on Sublime Text's editor theme
     - the theme can be changed through the new lower bar button:
     <p align="center">
         <img src="https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/bt_themes.png">
