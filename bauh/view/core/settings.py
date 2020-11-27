@@ -205,9 +205,9 @@ class GenericSettingsManager:
                                            min_value=100, max_value=400, step_value=5, value=scale * 100,
                                            max_width=default_width)
 
-        cur_style = QApplication.instance().style().objectName().lower() if not core_config['ui']['style'] else core_config['ui']['style']
-        style_opts = [InputOption(label=self.i18n['core.config.ui.style.default'].capitalize(), value=None)]
-        style_opts.extend([InputOption(label=s.capitalize(), value=s.lower()) for s in QStyleFactory.keys()])
+        cur_style = QApplication.instance().property('qt_style') if not core_config['ui']['qt_style'] else core_config['ui']['qt_style']
+
+        style_opts = [InputOption(label=s.capitalize(), value=s.lower()) for s in QStyleFactory.keys()]
 
         default_style = [o for o in style_opts if o.value == cur_style]
 
@@ -221,7 +221,7 @@ class GenericSettingsManager:
             default_style = default_style[0]
 
         select_style = SingleSelectComponent(label=self.i18n['style'].capitalize(),
-                                             tooltip=self.i18n['core.config.ui.style.tooltip'],
+                                             tooltip=self.i18n['core.config.ui.qt_style.tooltip'],
                                              options=style_opts,
                                              default_option=default_style,
                                              type_=SelectViewType.COMBO,
@@ -418,9 +418,10 @@ class GenericSettingsManager:
 
         style = ui_form.get_component('style').get_selected()
 
-        cur_style = core_config['ui']['style'] if core_config['ui']['style'] else QApplication.instance().style().objectName().lower()
+        cur_style = core_config['ui']['qt_style'] if core_config['ui']['qt_style'] else QApplication.instance().property('qt_style')
         if style != cur_style:
-            core_config['ui']['style'] = style
+            core_config['ui']['qt_style'] = style
+            QApplication.instance().setProperty('qt_style', style)
 
         core_config['ui']['system_theme'] = ui_form.get_component('system_theme').get_selected()
 

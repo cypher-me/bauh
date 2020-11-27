@@ -37,7 +37,7 @@ def read_config(update_file: bool = False) -> dict:
                 'default_icon': None,
                 'updates_icon': None
             },
-            'style': None,
+            'qt_style': 'fusion',
             'hdpi': True,
             "auto_scale": False,
             "scale_factor": 1.0,

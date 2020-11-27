@@ -296,7 +296,7 @@ system:
   notifications: true  # if system popup should be displayed for some events. e.g: when there are updates, bauh will display a system popup
   single_dependency_checking: false  # if bauh should check only once if for the available technologies on the system.
 ui:
-  style: null  # the current QT style set. A null value will map to 'Fusion', 'Breeze' or 'Oxygen' (depending on what is installed)
+  qt_style: fusion  # defines the Qt style. A null value will map to 'fusion' as well.
   table:
     max_displayed: 50  # defines the maximum number of displayed applications on the table. Use 0 for no limit.
   tray:  # system tray settings

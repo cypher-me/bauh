@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.9.9]
-### Features:
+### Features
 - Themes (stylesheets)
     - new settings property "theme": defines a set of customizations applied over the current Qt **Style**. In other words, a stylesheet file. At the moment 2 are available:
         - Light: default light theme
@@ -27,9 +27,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Settings
     - new property **system_theme** (UI -> System theme): merges the system's theme/stylesheet with bauh's (default: false)
     - **Applications displayed** property (Interface) tooltip now informs that 0 (zero) can be used for no limit [#138](https://github.com/vinifmor/bauh/issues/138)
-
 - Parameters
     - new parameter **--offline**: it assumes the internet connection is off. Useful if the connection is bad/unstable and you just want to check your installed packages.
+
+### Changes
+- Settings
+    - property **style** renamed to **qt_style** and its default value now is **fusion**. If this property is set to **null**, **fusion** will be considered as well. Fusion is the default style that all default themes are based on, so if you change this property the final style might not look like as expected.
+
 ### Fixes
 - Arch:
     - search: not able to find installed packages that were renamed on the repositories (e.g: xapps -> xapp)

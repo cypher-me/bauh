@@ -22,11 +22,12 @@ def new_qt_application(app_config: dict, logger: Logger, quit_on_last_closed: bo
     app.setApplicationVersion(__version__)
     app.setWindowIcon(util.get_default_icon()[1])
 
-    if app_config['ui']['style']:
-        app.setStyle(str(app_config['ui']['style']))
+    if app_config['ui']['qt_style']:
+        app.setStyle(str(app_config['ui']['qt_style']))
     else:
-        if app.style().objectName().lower() not in {'fusion', 'breeze', 'oxygen'}:
-            app.setStyle('Fusion')
+        app.setStyle('fusion')
+
+    app.setProperty('qt_style', app.style().objectName().lower())
 
     theme_key = app_config['ui']['theme'].strip() if app_config['ui']['theme'] else None
     set_theme(theme_key=theme_key, app=app, logger=logger)
