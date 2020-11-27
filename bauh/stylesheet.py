@@ -151,7 +151,7 @@ def process_theme(file_path: str, theme_str: str, metadata: ThemeMetadata,
                                                available_themes=available_themes)
 
         var_map = _read_var_file(file_path)
-        var_map['resources'] = resource.get_path('')
+        var_map['images'] = resource.get_path('img')
         var_map['style_dir'] = metadata.file_dir
 
         if var_map:

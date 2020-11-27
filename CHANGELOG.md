@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [0.9.9]
 ### Features
 - Themes (stylesheets)
-    - new settings property "theme": defines a set of customizations applied over the current Qt **Style**. In other words, a stylesheet file. At the moment 2 are available:
+    - new settings property "theme": it points to a file defining a set of customizations over the current style (QT). In other words, a stylesheet file. At the moment 3 will come bundled with bauh:
         - [Light](https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/light.png): default light theme
         - [Darcula](https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/darcula.png): dark based on JetBrain's Darcula theme
         - [Sublime](https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/sublime.png): dark based on Sublime Text's editor theme
@@ -15,7 +15,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     <p align="center">
         <img src="https://raw.githubusercontent.com/vinifmor/bauh-files/master/pictures/releases/0.9.9/bt_themes.png">
     </p>
-    - you can provide you own custom theme as well (TODO docs)
+    - you can provide custom themes by putting the required files at **~/.local/share/bauh/themes**. There are 2 required and 1 optional file for each theme (all files related to a theme must share the same name):
+        - my_theme.qss: file with the qss rules. Example: [light.qss](https://raw.githubusercontent.com/vinifmor/bauh/qss/bauh/view/resources/style/light/light.qss)
+        - my_theme.meta: file defining the data about your theme (name, description, version, ...). Example: [light.meta](https://raw.githubusercontent.com/vinifmor/bauh/qss/bauh/view/resources/style/light/light.meta) 
+        - my_theme.vars: **optional** file defining `key=value` variables that will be available on your .qss file by using the symbol '@' before the name (@my_var). Example: [light.vars](https://raw.githubusercontent.com/vinifmor/bauh/qss/bauh/view/resources/style/light/light.vars)
+    - common theme variables available: 
+        - **style_dir**: path to the .qss file directory. Example: @style_dir/my_icon.svg
+        - **images**: path to bauh's icons (gem icons are not available through this variable). Example: @images/logo.svg    
         
 ### Improvements
 - UI
@@ -26,13 +32,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     - some app actions icons are now displayed with a different picture when disabled to prevent confusion (e.g: launch, screenshots) [#138](https://github.com/vinifmor/bauh/issues/138)
 - Settings
     - new property **system_theme** (UI -> System theme): merges the system's theme/stylesheet with bauh's (default: false)
+    - property **style** renamed to **qt_style** and its default value now is **fusion**. If this property is set to **null**, **fusion** will be considered as well. Fusion is the default style that all default themes (stylesheets) are based on, so if you change this property the final style may not look like as expected.
     - **Applications displayed** property (Interface) tooltip now informs that 0 (zero) can be used for no limit [#138](https://github.com/vinifmor/bauh/issues/138)
 - Parameters
     - new parameter **--offline**: it assumes the internet connection is off. Useful if the connection is bad/unstable and you just want to check your installed packages.
-
-### Changes
-- Settings
-    - property **style** renamed to **qt_style** and its default value now is **fusion**. If this property is set to **null**, **fusion** will be considered as well. Fusion is the default style that all default themes are based on, so if you change this property the final style might not look like as expected.
 
 ### Fixes
 - Arch:
